@@ -35,8 +35,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_28_031237) do
   end
 
   create_table "page_views", force: :cascade do |t|
-    t.string "city"
-    t.string "country"
     t.datetime "created_at", null: false
     t.string "event"
     t.string "ip_address"

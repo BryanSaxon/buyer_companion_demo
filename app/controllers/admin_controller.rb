@@ -14,9 +14,7 @@ class AdminController < ApplicationController
         first_seen: views.first&.created_at,
         last_seen: views.last&.created_at,
         visit_count: views.count,
-        returned: views.count > 1,
-        city: views.first&.city,
-        country: views.first&.country
+        returned: views.count > 1
       }
     end
   end

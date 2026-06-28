@@ -89,7 +89,6 @@
         <tr>
           <th>Name &amp; Company</th>
           <th>Email</th>
-          <th>Location</th>
           <th>First seen</th>
           <th>Visits</th>
           <th>Returned</th>
@@ -105,13 +104,6 @@
               <div class="company"><%= l.company %></div>
             </td>
             <td><span class="email"><%= l.email %></span></td>
-            <td>
-              <% if s[:city] %>
-                <span class="ts"><%= s[:city] %><%= s[:country] ? ", #{s[:country]}" : "" %></span>
-              <% else %>
-                <span class="ts">—</span>
-              <% end %>
-            </td>
             <td><span class="ts"><%= s[:first_seen]&.strftime("%-I:%M %p") || "—" %></span></td>
             <td><span class="ts"><%= s[:visit_count] %></span></td>
             <td>

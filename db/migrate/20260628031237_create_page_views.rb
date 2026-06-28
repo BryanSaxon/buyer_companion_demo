@@ -3,8 +3,6 @@ class CreatePageViews < ActiveRecord::Migration[8.1]
     create_table :page_views do |t|
       t.integer :lead_id
       t.string :ip_address
-      t.string :city
-      t.string :country
       t.string :user_agent
       t.string :event
 
