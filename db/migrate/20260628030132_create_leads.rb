@@ -5,7 +5,7 @@ class CreateLeads < ActiveRecord::Migration[8.1]
       t.string :last_name
       t.string :email
       t.string :company
-      t.boolean :approved_render
+      t.boolean :approved_render, default: false, null: false
 
       t.timestamps
     end

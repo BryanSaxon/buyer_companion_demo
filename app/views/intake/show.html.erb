@@ -1,0 +1,99 @@
+<div style="min-height:100dvh;display:flex;justify-content:center;">
+  <div style="width:min(540px,100vw);min-height:100dvh;background:#FAFAF8;box-shadow:0 0 80px rgba(40,33,20,.10);position:relative;overflow:hidden;"
+       data-controller="intake"
+       data-intake-leads-url-value="<%= leads_path %>"
+       data-intake-home-url-value="<%= home_path %>">
+
+    <!-- ============ INTAKE SCREEN ============ -->
+    <div data-intake-target="intakeScreen" style="padding:26px 24px 40px;animation:scFade .5s ease both">
+
+      <%# Brand lockup %>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:12px;height:12px;border-radius:3px;background:#F5A623;"></div>
+        <span style="font:700 13px 'Sora',system-ui;letter-spacing:.2em;color:#1A1A1A">BUCKER LABS</span>
+      </div>
+      <div style="margin-top:7px;font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:#9aa0ac">AI platform for production home builders</div>
+
+      <div style="margin-top:46px">
+        <div style="font:600 10.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase;color:#F5A623">For builders &middot; Live demo</div>
+        <h1 style="margin:14px 0 0;font:700 37px/1.08 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.025em">Step into your buyer's experience.</h1>
+        <p style="margin:16px 0 0;font:400 16px/1.5 'Sora',system-ui;color:#6B7280">Bucker Labs gives every buyer a personal home companion that knows their lot, their floor plan, their selections — every room by name. It answers the 11pm questions so your team doesn't have to, and it shows up as you: your logo, your brand, your voice. Enter your details and experience it exactly as your buyers would.</p>
+      </div>
+
+      <div style="margin-top:30px">
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <label style="display:block;font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;margin-bottom:8px">First name</label>
+            <input data-intake-target="firstName" data-action="input->intake#clearError" type="text" placeholder="Sarah"
+              style="width:100%;padding:13px 14px;border:1px solid #E5E7EB;border-radius:10px;background:#fff;font:400 16px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,box-shadow .15s"
+              onfocus="this.style.borderColor='#F5A623';this.style.boxShadow='0 0 0 3px rgba(245,166,35,.18)'"
+              onblur="this.style.borderColor='#E5E7EB';this.style.boxShadow='none'" />
+            <div data-intake-target="firstNameError" style="display:none;font:500 12px 'Sora',system-ui;color:#E04040;margin-top:6px">Add your first name</div>
+          </div>
+          <div style="flex:1">
+            <label style="display:block;font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;margin-bottom:8px">Last name</label>
+            <input data-intake-target="lastName" data-action="input->intake#clearError" type="text" placeholder="Morgan"
+              style="width:100%;padding:13px 14px;border:1px solid #E5E7EB;border-radius:10px;background:#fff;font:400 16px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,box-shadow .15s"
+              onfocus="this.style.borderColor='#F5A623';this.style.boxShadow='0 0 0 3px rgba(245,166,35,.18)'"
+              onblur="this.style.borderColor='#E5E7EB';this.style.boxShadow='none'" />
+            <div data-intake-target="lastNameError" style="display:none;font:500 12px 'Sora',system-ui;color:#E04040;margin-top:6px">Add your last name</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <label style="display:block;font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;margin-bottom:8px">Your company</label>
+          <input data-intake-target="company" data-action="input->intake#clearError" type="text" placeholder="Your home-building company"
+            style="width:100%;padding:13px 14px;border:1px solid #E5E7EB;border-radius:10px;background:#fff;font:400 16px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,box-shadow .15s"
+            onfocus="this.style.borderColor='#F5A623';this.style.boxShadow='0 0 0 3px rgba(245,166,35,.18)'"
+            onblur="this.style.borderColor='#E5E7EB';this.style.boxShadow='none'" />
+          <div style="display:flex;align-items:center;gap:6px;margin-top:7px">
+            <span style="width:5px;height:5px;border-radius:50%;background:#F5A623;flex:none"></span>
+            <span style="font:400 12px 'Sora',system-ui;color:#9aa0ac">We'll brand the buyer experience with this name.</span>
+          </div>
+          <div data-intake-target="companyError" style="display:none;font:500 12px 'Sora',system-ui;color:#E04040;margin-top:6px">Add your company name</div>
+        </div>
+
+        <div style="margin-top:16px">
+          <label style="display:block;font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;margin-bottom:8px">Email</label>
+          <input data-intake-target="email" data-action="input->intake#clearError keydown->intake#emailKeydown" type="email" inputmode="email" placeholder="you@company.com"
+            style="width:100%;padding:13px 14px;border:1px solid #E5E7EB;border-radius:10px;background:#fff;font:400 16px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,box-shadow .15s"
+            onfocus="this.style.borderColor='#F5A623';this.style.boxShadow='0 0 0 3px rgba(245,166,35,.18)'"
+            onblur="this.style.borderColor='#E5E7EB';this.style.boxShadow='none'" />
+          <div data-intake-target="emailError" style="display:none;font:500 12px 'Sora',system-ui;color:#E04040;margin-top:6px">Enter a valid email so we can follow up</div>
+        </div>
+
+        <button data-action="click->intake#submit" data-intake-target="submitBtn"
+          style="width:100%;margin-top:24px;padding:16px;border:none;border-radius:999px;background:#F5A623;color:#0A0C10;font:600 15.5px 'Sora',system-ui;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:filter .15s,transform .08s"
+          onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''"
+          onmousedown="this.style.transform='scale(.99)'" onmouseup="this.style.transform=''">
+          Step into your buyer's view <span style="font-size:17px;line-height:1">&rarr;</span>
+        </button>
+
+        <div style="margin-top:16px;display:flex;align-items:flex-start;gap:9px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#F5A623;margin-top:6px;flex:none"></span>
+          <p style="margin:0;font:400 12.5px/1.5 'Sora',system-ui;color:#9aa0ac">We never request your location and never show a permission pop-up. Your details are used only to personalize this preview and follow up after today.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:40px;padding-top:22px;border-top:1px solid #E5E7EB">
+        <div style="width:26px;height:2px;border-radius:2px;background:#F5A623;margin-bottom:13px"></div>
+        <p style="margin:0;font:500 16.5px/1.4 'Sora',system-ui;color:#4b4b4b">&ldquo;Software should bend to you. Not the other way around.&rdquo;</p>
+      </div>
+    </div>
+
+    <!-- ============ LOADING SCREEN ============ -->
+    <div data-intake-target="loadingScreen" style="display:none;min-height:100dvh;flex-direction:column;align-items:center;justify-content:center;padding:40px;animation:scFade .4s ease both">
+      <div style="animation:housePulse 1.6s cubic-bezier(.4,0,.2,1) infinite">
+        <svg viewBox="0 0 24 24" width="62" height="62" fill="none" stroke="#F5A623" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11.2 12 4l9 7.2"/>
+          <path d="M5.5 9.6V19h13V9.6"/>
+          <path d="M10 19v-5h4v5"/>
+        </svg>
+      </div>
+      <div style="margin-top:24px;font:600 19px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Building your buyer's view&hellip;</div>
+      <div data-intake-target="brandedAs" style="margin-top:9px;font:500 10.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:#F5A623"></div>
+      <p style="margin:18px 0 0;max-width:300px;text-align:center;font:400 14px/1.5 'Sora',system-ui;color:#6B7280">This is the companion your homebuyers live with — personal to them, in your name. You're about to be greeted exactly the way they would be.</p>
+    </div>
+
+  </div>
+</div>

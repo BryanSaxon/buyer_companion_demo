@@ -1,7 +1,15 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
-
-  # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
+
+  private
+
+  def current_lead
+    return @current_lead if defined?(@current_lead)
+    @current_lead = Lead.find_by(id: session[:lead_id])
+  end
+
+  def require_lead
+    redirect_to root_path unless current_lead
+  end
 end
