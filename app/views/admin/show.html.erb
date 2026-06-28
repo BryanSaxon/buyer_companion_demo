@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grand Rapids Demo — Attendee Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Sora', system-ui, sans-serif; background: #0A0C10; color: #EDE9E0; -webkit-font-smoothing: antialiased; }
+    .page { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 36px; }
+    .logo-sq { width: 14px; height: 14px; border-radius: 3px; background: #F5A623; flex: none; }
+    .logo-text { font: 700 14px 'Sora'; letter-spacing: .2em; color: #EDE9E0; }
+    .tag { font: 500 10px 'IBM Plex Mono'; letter-spacing: .15em; text-transform: uppercase; color: #F5A623; margin-left: auto; }
+
+    .kpi-row { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+    .kpi { flex: 1; min-width: 140px; background: #181E2B; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 18px 20px; }
+    .kpi-label { font: 500 9px 'IBM Plex Mono'; letter-spacing: .12em; text-transform: uppercase; color: #838A9E; margin-bottom: 6px; }
+    .kpi-value { font: 700 32px 'Sora'; color: #F5A623; letter-spacing: -.02em; }
+
+    h2 { font: 600 14px 'Sora'; letter-spacing: .05em; color: #838A9E; text-transform: uppercase; margin: 0 0 14px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th { font: 500 9px 'IBM Plex Mono'; letter-spacing: .12em; text-transform: uppercase; color: #838A9E; text-align: left; padding: 0 14px 10px; }
+    td { font: 400 13.5px 'Sora'; color: #EDE9E0; padding: 13px 14px; border-top: 1px solid rgba(255,255,255,.06); vertical-align: top; }
+    tr:hover td { background: rgba(255,255,255,.03); }
+
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font: 600 11px 'Sora'; }
+    .badge-yes { background: rgba(34,160,107,.2); color: #22a06b; }
+    .badge-no  { background: rgba(255,255,255,.07); color: #838A9E; }
+    .badge-approved { background: rgba(34,160,107,.15); color: #22a06b; border: 1px solid rgba(34,160,107,.3); }
+
+    .ts { font: 400 11px 'IBM Plex Mono'; color: #838A9E; }
+    .company { font: 600 13.5px 'Sora'; color: #F5A623; }
+    .name { font: 400 13.5px 'Sora'; color: #EDE9E0; }
+    .email { font: 400 11px 'IBM Plex Mono'; color: #838A9E; }
+
+    .empty { text-align: center; padding: 48px; color: #838A9E; font: 400 14px 'Sora'; }
+    .section { background: #0D1017; border: 1px solid rgba(255,255,255,.07); border-radius: 14px; overflow: hidden; margin-bottom: 32px; padding: 20px 6px 0; }
+
+    .refresh { font: 500 9px 'IBM Plex Mono'; letter-spacing: .1em; text-transform: uppercase; color: #838A9E; text-align: right; margin-bottom: 24px; }
+    a { color: #F5A623; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="logo-sq"></div>
+    <span class="logo-text">BUCKER LABS</span>
+    <span class="tag">Grand Rapids · Jul 16 · Attendee Dashboard</span>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Intake opens</div>
+      <div class="kpi-value"><%= @total_opens %></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Completed intake</div>
+      <div class="kpi-value"><%= @leads.count %></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Companion opens</div>
+      <div class="kpi-value"><%= @total_home_views %></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Returned later</div>
+      <div class="kpi-value"><%= @lead_stats.count { |s| s[:returned] } %></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Approved render</div>
+      <div class="kpi-value"><%= @leads.count(&:approved_render) %></div>
+    </div>
+  </div>
+
+  <div class="refresh">Last loaded: <%= Time.now.strftime("%-I:%M %p") %> · <a href="?token=<%= params[:token] %>">Refresh</a></div>
+
+  <h2>Attendees</h2>
+  <div class="section">
+    <% if @lead_stats.empty? %>
+      <div class="empty">No attendees yet — share the QR code to get started.</div>
+    <% else %>
+    <table>
+      <thead>
+        <tr>
+          <th>Name &amp; Company</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th>First seen</th>
+          <th>Visits</th>
+          <th>Returned</th>
+          <th>Render</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @lead_stats.each do |s| %>
+          <% l = s[:lead] %>
+          <tr>
+            <td>
+              <div class="name"><%= l.first_name %> <%= l.last_name %></div>
+              <div class="company"><%= l.company %></div>
+            </td>
+            <td><span class="email"><%= l.email %></span></td>
+            <td>
+              <% if s[:city] %>
+                <span class="ts"><%= s[:city] %><%= s[:country] ? ", #{s[:country]}" : "" %></span>
+              <% else %>
+                <span class="ts">—</span>
+              <% end %>
+            </td>
+            <td><span class="ts"><%= s[:first_seen]&.strftime("%-I:%M %p") || "—" %></span></td>
+            <td><span class="ts"><%= s[:visit_count] %></span></td>
+            <td>
+              <% if s[:returned] %>
+                <span class="badge badge-yes">Yes ↩</span>
+              <% else %>
+                <span class="badge badge-no">—</span>
+              <% end %>
+            </td>
+            <td>
+              <% if l.approved_render %>
+                <span class="badge badge-approved">✓ Approved</span>
+              <% else %>
+                <span class="badge badge-no">—</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+
+  <% if @lead_stats.any? %>
+    <h2>Chat Activity</h2>
+    <div class="section">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Messages</th>
+            <th>Last question</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @lead_stats.select { |s| s[:lead].chat_messages.where(role: "user").any? }.each do |s| %>
+            <% l = s[:lead] %>
+            <% last_q = l.chat_messages.where(role: "user").order(:created_at).last %>
+            <tr>
+              <td><span class="name"><%= l.first_name %> <%= l.last_name %></span><br><span class="company"><%= l.company %></span></td>
+              <td><span class="ts"><%= l.chat_messages.where(role: "user").count %> questions</span></td>
+              <td><span class="ts">"<%= last_q&.content&.truncate(80) %>"</span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+</div>
+</body>
+</html>

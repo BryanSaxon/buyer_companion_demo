@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   end
 
   get "home", to: "home#show", as: :home
+
+  get "admin", to: "admin#show", as: :admin
 end
