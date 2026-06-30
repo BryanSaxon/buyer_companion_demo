@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   root "intake#show"
 
   resources :leads, only: [ :create ] do
-    resource :approval, only: [ :create ]
-    resources :messages, only: [ :create ]
+    resources :messages,   only: [ :create ]
+    resource  :selections, only: [ :create ]
   end
 
   get "home", to: "home#show", as: :home

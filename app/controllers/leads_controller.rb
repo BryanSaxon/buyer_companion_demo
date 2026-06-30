@@ -11,7 +11,7 @@ class LeadsController < ApplicationController
     @lead.assign_attributes(lead_params.except(:email))
 
     if @lead.save
-      seed_intro_message(@lead)
+      @lead.create_design_session!
       session[:lead_id] = @lead.id
       render json: { success: true, lead_id: @lead.id }
     else
@@ -27,10 +27,4 @@ class LeadsController < ApplicationController
     end
   end
 
-  def seed_intro_message(lead)
-    lead.chat_messages.create!(
-      role: "companion",
-      content: "Hi #{lead.first_name_display} — I'm your home companion from #{lead.org_name}. I know your selections, your timeline, and every room in your home by name. Ask me anything, day or night."
-    )
-  end
 end

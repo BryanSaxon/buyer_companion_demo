@@ -10,21 +10,59 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_28_031237) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_035200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "chat_messages", force: :cascade do |t|
+    t.string "component_type"
     t.text "content"
     t.datetime "created_at", null: false
     t.bigint "lead_id", null: false
+    t.string "message_type", default: "text", null: false
     t.string "role"
     t.datetime "updated_at", null: false
     t.index ["lead_id"], name: "index_chat_messages_on_lead_id"
   end
 
+  create_table "design_selections", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "design_session_id", null: false
+    t.string "option_key", null: false
+    t.string "option_label", null: false
+    t.boolean "pending", default: false, null: false
+    t.string "room_key", null: false
+    t.string "selection_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["design_session_id", "room_key", "selection_type"], name: "idx_design_selections_unique", unique: true
+    t.index ["design_session_id"], name: "index_design_selections_on_design_session_id"
+  end
+
+  create_table "design_sessions", force: :cascade do |t|
+    t.string "aasm_state", default: "welcome", null: false
+    t.datetime "created_at", null: false
+    t.string "current_room"
+    t.integer "current_selection_index", default: 0, null: false
+    t.text "design_styles"
+    t.bigint "lead_id", null: false
+    t.boolean "planning_complete", default: false, null: false
+    t.boolean "style_selected", default: false, null: false
+    t.boolean "summary_approved", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["lead_id"], name: "index_design_sessions_on_lead_id", unique: true
+  end
+
+  create_table "draft_emails", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.bigint "design_session_id", null: false
+    t.text "original_question", null: false
+    t.string "subject", null: false
+    t.datetime "updated_at", null: false
+    t.index ["design_session_id"], name: "index_draft_emails_on_design_session_id"
+  end
+
   create_table "leads", force: :cascade do |t|
-    t.boolean "approved_render", default: false, null: false
     t.string "company"
     t.datetime "created_at", null: false
     t.string "email"
@@ -45,5 +83,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_28_031237) do
     t.index ["lead_id"], name: "index_page_views_on_lead_id"
   end
 
+  create_table "room_plans", force: :cascade do |t|
+    t.boolean "complete", default: false, null: false
+    t.datetime "created_at", null: false
+    t.bigint "design_session_id", null: false
+    t.text "occupants"
+    t.string "purpose"
+    t.string "purpose_label"
+    t.string "room_key", null: false
+    t.boolean "skipped", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["design_session_id", "room_key"], name: "index_room_plans_on_design_session_id_and_room_key", unique: true
+    t.index ["design_session_id"], name: "index_room_plans_on_design_session_id"
+  end
+
   add_foreign_key "chat_messages", "leads"
+  add_foreign_key "design_selections", "design_sessions"
+  add_foreign_key "design_sessions", "leads"
+  add_foreign_key "draft_emails", "design_sessions"
+  add_foreign_key "room_plans", "design_sessions"
 end

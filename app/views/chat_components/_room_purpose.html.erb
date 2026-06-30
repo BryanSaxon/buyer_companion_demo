@@ -1,0 +1,26 @@
+<div class="chat-component" data-component="room_purpose" data-room-key="<%= room[:key] %>">
+  <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
+    Select a purpose
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="purpose-other-input-hidden" data-other-input-id="purpose-other-input">
+    <% DemoData::FLEX_PURPOSES.each do |p| %>
+      <button class="chat-component-btn chat-component-btn--option purpose-btn"
+              data-action="click->companion#selectPurpose"
+              data-room-key="<%= room[:key] %>"
+              data-purpose-key="<%= p[:key] %>">
+        <%= p[:label] %>
+      </button>
+    <% end %>
+  </div>
+  <div id="purpose-other-input" style="display:none;margin-top:10px;gap:8px;flex-direction:column">
+    <input type="text" placeholder="Describe the purpose…"
+           style="width:100%;padding:10px 13px;border:1px solid #E5E7EB;border-radius:10px;font:400 14px 'Sora',system-ui;background:#fff;outline:none"
+           onfocus="this.style.borderColor='#F5A623'" onblur="this.style.borderColor='#E5E7EB'"
+           data-purpose-other-input>
+    <button class="chat-component-btn chat-component-btn--primary"
+            data-action="click->companion#confirmPurposeOther"
+            data-room-key="<%= room[:key] %>">
+      Confirm
+    </button>
+  </div>
+</div>

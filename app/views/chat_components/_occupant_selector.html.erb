@@ -1,0 +1,29 @@
+<div class="chat-component" data-component="occupant_selector" data-room-key="<%= room[:key] %>">
+  <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
+    Select all that apply
+  </div>
+  <div style="display:flex;flex-direction:column;gap:7px">
+    <% (remaining_family || DemoData::FAMILY).each do |person| %>
+      <button class="chat-component-btn chat-component-btn--option occupant-btn"
+              data-action="click->companion#toggleOccupant"
+              data-occupant-key="<%= person[:key] %>"
+              data-room-key="<%= room[:key] %>">
+        <span style="font:600 13px 'Sora',system-ui"><%= person[:name] %></span>
+        <span style="font:400 11px 'Sora',system-ui;color:#9aa0ac;margin-left:6px"><%= person[:role] %></span>
+      </button>
+    <% end %>
+    <button class="chat-component-btn chat-component-btn--option occupant-btn"
+            data-action="click->companion#toggleOccupant"
+            data-occupant-key="guest"
+            data-room-key="<%= room[:key] %>">
+      <span style="font:600 13px 'Sora',system-ui">Guest room</span>
+      <span style="font:400 11px 'Sora',system-ui;color:#9aa0ac;margin-left:6px">Or not assigned yet</span>
+    </button>
+  </div>
+  <button class="chat-component-btn chat-component-btn--primary"
+          style="margin-top:10px"
+          data-action="click->companion#confirmOccupants"
+          data-room-key="<%= room[:key] %>">
+    Confirm →
+  </button>
+</div>
