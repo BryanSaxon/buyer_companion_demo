@@ -24,42 +24,65 @@
     <!-- ============ RESPONSIVE CONTENT GRID ============ -->
     <div class="companion-grid">
 
-      <!-- LEFT / MAIN: greeting, render, footer -->
+      <!-- ====== LEFT / MAIN ====== -->
       <div class="companion-main">
 
-        <!-- ============ GREETING ============ -->
-        <div style="padding:34px 28px 4px;animation:scRise .6s ease both">
+        <!-- GREETING -->
+        <div class="c-section" style="padding-top:38px;padding-bottom:4px;animation:scRise .6s ease both">
           <div style="display:flex;align-items:center;gap:8px">
             <span style="width:6px;height:6px;border-radius:50%;background:#F5A623"></span>
             <span style="font:600 10.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase;color:#F5A623">It knows you</span>
           </div>
-          <h1 class="greeting-headline" style="margin:14px 0 0;font:700 43px/1.04 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.03em">Hello, <%= first_name %>.</h1>
-          <p style="margin:14px 0 0;font:400 16.5px/1.5 'Sora',system-ui;color:#6B7280">Here's the home we've been building together — with every selection you've made already in place.</p>
 
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px">
-            <div style="display:flex;flex-direction:column;gap:3px;padding:11px 15px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
-              <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Plan</span>
-              <span style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">The Brookfield</span>
+          <!-- Desktop: heading+desc left / chips right. Mobile: stacked -->
+          <div class="c-greeting-layout">
+            <div>
+              <h1 class="greeting-headline" style="margin:14px 0 0;font:700 43px/1.04 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.03em">Hello, <%= first_name %>.</h1>
+              <p style="margin:14px 0 0;font:400 16.5px/1.5 'Sora',system-ui;color:#6B7280">Here's the home we've been building together — with every selection you've made already in place.</p>
+
+              <!-- Fact chips: shown inline on mobile; hidden on desktop (appear in right col) -->
+              <div class="c-fact-chips-mobile" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px">
+                <div style="display:flex;flex-direction:column;gap:3px;padding:11px 15px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
+                  <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Plan</span>
+                  <span style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">The Brookfield</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:3px;padding:11px 15px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
+                  <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Lot</span>
+                  <span style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Lot 24</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:3px;padding:11px 15px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
+                  <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Stage</span>
+                  <span style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Final review</span>
+                </div>
+              </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:3px;padding:11px 15px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
-              <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Lot</span>
-              <span style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Lot 24</span>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:3px;padding:11px 15px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
-              <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Stage</span>
-              <span style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Final review</span>
+
+            <!-- Fact chips column: desktop-only right column -->
+            <div class="c-greeting-chips-col">
+              <div style="display:flex;flex-direction:column;gap:3px;padding:12px 16px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
+                <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Plan</span>
+                <span style="font:600 14px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">The Brookfield</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;padding:12px 16px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
+                <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Lot</span>
+                <span style="font:600 14px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Lot 24</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;padding:12px 16px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.04)">
+                <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Stage</span>
+                <span style="font:600 14px 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em">Final review</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- ============ KITCHEN RENDER ============ -->
-        <div style="padding:30px 28px 4px;animation:scRise .7s ease both">
+        <!-- KITCHEN RENDER -->
+        <div class="c-section" style="padding-top:34px;padding-bottom:4px;animation:scRise .7s ease both">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
             <span style="width:6px;height:6px;border-radius:50%;background:#F5A623"></span>
             <span style="font:600 10.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase;color:#F5A623">Your kitchen — the render's back</span>
           </div>
 
-          <div style="position:relative;aspect-ratio:4/3;width:100%;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;background:#F1F3F8;box-shadow:0 2px 12px rgba(0,0,0,.06)">
+          <div class="c-render-box" style="position:relative;aspect-ratio:4/3;width:100%;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;background:#F1F3F8;box-shadow:0 2px 12px rgba(0,0,0,.06)">
             <% if File.exist?(Rails.root.join("app/assets/images/kitchen-render.jpg")) || File.exist?(Rails.root.join("app/assets/images/kitchen-render.png")) %>
               <%= image_tag "kitchen-render", style: "display:block;width:100%;height:100%;object-fit:cover;" %>
             <% else %>
@@ -82,7 +105,8 @@
 
           <p style="margin:18px 0 0;font:400 15.5px/1.55 'Sora',system-ui;color:#3f3f3f">We've got the render back on your kitchen, with all your selections. Take a look — let us know if you approve, or ask me anything about it.</p>
 
-          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+          <!-- Selection pills: wrapping on mobile, 2-col grid on desktop -->
+          <div class="c-selections" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
             <% [["Cabinets", "Alpine White shaker"], ["Island", "Hale Navy"], ["Counters", "Calacatta Gold quartz"], ["Backsplash", "Zellige, gloss white"], ["Hardware", "Matte black pulls"], ["Floors", "Natural white oak"]].each do |label, value| %>
               <div style="display:inline-flex;align-items:center;gap:7px;padding:7px 12px;background:#fff;border:1px solid #E5E7EB;border-radius:999px">
                 <span style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#F5A623"><%= label %></span>
@@ -114,8 +138,8 @@
           </div>
         </div>
 
-        <!-- ============ FOOTER ============ -->
-        <div style="padding:30px 28px 36px">
+        <!-- FOOTER -->
+        <div class="c-section" style="padding-top:30px;padding-bottom:44px">
           <div style="width:26px;height:2px;border-radius:2px;background:#F5A623;margin-bottom:14px"></div>
           <p style="margin:0;font:500 17px/1.4 'Sora',system-ui;color:#4b4b4b">&ldquo;Software should bend to you. Not the other way around.&rdquo;</p>
           <div style="display:flex;align-items:center;gap:9px;margin-top:20px;padding-top:18px;border-top:1px solid #E5E7EB">
@@ -127,12 +151,12 @@
 
       </div><!-- /companion-main -->
 
-      <!-- RIGHT / SIDEBAR: companion chat -->
+      <!-- ====== RIGHT / CHAT SIDEBAR ====== -->
       <div class="companion-sidebar">
         <div class="companion-sidebar-pad" style="animation:scRise .8s ease both">
-          <div class="chat-panel" style="background:#fff;border:1px solid #E5E7EB;border-radius:18px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)">
+          <div class="chat-panel">
 
-            <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid #E5E7EB;flex:none">
+            <div class="chat-header-bar">
               <div style="position:relative;width:34px;height:34px;border-radius:50%;background:#F5A623;color:#1A1A2E;display:flex;align-items:center;justify-content:center;font:700 12px 'Sora',system-ui;flex:none">
                 <%= org_initials %>
                 <span style="position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#22a06b;border:2px solid #fff"></span>
@@ -143,7 +167,7 @@
               </div>
             </div>
 
-            <div class="chat-messages" data-companion-target="messageArea" style="padding:18px;max-height:440px;overflow-y:auto;overflow-x:hidden;background:#FAFAF8">
+            <div class="chat-messages" data-companion-target="messageArea">
               <% @messages.each do |msg| %>
                 <%= render partial: "home/message", locals: { msg: msg } %>
               <% end %>
@@ -159,7 +183,7 @@
               </div>
             </div>
 
-            <div style="display:flex;gap:9px;padding:13px 16px;border-top:1px solid #E5E7EB;background:#fff;flex:none">
+            <div class="chat-composer">
               <input data-companion-target="composer"
                 data-action="keydown->companion#composerKeydown"
                 placeholder="Ask about your home&hellip;"
