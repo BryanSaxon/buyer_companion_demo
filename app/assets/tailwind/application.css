@@ -58,6 +58,123 @@ input::placeholder {
    ============================================================ */
 :root {
   --brand-bar-h: 65px;
+  --tab-bar-h:   46px;
+}
+
+/* ============================================================
+   MOBILE TAB BAR (hidden on desktop)
+   ============================================================ */
+.mobile-tab-bar {
+  display: flex;
+  flex: none;
+  position: sticky;
+  top: var(--brand-bar-h);
+  z-index: 5;
+  background: #FAFAF8;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.mobile-tab {
+  flex: 1;
+  padding: 13px 16px;
+  font: 600 13px 'Sora', system-ui;
+  color: #9aa0ac;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  letter-spacing: -.01em;
+  transition: color .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.mobile-tab.active {
+  color: #1A1A1A;
+  border-bottom-color: #F5A623;
+}
+
+/* Unread dot on Companion tab */
+.tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #F5A623;
+  display: none;
+}
+.tab-dot.visible {
+  display: block;
+}
+
+/* ============================================================
+   MOBILE PANEL SWITCHING (< 1024px)
+   ============================================================ */
+@media (max-width: 1023px) {
+  /* Grid fills the remaining viewport below brand + tab bars */
+  .companion-grid {
+    height: calc(100dvh - var(--brand-bar-h) - var(--tab-bar-h));
+    overflow: hidden;
+  }
+
+  /* Home panel: scrolls internally */
+  .companion-main {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Chat panel: hidden until tab is activated */
+  .companion-sidebar {
+    display: none;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* --- Chat tab active --- */
+  .companion-grid.chat-active .companion-main {
+    display: none;
+  }
+  .companion-grid.chat-active .companion-sidebar {
+    display: flex;
+  }
+
+  /* Full-height native-feeling chat — no card chrome on mobile */
+  .companion-grid.chat-active .companion-sidebar-pad {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .companion-grid.chat-active .chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    background: #FAFAF8;
+  }
+  .companion-grid.chat-active .chat-header-bar {
+    background: rgba(250,250,248,.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .companion-grid.chat-active .chat-messages {
+    flex: 1;
+    max-height: none;
+    background: #FAFAF8;
+    overflow-y: auto;
+  }
+  .companion-grid.chat-active .chat-composer {
+    background: rgba(250,250,248,.96);
+    border-top: 1px solid #E5E7EB;
+  }
 }
 
 /* ============================================================
@@ -210,6 +327,11 @@ input::placeholder {
    full height, distinct warm background, no card chrome.
    ============================================================ */
 @media (min-width: 1024px) {
+
+  /* Tab bar not needed on desktop — both panels always visible */
+  .mobile-tab-bar {
+    display: none;
+  }
 
   /* --- Outer shell: full-width, no gutters --- */
   .companion-outer {

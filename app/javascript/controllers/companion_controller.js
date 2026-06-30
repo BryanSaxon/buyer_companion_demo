@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 const HOUSE_SVG = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#F5A623" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="animation:housePulse 1.6s cubic-bezier(.4,0,.2,1) infinite"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>`
 
 export default class extends Controller {
-  static targets = ["messageArea", "composer", "approveRow", "approvedPanel", "chips"]
+  static targets = ["messageArea", "composer", "approveRow", "approvedPanel", "chips", "grid", "homeTab", "chatTab", "tabDot"]
   static values = {
     approveUrl: String,
     messagesUrl: String,
@@ -14,6 +14,20 @@ export default class extends Controller {
   sending = false
 
   connect() {
+    this.scrollToBottom()
+  }
+
+  showHome() {
+    if (this.hasGridTarget) this.gridTarget.classList.remove("chat-active")
+    this.homeTabTarget.classList.add("active")
+    this.chatTabTarget.classList.remove("active")
+  }
+
+  showChat() {
+    if (this.hasGridTarget) this.gridTarget.classList.add("chat-active")
+    this.homeTabTarget.classList.remove("active")
+    this.chatTabTarget.classList.add("active")
+    if (this.hasTabDotTarget) this.tabDotTarget.classList.remove("visible")
     this.scrollToBottom()
   }
 
@@ -80,11 +94,13 @@ export default class extends Controller {
       typingEl.remove()
       this.appendCompanionBubble(data.answer)
       this.scrollToBottom()
+      this._notifyIfHidden()
     })
     .catch(() => {
       typingEl.remove()
       this.appendCompanionBubble("That's a great one for Megan, your designer — I've flagged it so she sees it before your next appointment.")
       this.scrollToBottom()
+      this._notifyIfHidden()
     })
     .finally(() => { this.sending = false })
   }
@@ -114,6 +130,11 @@ export default class extends Controller {
   scrollToBottom() {
     const el = this.messageAreaTarget
     el.scrollTop = el.scrollHeight
+  }
+
+  _notifyIfHidden() {
+    const onChat = this.hasGridTarget && this.gridTarget.classList.contains("chat-active")
+    if (!onChat && this.hasTabDotTarget) this.tabDotTarget.classList.add("visible")
   }
 
   escapeHtml(text) {

@@ -21,8 +21,21 @@
       <div style="margin-left:auto;text-align:right;font:500 8px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:#b3b8c0;line-height:1.5;flex:none">Powered by<br>Bucker Labs</div>
     </div>
 
+    <!-- ============ MOBILE TAB BAR (hidden on desktop) ============ -->
+    <div class="mobile-tab-bar">
+      <button class="mobile-tab active" data-action="click->companion#showHome" data-companion-target="homeTab">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
+        My home
+      </button>
+      <button class="mobile-tab" data-action="click->companion#showChat" data-companion-target="chatTab">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Companion
+        <span class="tab-dot" data-companion-target="tabDot"></span>
+      </button>
+    </div>
+
     <!-- ============ RESPONSIVE CONTENT GRID ============ -->
-    <div class="companion-grid">
+    <div class="companion-grid" data-companion-target="grid">
 
       <!-- ====== LEFT / MAIN ====== -->
       <div class="companion-main">
