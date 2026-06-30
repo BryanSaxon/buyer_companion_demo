@@ -37,10 +37,11 @@ class DesignFlow
     when "option"        then handle_option(action_data)
     when "pending"       then handle_pending_selection(action_data)
     when "progress_next" then handle_progress_next
-    when "summary_edit"  then handle_summary_edit(action_data)
-    when "summary_done"  then handle_summary_done
-    when "welcome_ready" then handle_welcome_ready
-    when "welcome_info"  then handle_welcome_info
+    when "summary_edit"          then handle_summary_edit(action_data)
+    when "summary_done"          then handle_summary_done
+    when "summary_change_intent" then handle_summary_change_intent
+    when "welcome_ready"         then handle_welcome_ready
+    when "welcome_info"          then handle_welcome_info
     else
       { message: "Something went wrong — let's try that again.", component_html: nil }
     end
@@ -214,7 +215,19 @@ class DesignFlow
       unique_by: :idx_design_selections_unique
     )
 
-    advance_design_cursor
+    selections_for_room = DemoData.selections_for(room_key)
+    next_idx            = session.current_selection_index + 1
+    next_selection      = selections_for_room[next_idx]
+
+    warm_message = selection_confirmation_llm_message(
+      room_key: room_key,
+      selection_type: selection_type,
+      option_label: option_label,
+      next_selection_label: next_selection&.dig(:label),
+      is_last_in_room: next_selection.nil?
+    )
+
+    advance_design_cursor(warm_message)
   end
 
   def handle_pending_selection(data)
@@ -232,7 +245,15 @@ class DesignFlow
       unique_by: :idx_design_selections_unique
     )
 
-    advance_design_cursor
+    selections_for_room = DemoData.selections_for(room_key)
+    next_idx            = session.current_selection_index + 1
+    next_selection      = selections_for_room[next_idx]
+    room                = DemoData.room(room_key)
+    skip_msg = next_selection.nil? ?
+      "That's totally okay — Megan will help you land on #{label.downcase} at your design meeting. Let's wrap up #{room[:label]}!" :
+      "No worries at all — Megan will sort out #{label.downcase} with you at your meeting. Let's move on to #{next_selection[:label].downcase}."
+
+    advance_design_cursor(skip_msg)
   end
 
   def handle_progress_next
@@ -278,15 +299,13 @@ class DesignFlow
       state: "complete", rooms_complete: 8, total_rooms: 8 }
   end
 
-  def advance_design_cursor
+  def advance_design_cursor(warm_message = nil)
     selections_for_room = DemoData.selections_for(session.current_room)
     next_idx = session.current_selection_index + 1
 
     if next_idx < selections_for_room.size
-      # More selections in this room
       session.update!(current_selection_index: next_idx)
-      room_label = DemoData.room(session.current_room)[:label]
-      msg = confirmation_message_for_selection
+      msg = warm_message || confirmation_message_for_selection
       { message: msg,
         component_html: render_option_selector,
         component_type: "option_selector",
@@ -294,19 +313,28 @@ class DesignFlow
         rooms_complete: session.rooms_complete_count,
         total_rooms: 8 }
     else
-      # Room complete — show progress card
       room_label = DemoData.room(session.current_room)[:label]
-      sels = session.design_selections.where(room_key: session.current_room)
-      msg = "#{room_label} is done! Great choices — these are going to look incredible together."
+      msg = warm_message || "#{room_label} is done! Great choices — these are going to look incredible together."
       { message: msg,
         component_html: render_component("chat_components/progress_card",
                                          session: session, room_key: session.current_room,
-                                         rooms_complete: session.rooms_complete_count + 1),
+                                         rooms_complete: session.rooms_complete_count),
         component_type: "progress_card",
         state: session.aasm_state,
         rooms_complete: session.rooms_complete_count,
         total_rooms: 8 }
     end
+  end
+
+  def handle_summary_change_intent
+    msg = "Of course — no problem at all! Tap 'Edit' next to any room below to revisit it. " \
+          "You can change as many selections as you'd like."
+    { message: msg,
+      component_html: render_component("chat_components/summary_card", session: session),
+      component_type: "summary_card",
+      state: session.aasm_state,
+      rooms_complete: session.rooms_complete_count,
+      total_rooms: 8 }
   end
 
   def move_to_style_selection
@@ -444,6 +472,37 @@ class DesignFlow
   rescue StandardError => e
     Rails.logger.error("Component render error: #{e.message}")
     nil
+  end
+
+  def selection_confirmation_llm_message(room_key:, selection_type:, option_label:, next_selection_label: nil, is_last_in_room: false)
+    room   = DemoData.room(room_key)
+    styles = session.design_styles_array.filter_map { |k|
+      DemoData::DESIGN_STYLES.find { |s| s[:key] == k }&.dig(:label)
+    }.join(", ")
+
+    context = "The Morgan family just selected '#{option_label}' for " \
+              "#{selection_type.humanize.downcase} in the #{room[:label]}." \
+              "#{styles.present? ? " Their design style is #{styles}." : ''}" \
+              "#{is_last_in_room ?
+                  " This is the final selection — the #{room[:label]} is now fully designed!" :
+                  next_selection_label ? " Next up: #{next_selection_label.downcase}." : ''}" \
+              " Write exactly 1–2 warm, enthusiastic, personal sentences celebrating this specific choice." \
+              "#{is_last_in_room ?
+                  " Celebrate completing the room — mention how the choices will come together." :
+                  " End with one natural sentence introducing the next selection."}" \
+              " Reference the room or their style when it feels natural. No questions. No listing all picks."
+
+    result = @llm.call(
+      session: session, lead: lead,
+      user_input: "I selected #{option_label}",
+      state_context: context,
+      history: []
+    )
+    result["message"]
+  rescue StandardError
+    is_last_in_room ?
+      "The #{room[:label]} is complete — those selections are going to look stunning together!" :
+      "Beautiful choice! Now let's look at #{next_selection_label&.downcase || 'the next selection'}."
   end
 
   def generate_draft_body(question)

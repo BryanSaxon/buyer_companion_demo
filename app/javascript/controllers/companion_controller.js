@@ -194,10 +194,44 @@ export default class extends Controller {
     this.postSelection({ type: "summary_edit", room_key: roomKey })
   }
 
+  summaryChangeIntent(e) {
+    const component = e.currentTarget.closest("[data-component='summary_card']")
+    this.lockComponent(component)
+    this.postSelection({ type: "summary_change_intent" })
+  }
+
   summaryDone(e) {
     const component = e.currentTarget.closest("[data-component='summary_card']")
     this.lockComponent(component)
     this.postSelection({ type: "summary_done" })
+  }
+
+  toggleRoomDrawer(e) {
+    const roomKey = e.currentTarget.dataset.roomKey
+    const drawer  = document.getElementById(`room-drawer-${roomKey}`)
+    const chevron = document.getElementById(`chevron-${roomKey}`)
+    if (!drawer) return
+
+    const isOpen = drawer.style.display !== "none"
+
+    document.querySelectorAll("[id^='room-drawer-']").forEach(d => { d.style.display = "none" })
+    document.querySelectorAll("[id^='chevron-']").forEach(c => { c.style.transform = "" })
+
+    if (!isOpen) {
+      drawer.style.display = "block"
+      if (chevron) chevron.style.transform = "rotate(90deg)"
+    }
+  }
+
+  editRoomFromBrief(e) {
+    e.stopPropagation()
+    const { roomKey } = e.currentTarget.dataset
+    const drawer = document.getElementById(`room-drawer-${roomKey}`)
+    if (drawer) drawer.style.display = "none"
+    const chevron = document.getElementById(`chevron-${roomKey}`)
+    if (chevron) chevron.style.transform = ""
+    if (window.innerWidth < 1024) this.showChat()
+    this.postSelection({ type: "summary_edit", room_key: roomKey })
   }
 
   copyEmail(e) {

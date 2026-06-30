@@ -15,9 +15,17 @@
         <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= org_name %></div>
         <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:#9aa0ac">Buyer design companion</div>
       </div>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;flex:none">
-        <div style="width:7px;height:7px;border-radius:50%;background:#22a06b"></div>
-        <span style="font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#9aa0ac">Live</span>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:14px;flex:none">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:7px;height:7px;border-radius:50%;background:#22a06b"></div>
+          <span style="font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#9aa0ac">Live</span>
+        </div>
+        <%= link_to demo_reset_path,
+              style: "font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b3b8c0;text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .15s",
+              onmouseover: "this.style.color='#F5A623'",
+              onmouseout: "this.style.color='#b3b8c0'" do %>
+          ↺ Reset
+        <% end %>
       </div>
     </div>
 

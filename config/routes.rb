@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   get "home", to: "home#show", as: :home
 
   get "admin", to: "admin#show", as: :admin
+
+  get "reset", to: "demo#reset", as: :demo_reset
 end

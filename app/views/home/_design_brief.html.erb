@@ -1,6 +1,9 @@
 <% rooms_complete = session.rooms_complete_count %>
 <% total_rooms = 8 %>
 <% pct = total_rooms > 0 ? (rooms_complete.to_f / total_rooms * 100).round : 0 %>
+<% planning_done = !session.welcome? && !session.room_planning? %>
+<% styles_done   = session.designing? || session.summary_review? || session.complete? %>
+<% selections_by_room = session.design_selections.to_a.group_by(&:room_key) %>
 
 <div class="c-section" style="padding-top:32px;padding-bottom:8px;animation:scRise .6s ease both">
   <!-- Property card -->
@@ -48,8 +51,8 @@
 
     <!-- Phase indicators -->
     <% [
-      { label: "Room Planning",   done: session.planning_complete?,  active: session.room_planning? },
-      { label: "Design Styles",   done: session.style_selected?,     active: session.style_selection? },
+      { label: "Room Planning", done: planning_done, active: session.room_planning? },
+      { label: "Design Styles", done: styles_done,   active: session.style_selection? },
     ].each do |phase| %>
       <div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #F5F4EF">
         <% if phase[:done] %>
@@ -71,21 +74,41 @@
     <% DemoData::ROOMS.each do |room| %>
       <% is_done   = session.room_fully_designed?(room[:key]) %>
       <% is_active = !session.complete? && session.designing? && session.current_room == room[:key] %>
-      <% is_pending = session.designing? && !is_done && !is_active %>
-      <div style="display:flex;align-items:center;gap:9px;padding:5px 0">
-        <% if is_done %>
+      <% if is_done %>
+        <div style="display:flex;align-items:center;gap:9px;padding:5px 0;cursor:pointer;user-select:none"
+             data-action="click->companion#toggleRoomDrawer"
+             data-room-key="<%= room[:key] %>">
           <div style="width:16px;height:16px;border-radius:50%;background:#22a06b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;flex:none">✓</div>
           <span style="font:400 12px 'Sora',system-ui;color:#9aa0ac;text-decoration:line-through"><%= room[:label] %></span>
-        <% elsif is_active %>
+          <svg id="chevron-<%= room[:key] %>" style="margin-left:auto;flex:none;transition:transform .15s;color:#c8ccd4" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div id="room-drawer-<%= room[:key] %>" style="display:none;padding:4px 0 10px 25px">
+          <% (selections_by_room[room[:key]] || []).each do |sel| %>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:2px 0">
+              <span style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b3b8c0;white-space:nowrap;flex:none"><%= sel.selection_type.humanize %></span>
+              <span style="font:500 11.5px 'Sora',system-ui;color:<%= sel.pending? ? '#b3b8c0' : '#1A1A1A' %>;text-align:right"><%= sel.pending? ? '—' : sel.option_label %></span>
+            </div>
+          <% end %>
+          <button style="margin-top:8px;font:600 11px 'Sora',system-ui;color:#F5A623;background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:3px"
+                  data-action="click->companion#editRoomFromBrief"
+                  data-room-key="<%= room[:key] %>">
+            Edit in chat
+            <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      <% elsif is_active %>
+        <div style="display:flex;align-items:center;gap:9px;padding:5px 0">
           <div style="width:16px;height:16px;border-radius:50%;border:2px solid #F5A623;background:rgba(245,166,35,.1);display:flex;align-items:center;justify-content:center;flex:none">
             <div style="width:6px;height:6px;border-radius:50%;background:#F5A623"></div>
           </div>
           <span style="font:600 12px 'Sora',system-ui;color:#1A1A1A"><%= room[:label] %></span>
-        <% else %>
+        </div>
+      <% else %>
+        <div style="display:flex;align-items:center;gap:9px;padding:5px 0">
           <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #E5E7EB;flex:none"></div>
           <span style="font:400 12px 'Sora',system-ui;color:#b3b8c0"><%= room[:label] %></span>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
