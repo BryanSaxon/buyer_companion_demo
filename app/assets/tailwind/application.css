@@ -72,10 +72,9 @@ input::placeholder {
 
 .intake-card {
   width: 100%;
-  max-width: 540px;
   min-height: 100dvh;
   background: #FAFAF8;
-  box-shadow: 0 0 80px rgba(40,33,20,.10);
+  box-shadow: none;
   position: relative;
   overflow: hidden;
 }
@@ -117,10 +116,9 @@ input::placeholder {
 
 .companion-card {
   width: 100%;
-  max-width: 540px;
   min-height: 100dvh;
   background: #FAFAF8;
-  box-shadow: 0 0 80px rgba(40,33,20,.10);
+  box-shadow: none;
   position: relative;
 }
 
