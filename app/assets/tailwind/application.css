@@ -207,27 +207,19 @@ input::placeholder {
    ============================================================ */
 @media (min-width: 1024px) {
 
-  /* --- Outer shell --- */
-  /* Split background mirrors the two-panel layout so gutters are invisible:
-     left side matches the content panel (#FAFAF8), right 420px matches
-     the chat sidebar (#F2EFE9). Works at any viewport width. */
+  /* --- Outer shell: full-width, no gutters --- */
   .companion-outer {
     padding: 0;
     align-items: stretch;
-    background: linear-gradient(
-      to right,
-      #FAFAF8 calc(100% - 420px),
-      #F2EFE9 calc(100% - 420px)
-    );
   }
   .companion-card {
-    max-width: 1360px;
+    max-width: 100%;
     height: 100dvh;
     min-height: unset;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 8px 60px rgba(40,33,20,.15);
+    box-shadow: none;
   }
   .brand-bar {
     flex: none;
