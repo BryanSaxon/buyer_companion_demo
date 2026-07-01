@@ -36,7 +36,8 @@ class SelectionsController < ApplicationController
       role: "concierge",
       content: result[:message],
       message_type: "text",
-      component_type: result[:component_type]
+      component_type: result[:component_type],
+      component_html: result[:component_html]
     )
   end
 end
