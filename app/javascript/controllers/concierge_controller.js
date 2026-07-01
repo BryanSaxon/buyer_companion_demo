@@ -77,6 +77,8 @@ export default class extends Controller {
 
   sendSelection(e) {
     const type = e.currentTarget.dataset.selectionType
+    const component = e.currentTarget.closest("[data-component]")
+    this.lockComponent(component)
     this.postSelection({ type })
   }
 
@@ -90,7 +92,7 @@ export default class extends Controller {
       return
     }
 
-    this.lockComponent(component)
+    this._lockRoomPurpose(component, purposeKey)
     const label = e.currentTarget.textContent.trim()
     this.postSelection({ type: "room_purpose", room_key: roomKey, purpose: purposeKey, purpose_label: label })
   }
@@ -101,7 +103,7 @@ export default class extends Controller {
     const label = input?.value.trim()
     if (!label) { input?.focus(); return }
     const roomKey = e.currentTarget.dataset.roomKey
-    this.lockComponent(component)
+    this._lockRoomPurpose(component, "other")
     this.postSelection({ type: "room_purpose", room_key: roomKey, purpose: "other", purpose_label: label })
   }
 
@@ -121,7 +123,7 @@ export default class extends Controller {
     const component = e.currentTarget.closest("[data-component='occupant_selector']")
     const roomKey = component?.dataset.roomKey
     if (this.selectedOccupants.size === 0) return
-    this.lockComponent(component)
+    this._lockOccupantSelector(component, [...this.selectedOccupants])
     this.postSelection({ type: "occupants", room_key: roomKey, occupants: [...this.selectedOccupants] })
     this.selectedOccupants.clear()
   }
@@ -163,7 +165,7 @@ export default class extends Controller {
   confirmStyles(e) {
     const component = e.currentTarget.closest("[data-component='style_picker']")
     if (this.selectedStyles.size === 0) return
-    this.lockComponent(component)
+    this._lockStylePicker(component, [...this.selectedStyles])
     this.postSelection({ type: "design_styles", styles: [...this.selectedStyles] })
     this.selectedStyles.clear()
   }
@@ -178,7 +180,7 @@ export default class extends Controller {
     }
     e.currentTarget.classList.add("option-tile--selected")
 
-    this.lockComponent(component)
+    this._lockOptionSelector(component, optionKey, false)
     this.postSelection({ type: "option", room_key: roomKey, selection_type: selectionType,
                          option_key: optionKey, option_label: optionLabel })
   }
@@ -186,7 +188,7 @@ export default class extends Controller {
   skipOption(e) {
     const { roomKey, selectionType } = e.currentTarget.dataset
     const component = e.currentTarget.closest("[data-component='option_selector']")
-    this.lockComponent(component)
+    this._lockOptionSelector(component, null, true)
     this.postSelection({ type: "pending", room_key: roomKey, selection_type: selectionType })
   }
 
@@ -323,6 +325,97 @@ export default class extends Controller {
     div.innerHTML = `<div style="max-width:88%;background:#fff;color:#1A1A1A;padding:11px 15px;border-radius:16px 16px 16px 5px;border:1px solid #E5E7EB;box-shadow:0 1px 6px rgba(0,0,0,.04)"><span style="display:inline-flex;align-items:center;gap:8px">${HOUSE_SVG}<span style="font:500 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Thinking</span></span></div>`
     this.messageAreaTarget.appendChild(div)
     return div
+  }
+
+  _lockOptionSelector(component, chosenKey, isPending) {
+    if (!component) return
+    const header = component.querySelector("[data-component='option_selector'] > div:first-child, .chat-component--wide > div:first-child")
+      || component.querySelector("div:first-child")
+    if (header) { header.style.color = "#22a06b" }
+    // Update the selection type label to "✓ Locked in"
+    const labelEl = component.querySelector("[style*='color:#F5A623']")
+    if (labelEl) { labelEl.textContent = "✓ Locked in"; labelEl.style.color = "#22a06b" }
+
+    component.querySelectorAll(".option-tile").forEach(tile => {
+      const key = tile.dataset.optionKey
+      const isChosen = !isPending && key === chosenKey
+      tile.disabled = true
+      tile.style.cursor = "default"
+      tile.style.pointerEvents = "none"
+      tile.style.opacity = isChosen ? "1" : "0.35"
+      if (isChosen) {
+        tile.classList.add("option-tile--selected")
+        const sub = tile.querySelector("div:last-child")
+        if (sub) { sub.textContent = "Selected ✓"; sub.style.color = "#22a06b"; sub.style.display = "block" }
+      }
+    })
+    // Hide "Not sure yet" / action bar
+    component.querySelectorAll("[data-action*='skipOption'], [data-action*='concierge#skipOption']").forEach(b => b.style.display = "none")
+    if (isPending) {
+      const bar = component.querySelector("[style*='margin-top:8px']")
+      if (bar) {
+        bar.innerHTML = "<span style=\"font:500 11px 'Sora',system-ui;color:#9aa0ac\">Deciding with Megan at the design meeting</span>"
+      }
+    }
+  }
+
+  _lockStylePicker(component, chosenKeys) {
+    if (!component) return
+    const header = component.querySelector("div:first-child")
+    if (header) { header.textContent = "✓ Style locked in"; header.style.color = "#22a06b" }
+    component.querySelectorAll("[data-style-key]").forEach(tile => {
+      const key = tile.dataset.styleKey
+      const isChosen = chosenKeys.includes(key)
+      tile.disabled = true
+      tile.style.cursor = "default"
+      tile.style.pointerEvents = "none"
+      tile.style.opacity = isChosen ? "1" : "0.35"
+      if (isChosen) {
+        tile.classList.add("style-tile--selected")
+        const check = tile.querySelector(".style-tile__check")
+        if (check) check.style.display = "flex"
+      }
+    })
+    const confirmBtn = component.querySelector("[data-action*='confirmStyles']")
+    if (confirmBtn) confirmBtn.style.display = "none"
+  }
+
+  _lockOccupantSelector(component, confirmedKeys) {
+    if (!component) return
+    const header = component.querySelector("[style*='letter-spacing:.1em']")
+    if (header) { header.textContent = "✓ Confirmed"; header.style.color = "#22a06b" }
+    component.querySelectorAll(".occupant-btn").forEach(btn => {
+      const key = btn.dataset.occupantKey
+      const isConfirmed = confirmedKeys.includes(key)
+      btn.disabled = true
+      btn.style.cursor = "default"
+      btn.style.pointerEvents = "none"
+      btn.style.opacity = isConfirmed ? "1" : "0.35"
+      if (isConfirmed) {
+        btn.classList.add("chat-component-btn--selected")
+        const check = document.createElement("span")
+        check.style.cssText = "margin-left:auto;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;color:#22a06b"
+        check.textContent = "✓"
+        btn.appendChild(check)
+      }
+    })
+    const confirmBtn = component.querySelector("[data-action*='confirmOccupants']")
+    if (confirmBtn) confirmBtn.style.display = "none"
+  }
+
+  _lockRoomPurpose(component, chosenKey) {
+    if (!component) return
+    const header = component.querySelector("div:first-child")
+    if (header) { header.textContent = "✓ Locked in"; header.style.color = "#22a06b" }
+    component.querySelectorAll(".purpose-btn").forEach(btn => {
+      const key = btn.dataset.purposeKey
+      const isChosen = key === chosenKey
+      btn.disabled = true
+      btn.style.cursor = "default"
+      btn.style.pointerEvents = "none"
+      btn.style.opacity = isChosen ? "1" : "0.35"
+      if (isChosen) btn.classList.add("chat-component-btn--selected")
+    })
   }
 
   lockComponent(component) {

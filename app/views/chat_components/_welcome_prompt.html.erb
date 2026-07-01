@@ -1,17 +1,22 @@
 <% show_info_btn = local_assigns.fetch(:show_info_btn, true) %>
+<% locked = local_assigns.fetch(:locked, false) %>
 <div class="chat-component" data-component="welcome_prompt">
-  <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
-    <button class="chat-component-btn chat-component-btn--primary"
-            data-action="click->concierge#sendSelection"
-            data-selection-type="welcome_ready">
-      Yes, let's get started! →
-    </button>
-    <% if show_info_btn %>
-      <button class="chat-component-btn chat-component-btn--secondary"
+  <% unless locked %>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <button class="chat-component-btn chat-component-btn--primary"
               data-action="click->concierge#sendSelection"
-              data-selection-type="welcome_info">
-        Tell me how this works first
+              data-selection-type="welcome_ready">
+        Yes, let's get started! →
       </button>
-    <% end %>
-  </div>
+      <% if show_info_btn %>
+        <button class="chat-component-btn chat-component-btn--secondary"
+                data-action="click->concierge#sendSelection"
+                data-selection-type="welcome_info">
+          Tell me how this works first
+        </button>
+      <% end %>
+    </div>
+  <% else %>
+    <div style="font:500 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#22a06b;margin-top:4px">✓ Started</div>
+  <% end %>
 </div>

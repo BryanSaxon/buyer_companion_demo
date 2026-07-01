@@ -1,5 +1,6 @@
 <% display_family = local_assigns.fetch(:family, DemoData::FAMILY) %>
 <% newly_added    = local_assigns.fetch(:just_added, nil) %>
+<% locked         = local_assigns.fetch(:locked, false) %>
 <div class="chat-component" data-component="household_recap">
   <div style="margin-bottom:12px;font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
     Your Household
@@ -28,9 +29,13 @@
       Does this look right now?
     </div>
   <% end %>
-  <button class="chat-component-btn chat-component-btn--primary"
-          data-action="click->concierge#sendSelection"
-          data-selection-type="household_confirmed">
-    <%= newly_added.present? ? "Yes, that's everyone — let's start! →" : "That's us — let's start! →" %>
-  </button>
+  <% if locked %>
+    <div style="font:500 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#22a06b">✓ Confirmed</div>
+  <% else %>
+    <button class="chat-component-btn chat-component-btn--primary"
+            data-action="click->concierge#sendSelection"
+            data-selection-type="household_confirmed">
+      <%= newly_added.present? ? "Yes, that's everyone — let's start! →" : "That's us — let's start! →" %>
+    </button>
+  <% end %>
 </div>

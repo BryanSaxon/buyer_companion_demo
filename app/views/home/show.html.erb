@@ -99,7 +99,12 @@
                     <% end %>
                     <% if msg.component_html.present? && msg != last_concierge %>
                       <% rk = msg.component_html.match(/data-room-key="([^"]+)"/)&.[](1) %>
-                      <% if msg.component_type == "option_selector" %>
+                      <% if msg.component_type == "welcome_prompt" %>
+                        <%= render partial: "chat_components/welcome_prompt", locals: { locked: true } %>
+                      <% elsif msg.component_type == "household_recap" %>
+                        <%= render partial: "chat_components/household_recap",
+                                   locals: { family: @session.effective_family, locked: true } %>
+                      <% elsif msg.component_type == "option_selector" %>
                         <% st = msg.component_html.match(/data-selection-type="([^"]+)"/)&.[](1) %>
                         <% sel_cfg = rk && st ? DemoData.selections_for(rk).find { |s| s[:type].to_s == st } : nil %>
                         <% prior_sel = rk && st ? @session.design_selections.find_by(room_key: rk, selection_type: st) : nil %>
