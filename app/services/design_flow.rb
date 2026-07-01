@@ -42,6 +42,7 @@ class DesignFlow
     when "summary_change_intent" then handle_summary_change_intent
     when "welcome_ready"         then handle_welcome_ready
     when "welcome_info"          then handle_welcome_info
+    when "household_confirmed"   then handle_household_confirmed
     else
       { message: "Something went wrong — let's try that again.", component_html: nil }
     end
@@ -65,8 +66,22 @@ class DesignFlow
   # --- State handlers ---
 
   def handle_welcome_ready
+    msg = "Before we dive in, let me confirm who's moving into the home — " \
+          "I want to make sure we plan every room for the right people."
+    { message: msg,
+      component_html: render_component("chat_components/household_recap"),
+      component_type: "household_recap",
+      state: session.aasm_state,
+      rooms_complete: 0,
+      total_rooms: 8 }
+  end
+
+  def handle_household_confirmed
     session.begin_planning!
-    plan_first_room
+    result = plan_first_room
+    result[:message] = "Here's your Brookfield floor plan for reference — " \
+                       "it'll help as we place everyone. " + result[:message]
+    result
   end
 
   def handle_welcome_info
@@ -134,11 +149,32 @@ class DesignFlow
     purpose  = data[:purpose]
     label    = data[:purpose_label]
 
+    # Bedroom and guest room purposes need an occupant assignment step
+    needs_occupants = %w[bedroom guest_room].include?(purpose)
+
     rp = session.room_plans.find_or_initialize_by(room_key: room_key)
     rp.purpose       = purpose
     rp.purpose_label = label
-    rp.complete      = true
+    rp.complete      = !needs_occupants
     rp.save!
+
+    if needs_occupants
+      room      = DemoData.room(room_key)
+      remaining = DemoData.unassigned_family(session.assigned_occupant_keys)
+      occ_msg   = purpose == "bedroom" ?
+        "Who's going to be sleeping in the Flex Room?" :
+        "Great! Will specific family members be staying there, or keep it open as a general guest room?"
+      return {
+        message: occ_msg,
+        component_html: render_component("chat_components/occupant_selector",
+                                         room: room, remaining_family: remaining,
+                                         show_floorplan: false),
+        component_type: "occupant_selector",
+        state: session.aasm_state,
+        rooms_complete: 0,
+        total_rooms: 8
+      }
+    end
 
     next_room = session.next_unplanned_room
     if next_room
@@ -163,7 +199,7 @@ class DesignFlow
 
     rp = session.room_plans.find_or_initialize_by(room_key: room_key)
     rp.occupants_array = occupants
-    rp.purpose         = "bedroom"
+    rp.purpose         = rp.purpose.presence || "bedroom"
     rp.complete        = true
     rp.save!
 
@@ -394,9 +430,10 @@ class DesignFlow
     if room[:ask_purpose]
       render_component("chat_components/room_purpose", room: room)
     elsif room[:ask_occupants]
-      assigned = session.assigned_occupant_keys
+      assigned  = session.assigned_occupant_keys
       remaining = DemoData.unassigned_family(assigned)
-      render_component("chat_components/occupant_selector", room: room, remaining_family: remaining)
+      render_component("chat_components/occupant_selector",
+                       room: room, remaining_family: remaining, show_floorplan: true)
     else
       nil
     end
