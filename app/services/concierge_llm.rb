@@ -73,9 +73,8 @@ class ConciergeLlm
       Celebrate warmly, then set add_family_member: { name: "...", role: "...", age_note: "..." }
       and set can_advance: false. Use role like "Son", "Daughter", "Baby", "Grandparent".
       Use age_note like "expected" for unborn, "infant", "toddler", "teenage" as appropriate.
-    - If the user says they want to proceed / start ("let's go", "start", "continue", etc.):
-      Say something warm like "Just tap the button below to confirm your household and we'll get going!"
-      Set can_advance: false so the button remains visible.
+    - If the user says they want to proceed / start ("let's go", "start", "continue", "that's us", etc.):
+      Say something warm and brief like "Let's do it!" and set can_advance: true.
     - Never show add_family_member for people already listed in the household.
   TXT
 

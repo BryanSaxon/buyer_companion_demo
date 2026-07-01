@@ -24,8 +24,16 @@ class DesignFlow
       return handle_off_topic(user_input, llm_result)
     end
 
+    if session.welcome? && llm_result["can_advance"] == true
+      return handle_welcome_ready
+    end
+
     if session.household_review? && llm_result["add_family_member"].present?
       return handle_household_addition(llm_result)
+    end
+
+    if session.household_review? && llm_result["can_advance"] == true
+      return handle_household_confirmed
     end
 
     if session.designing? && llm_result["selected_option_key"].present?
