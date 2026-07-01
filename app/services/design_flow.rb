@@ -82,6 +82,31 @@ class DesignFlow
     render_component("chat_components/welcome_prompt", session: session)
   end
 
+  def next_component_html
+    case session.aasm_state
+    when "welcome"           then welcome_component_html
+    when "household_review"  then render_component("chat_components/household_recap",
+                                                   family: session.effective_family)
+    when "room_planning"     then planning_component_for(DemoData.room(session.current_room) || session.next_unplanned_room)
+    when "style_selection"   then render_component("chat_components/style_picker", session: session)
+    when "designing"         then render_option_selector
+    when "summary_review"    then render_component("chat_components/summary_card", session: session)
+    end
+  end
+
+  def next_component_type
+    case session.aasm_state
+    when "welcome"           then "welcome_prompt"
+    when "household_review"  then "household_recap"
+    when "room_planning"
+      room = DemoData.room(session.current_room) || session.next_unplanned_room
+      planning_component_type_for(room)
+    when "style_selection"   then "style_picker"
+    when "designing"         then "option_selector"
+    when "summary_review"    then "summary_card"
+    end
+  end
+
   private
 
   # --- State handlers ---
@@ -534,31 +559,6 @@ class DesignFlow
     render_component("chat_components/option_selector",
                      session: session, selection: sel_config,
                      room_key: session.current_room, prior_selection: prior)
-  end
-
-  def next_component_html
-    case session.aasm_state
-    when "welcome"           then welcome_component_html
-    when "household_review"  then render_component("chat_components/household_recap",
-                                                   family: session.effective_family)
-    when "room_planning"     then planning_component_for(DemoData.room(session.current_room) || session.next_unplanned_room)
-    when "style_selection"   then render_component("chat_components/style_picker", session: session)
-    when "designing"         then render_option_selector
-    when "summary_review"    then render_component("chat_components/summary_card", session: session)
-    end
-  end
-
-  def next_component_type
-    case session.aasm_state
-    when "welcome"           then "welcome_prompt"
-    when "household_review"  then "household_recap"
-    when "room_planning"
-      room = DemoData.room(session.current_room) || session.next_unplanned_room
-      planning_component_type_for(room)
-    when "style_selection"   then "style_picker"
-    when "designing"         then "option_selector"
-    when "summary_review"    then "summary_card"
-    end
   end
 
   def confirmation_message_for_selection
