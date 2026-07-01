@@ -346,8 +346,15 @@ export default class extends Controller {
       tile.style.opacity = isChosen ? "1" : "0.35"
       if (isChosen) {
         tile.classList.add("option-tile--selected")
-        const sub = tile.querySelector("div:last-child")
-        if (sub) { sub.textContent = "Selected ✓"; sub.style.color = "#22a06b"; sub.style.display = "block" }
+        let indicator = tile.querySelector("[data-tile-indicator]")
+        if (!indicator) {
+          indicator = document.createElement("div")
+          indicator.dataset.tileIndicator = ""
+          indicator.style.cssText = "font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px;text-align:center"
+          tile.appendChild(indicator)
+        }
+        indicator.textContent = "Selected ✓"
+        indicator.style.color = "#22a06b"
       }
     })
     // Hide "Not sure yet" / action bar
