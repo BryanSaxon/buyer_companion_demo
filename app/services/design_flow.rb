@@ -84,6 +84,13 @@ class DesignFlow
   end
 
   def handle_household_confirmed
+    # Seed session with the confirmed family so it's the persistent source of truth.
+    # Any additions (like Baby Noah) already live in custom_family_json; if nothing
+    # was added yet, write the defaults now so the session is self-contained.
+    if session.custom_family_json.blank?
+      seed = DemoData::FAMILY.map { |p| p.transform_keys(&:to_s) }
+      session.update!(custom_family_json: seed.to_json)
+    end
     session.begin_planning!
     result = plan_first_room
     result[:message] = "Here's your Brookfield floor plan for reference — " \
