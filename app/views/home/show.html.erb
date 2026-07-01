@@ -98,7 +98,21 @@
                       </div>
                     <% end %>
                     <% if msg.component_html.present? && msg != last_concierge %>
-                      <%= msg.component_html.html_safe %>
+                      <% if msg.component_type == "option_selector" %>
+                        <% rk = msg.component_html.match(/data-room-key="([^"]+)"/)&.[](1) %>
+                        <% st = msg.component_html.match(/data-selection-type="([^"]+)"/)&.[](1) %>
+                        <% sel_cfg = rk && st ? DemoData.selections_for(rk).find { |s| s[:type].to_s == st } : nil %>
+                        <% prior_sel = rk && st ? @session.design_selections.find_by(room_key: rk, selection_type: st) : nil %>
+                        <% if sel_cfg %>
+                          <%= render partial: "chat_components/option_selector",
+                                     locals: { selection: sel_cfg, room_key: rk,
+                                               prior_selection: prior_sel, locked: true } %>
+                        <% else %>
+                          <%= msg.component_html.html_safe %>
+                        <% end %>
+                      <% else %>
+                        <%= msg.component_html.html_safe %>
+                      <% end %>
                     <% end %>
                   </div>
                 <% end %>
