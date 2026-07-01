@@ -565,9 +565,14 @@ class DesignFlow
     when "room_planning"     then "Assigning purposes and occupants to rooms. Currently on: #{room}."
     when "style_selection" then "Asking the family which design styles resonate with them."
     when "designing"
-      opts = sel ? sel[:options]&.map { |o| "#{o[:key]}: #{o[:label]}" }&.join(", ") : nil
+      opts   = sel ? sel[:options]&.map { |o| "#{o[:key]}: #{o[:label]}" }&.join(", ") : nil
+      styles = session.design_styles_array
+                      .filter_map { |k| DemoData::DESIGN_STYLES.find { |s| s[:key] == k } }
+                      .map { |s| s[:label] }
+                      .join(", ")
       "Making finish selections for #{room}, current selection: #{sel&.dig(:label)}." \
-      "#{opts ? " Available options: #{opts}." : ''}"
+      "#{opts ? " Available options: #{opts}." : ''}" \
+      "#{styles.present? ? " Family's selected design styles: #{styles}." : ''}"
     when "summary_review" then "Reviewing all selections with the family before finalizing."
     when "complete"       then "All selections are complete. Session is done."
     else "Unknown state."
