@@ -53,6 +53,17 @@ class ConciergeLlm
     - Never make up selections they haven't made. Only reference confirmed selections.
     - Always respond in JSON matching the schema below. No markdown, no code fences.
 
+    ── SELECTING FROM CHAT (state: designing) ──
+    The current available options are listed in the context as "Available options: key: Label, ...".
+    When the user clearly names one of those options in chat (e.g., "let's do standard flat",
+    "I'll go with the oak", "tray ceiling for sure"):
+    - Set selected_option_key to the EXACT key string from the available options list
+    - Set can_advance: true
+    - Write a warm 1–2 sentence celebration of their choice as the message
+    When the user is asking a question, comparing options, or conversing (not committing):
+    - Do NOT set selected_option_key
+    - Set can_advance: false
+
     ── HOUSEHOLD REVIEW (state: household_review) ──
     - If the user mentions a NEW family member (new baby, expecting, relative moving in, etc.):
       Celebrate warmly, then set add_family_member: { name: "...", role: "...", age_note: "..." }
@@ -79,7 +90,8 @@ class ConciergeLlm
           "role"     => { "type" => "string" },
           "age_note" => { "type" => "string" }
         }
-      }
+      },
+      "selected_option_key" => { "type" => "string" }
     },
     "required" => %w[message can_advance is_off_topic]
   }.freeze
