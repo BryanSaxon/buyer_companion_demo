@@ -1,30 +1,44 @@
 <% room_config = DemoData.room(room_key) %>
 <% sels = session.design_selections.where(room_key: room_key).order(:created_at) %>
-<div class="chat-component chat-component--progress" data-component="progress_card">
-  <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
-    <div style="width:22px;height:22px;border-radius:50%;background:#22a06b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none">✓</div>
-    <div style="font:600 13.5px 'Sora',system-ui;color:#15803d"><%= room_config[:label] %> complete</div>
+<% pct = (rooms_complete.to_f / 8 * 100).round %>
+<div class="chat-component chat-component--wide" data-component="progress_card"
+     style="background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-color:#86efac;padding:18px 18px 16px">
+
+  <!-- Room complete header -->
+  <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #bbf7d0">
+    <div style="width:32px;height:32px;border-radius:50%;background:#22a06b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;box-shadow:0 2px 8px rgba(34,160,107,.35)">✓</div>
+    <div style="flex:1;min-width:0">
+      <div style="font:700 15px/1.2 'Sora',system-ui;color:#15803d"><%= room_config[:label] %> complete!</div>
+      <div style="font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-top:2px">All selections locked in</div>
+    </div>
   </div>
-  <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
+
+  <!-- Selections recap -->
+  <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px">
     <% sels.each do |sel| %>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <span style="font:500 10.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#9aa0ac">
+        <span style="font:500 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#6b7280">
           <%= sel.selection_type.humanize %>
         </span>
-        <span style="font:600 12.5px 'Sora',system-ui;color:<%= sel.pending? ? '#9aa0ac' : '#1A1A1A' %>">
-          <%= sel.pending? ? "Not sure yet" : sel.option_label %>
+        <span style="font:600 12.5px 'Sora',system-ui;color:<%= sel.pending? ? '#9aa0ac' : '#15803d' %>">
+          <%= sel.pending? ? "Deciding later" : sel.option_label %>
         </span>
       </div>
     <% end %>
   </div>
-  <div style="display:flex;align-items:center;gap:7px;padding-top:10px;border-top:1px solid #E5E7EB;margin-bottom:10px">
-    <div style="font:400 11.5px 'Sora',system-ui;color:#9aa0ac"><%= rooms_complete %> of 8 rooms complete</div>
-    <div style="flex:1;height:4px;background:#E5E7EB;border-radius:2px;overflow:hidden">
-      <div style="height:100%;width:<%= (rooms_complete.to_f / 8 * 100).round %>%;background:#F5A623;border-radius:2px"></div>
+
+  <!-- Progress bar -->
+  <div style="display:flex;align-items:center;gap:9px;padding:11px 0;border-top:1px solid #bbf7d0;border-bottom:1px solid #bbf7d0;margin-bottom:12px">
+    <div style="font:700 13px 'Sora',system-ui;color:#15803d;white-space:nowrap"><%= rooms_complete %> of 8</div>
+    <div style="flex:1;height:5px;background:rgba(0,0,0,.08);border-radius:3px;overflow:hidden">
+      <div style="height:100%;width:<%= pct %>%;background:#22a06b;border-radius:3px;transition:width .6s ease"></div>
     </div>
+    <div style="font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#4ade80;white-space:nowrap">rooms done</div>
   </div>
+
   <button class="chat-component-btn chat-component-btn--primary"
+          style="background:#22a06b;color:#fff"
           data-action="click->companion#progressNext">
-    Next room →
+    Ready for the next room &rarr;
   </button>
 </div>
