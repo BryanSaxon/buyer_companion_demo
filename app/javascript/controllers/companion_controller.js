@@ -16,13 +16,15 @@ export default class extends Controller {
     this.scrollToBottom()
   }
 
-  // ── Tab navigation ──────────────────────────────────────────────
+  // ── Tab / brand-nav navigation ───────────────────────────────────
+  // homeTab and chatTab targets exist on BOTH the mobile tab bar and
+  // the desktop brand-nav buttons. Using *Targets (plural) keeps them
+  // all in sync with a single update.
 
   showHome() {
     if (this.hasGridTarget) this.gridTarget.classList.remove("chat-active")
-    this.homeTabTarget.classList.remove("active")
-    this.chatTabTarget.classList.remove("active")
-    this.homeTabTarget.classList.add("active")
+    this.homeTabTargets.forEach(t => t.classList.add("active"))
+    this.chatTabTargets.forEach(t => t.classList.remove("active"))
   }
 
   showChat() {
@@ -31,10 +33,8 @@ export default class extends Controller {
 
   _activateChat() {
     if (this.hasGridTarget) this.gridTarget.classList.add("chat-active")
-    if (this.hasHomeTabTarget) this.homeTabTarget.classList.remove("active")
-    if (this.hasChatTabTarget) {
-      this.chatTabTarget.classList.add("active")
-    }
+    this.homeTabTargets.forEach(t => t.classList.remove("active"))
+    this.chatTabTargets.forEach(t => t.classList.add("active"))
     if (this.hasTabDotTarget) this.tabDotTarget.classList.remove("visible")
     this.scrollToBottom()
   }

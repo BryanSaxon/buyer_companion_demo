@@ -58,21 +58,50 @@ input::placeholder {
    ============================================================ */
 :root {
   --brand-bar-h: 65px;
-  --tab-bar-h:   56px; /* taller for bottom nav + safe area */
+  --tab-bar-h:   50px;
 }
 
 /* ============================================================
-   MOBILE TAB BAR — bottom navigation (hidden on desktop)
+   DESKTOP BRAND NAV — segmented control in the brand bar
+   Hidden on mobile; desktop uses this instead of the tab bar.
+   ============================================================ */
+.brand-nav {
+  display: none; /* mobile: hidden — uses .mobile-tab-bar instead */
+}
+
+.brand-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font: 600 13px 'Sora', system-ui;
+  letter-spacing: -.01em;
+  color: #9aa0ac;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, color .15s, box-shadow .15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.brand-nav-btn.active {
+  background: #fff;
+  color: #1A1A1A;
+  box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.05);
+}
+
+/* ============================================================
+   MOBILE TAB BAR — top position, below brand bar (hidden on desktop)
    ============================================================ */
 .mobile-tab-bar {
   display: flex;
   flex: none;
-  z-index: 9;
-  background: rgba(250,250,248,.97);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid #E5E7EB;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(250,250,248,.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E5E7EB;
 }
 
 .mobile-tab {
@@ -82,10 +111,11 @@ input::placeholder {
   color: #9aa0ac;
   background: none;
   border: none;
+  border-bottom: 2px solid transparent;
   cursor: pointer;
   letter-spacing: .02em;
   text-transform: uppercase;
-  transition: color .15s;
+  transition: color .15s, border-color .15s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -96,15 +126,16 @@ input::placeholder {
 
 .mobile-tab.active {
   color: #F5A623;
+  border-bottom-color: #F5A623;
 }
 
 /* Unread badge on Chat tab */
 .tab-dot {
   position: absolute;
   top: -2px;
-  right: -2px;
-  width: 8px;
-  height: 8px;
+  right: -4px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #F5A623;
   border: 2px solid #FAFAF8;
@@ -120,7 +151,6 @@ input::placeholder {
   50%       { transform: scale(1.3); opacity: .85; }
 }
 
-/* Wrapper for icon + dot so badge positions correctly */
 .mobile-tab__icon {
   position: relative;
   display: flex;
@@ -130,11 +160,10 @@ input::placeholder {
 
 /* ============================================================
    MOBILE APP SHELL + PANEL SWITCHING (< 1024px)
-   Mobile uses a native-feeling flex column:
-   [brand bar] → [content grid] → [bottom tab bar]
+   Flex column: [brand bar] → [tab bar] → [content grid]
    ============================================================ */
 @media (max-width: 1023px) {
-  /* Full-height flex column — no outer scrolling */
+  /* Full-height flex column */
   .companion-card {
     height: 100dvh;
     min-height: unset;
@@ -143,14 +172,14 @@ input::placeholder {
     flex-direction: column;
   }
 
-  /* Brand bar sits in flex flow — no sticky needed */
+  /* Brand bar in flex flow — no sticky needed */
   .brand-bar {
     position: relative;
     top: 0;
     flex: none;
   }
 
-  /* Grid fills all space between brand bar and tab bar */
+  /* Grid fills remaining height */
   .companion-grid {
     flex: 1;
     min-height: 0;
@@ -162,9 +191,11 @@ input::placeholder {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    /* room for iOS home indicator at bottom */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Chat panel: hidden until tab is activated */
+  /* Chat panel: hidden until tab activated */
   .companion-sidebar {
     display: none;
     height: 100%;
@@ -173,14 +204,9 @@ input::placeholder {
   }
 
   /* --- Chat tab active --- */
-  .companion-grid.chat-active .companion-main {
-    display: none;
-  }
-  .companion-grid.chat-active .companion-sidebar {
-    display: flex;
-  }
+  .companion-grid.chat-active .companion-main { display: none; }
+  .companion-grid.chat-active .companion-sidebar { display: flex; }
 
-  /* Full-height native-feeling chat — no card chrome on mobile */
   .companion-grid.chat-active .companion-sidebar-pad {
     flex: 1;
     display: flex;
@@ -209,6 +235,7 @@ input::placeholder {
     max-height: none;
     background: #FAFAF8;
     overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .companion-grid.chat-active .chat-composer {
     background: rgba(250,250,248,.96);
@@ -352,7 +379,7 @@ input::placeholder {
   display: block;
 }
 
-/* ---- Tablet (640–1023px): slight shadow, centered card ---- */
+/* ---- Tablet (640–1023px): card shadow, max-width ---- */
 @media (min-width: 640px) and (max-width: 1023px) {
   .companion-card {
     max-width: 700px;
@@ -360,26 +387,46 @@ input::placeholder {
   }
 }
 
+/* ---- Desktop (≥1024px): companion-card full-width, no shadow ---- */
+@media (min-width: 1024px) {
+  .companion-card {
+    max-width: 100%;
+    box-shadow: none;
+  }
+}
+
 /* ============================================================
-   DESKTOP (≥1024px) — focused single-panel with bottom tabs
-   Same navigation pattern as mobile: one panel at a time,
-   tab bar to switch. Content centered at a readable max-width.
+   DESKTOP (≥1024px) — segmented brand-bar nav + single-panel view
+   Brand bar hosts the nav pill. Mobile tab bar is hidden.
+   Switching between panels gives a focused, distraction-free view.
    ============================================================ */
 @media (min-width: 1024px) {
 
-  /* Tab bar visible on desktop too */
+  /* Hide mobile tab bar — desktop uses brand-nav instead */
   .mobile-tab-bar {
+    display: none;
+  }
+
+  /* Show the brand-nav segmented control */
+  .brand-nav {
     display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26,26,26,.06);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
   }
 
-  /* Tabs slightly roomier on large screens */
-  .mobile-tab {
-    padding: 11px 24px 13px;
-    font-size: 11px;
-    gap: 5px;
+  /* Brand bar: relative so brand-nav can center absolutely */
+  .brand-bar {
+    position: relative;
+    flex: none;
+    top: unset;
   }
 
-  /* --- Outer shell: full-width, no gutters --- */
+  /* --- Outer shell: full-width --- */
   .companion-outer {
     padding: 0;
     align-items: stretch;
@@ -393,13 +440,8 @@ input::placeholder {
     flex-direction: column;
     box-shadow: none;
   }
-  .brand-bar {
-    flex: none;
-    position: relative;
-    top: unset;
-  }
 
-  /* --- Single-column grid (same as mobile) --- */
+  /* --- Single-panel grid — one view at a time --- */
   .companion-grid {
     display: block;
     flex: 1;
@@ -407,7 +449,7 @@ input::placeholder {
     overflow: hidden;
   }
 
-  /* --- Brief panel: scrolls, centered content --- */
+  /* Brief panel: scrolls, centered at readable width */
   .companion-main {
     height: 100%;
     overflow-y: auto;
@@ -418,42 +460,36 @@ input::placeholder {
     align-items: center;
   }
 
-  /* Center the brief content at a legible width */
   .companion-main > * {
     width: 100%;
-    max-width: 680px;
+    max-width: 720px;
   }
 
-  /* Slightly more padding on desktop */
   .c-section {
-    padding-left: 32px !important;
-    padding-right: 32px !important;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
   }
 
-  /* --- Chat panel: hidden until chat-active (same as mobile) --- */
+  /* Chat panel: hidden until chat-active */
   .companion-sidebar {
     display: none;
     height: 100%;
     flex-direction: column;
     overflow: hidden;
     background: #FAFAF8;
-    align-items: center; /* center chat at a comfortable max-width */
+    align-items: center;
   }
 
-  /* chat-active: same panel switch as mobile */
-  .companion-grid.chat-active .companion-main {
-    display: none;
-  }
-  .companion-grid.chat-active .companion-sidebar {
-    display: flex;
-  }
+  /* Panel switching */
+  .companion-grid.chat-active .companion-main { display: none; }
+  .companion-grid.chat-active .companion-sidebar { display: flex; }
 
   .companion-grid.chat-active .companion-sidebar-pad {
     flex: 1;
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 720px;
+    max-width: 760px;
     padding: 0;
     overflow: hidden;
   }
@@ -470,7 +506,7 @@ input::placeholder {
     min-height: 0;
   }
   .companion-grid.chat-active .chat-header-bar {
-    padding: 18px 28px;
+    padding: 18px 32px;
     background: rgba(250,250,248,.97);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -481,10 +517,10 @@ input::placeholder {
     max-height: none;
     overflow-y: auto;
     background: #FAFAF8;
-    padding: 24px 28px 16px;
+    padding: 24px 32px 16px;
   }
   .companion-grid.chat-active .chat-composer {
-    padding: 16px 28px;
+    padding: 16px 32px;
     background: rgba(250,250,248,.97);
     border-top: 1px solid #E5E7EB;
   }
