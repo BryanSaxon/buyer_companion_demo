@@ -11,10 +11,8 @@ export default class extends Controller {
   selectedStyles    = new Set()
 
   connect() {
-    // Mobile: always land on the chat tab — that's where the experience starts
-    if (window.innerWidth < 1024) {
-      this._activateChat()
-    }
+    // Always start on the chat tab — that's where the experience begins
+    this._activateChat()
     this.scrollToBottom()
   }
 
@@ -360,11 +358,8 @@ export default class extends Controller {
   _notifyIfHidden() {
     const onChat = !this.hasGridTarget || this.gridTarget.classList.contains("chat-active")
     if (!onChat) {
-      // On mobile: show dot then auto-switch after a beat so they see new content
       if (this.hasTabDotTarget) this.tabDotTarget.classList.add("visible")
-      if (window.innerWidth < 1024) {
-        setTimeout(() => this._activateChat(), 900)
-      }
+      setTimeout(() => this._activateChat(), 900)
     }
   }
 

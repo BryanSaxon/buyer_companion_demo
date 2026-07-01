@@ -352,8 +352,8 @@ input::placeholder {
   display: block;
 }
 
-/* ---- Tablet (≥640px) ---- */
-@media (min-width: 640px) {
+/* ---- Tablet (640–1023px): slight shadow, centered card ---- */
+@media (min-width: 640px) and (max-width: 1023px) {
   .companion-card {
     max-width: 700px;
     box-shadow: 0 0 120px rgba(40,33,20,.13);
@@ -361,15 +361,22 @@ input::placeholder {
 }
 
 /* ============================================================
-   DESKTOP (≥1024px) — true two-panel app shell
-   Left panel scrolls internally. Right panel (chat) fills
-   full height, distinct warm background, no card chrome.
+   DESKTOP (≥1024px) — focused single-panel with bottom tabs
+   Same navigation pattern as mobile: one panel at a time,
+   tab bar to switch. Content centered at a readable max-width.
    ============================================================ */
 @media (min-width: 1024px) {
 
-  /* Tab bar not needed on desktop — both panels always visible */
+  /* Tab bar visible on desktop too */
   .mobile-tab-bar {
-    display: none;
+    display: flex;
+  }
+
+  /* Tabs slightly roomier on large screens */
+  .mobile-tab {
+    padding: 11px 24px 13px;
+    font-size: 11px;
+    gap: 5px;
   }
 
   /* --- Outer shell: full-width, no gutters --- */
@@ -388,91 +395,70 @@ input::placeholder {
   }
   .brand-bar {
     flex: none;
-    position: relative; /* no longer sticky — sits in flex column */
+    position: relative;
     top: unset;
   }
 
-  /* --- Two-column grid --- */
+  /* --- Single-column grid (same as mobile) --- */
   .companion-grid {
-    display: grid;
-    grid-template-columns: 1fr 420px;
+    display: block;
     flex: 1;
-    min-height: 0; /* critical: lets flex child shrink below content size */
+    min-height: 0;
     overflow: hidden;
-    align-items: stretch;
   }
 
-  /* --- Left panel: scrolls internally --- */
+  /* --- Brief panel: scrolls, centered content --- */
   .companion-main {
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    border-right: 1px solid #E5E7EB;
-    min-height: 0;
-  }
-
-  /* Wider horizontal padding for left sections */
-  .c-section {
-    padding-left: 48px !important;
-    padding-right: 48px !important;
-  }
-
-  /* Greeting: heading + desc on left, chips stacked on right */
-  .c-greeting-layout {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 32px;
-    align-items: start;
-    margin-top: 0;
-  }
-  .c-greeting-chips-col {
+    border-right: none;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-top: 6px;
-    min-width: 168px;
-  }
-  .c-fact-chips-mobile {
-    display: none !important; /* desktop: chips live in the right column instead */
-  }
-  .greeting-headline {
-    font-size: 58px !important;
-    letter-spacing: -.035em !important;
-    margin-top: 10px !important;
+    align-items: center;
   }
 
-  /* Render: cinematic 16:9 */
-  .c-render-box {
-    aspect-ratio: 16/9 !important;
+  /* Center the brief content at a legible width */
+  .companion-main > * {
+    width: 100%;
+    max-width: 680px;
   }
 
-  /* Selections: two-column definition grid */
-  .c-selections {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px !important;
-    margin-top: 16px;
+  /* Slightly more padding on desktop */
+  .c-section {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
   }
 
-  /* --- Right panel: chat sidebar --- */
+  /* --- Chat panel: hidden until chat-active (same as mobile) --- */
   .companion-sidebar {
-    background: #F2EFE9;
-    display: flex;
+    display: none;
+    height: 100%;
     flex-direction: column;
     overflow: hidden;
-    position: relative;
-    min-height: 0;
+    background: #FAFAF8;
+    align-items: center; /* center chat at a comfortable max-width */
   }
-  .companion-sidebar-pad {
+
+  /* chat-active: same panel switch as mobile */
+  .companion-grid.chat-active .companion-main {
+    display: none;
+  }
+  .companion-grid.chat-active .companion-sidebar {
+    display: flex;
+  }
+
+  .companion-grid.chat-active .companion-sidebar-pad {
     flex: 1;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 720px;
     padding: 0;
     overflow: hidden;
-    min-height: 0;
   }
 
-  /* Chat panel: no card chrome — fills the sidebar naturally */
-  .chat-panel {
+  .companion-grid.chat-active .chat-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -480,27 +466,27 @@ input::placeholder {
     border-radius: 0;
     border: none;
     box-shadow: none;
-    background: transparent;
+    background: #FAFAF8;
     min-height: 0;
   }
-  .chat-header-bar {
-    padding: 20px 24px;
-    background: rgba(242,239,233,.97);
+  .companion-grid.chat-active .chat-header-bar {
+    padding: 18px 28px;
+    background: rgba(250,250,248,.97);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0,0,0,.07);
+    border-bottom: 1px solid #E5E7EB;
   }
-  .chat-messages {
+  .companion-grid.chat-active .chat-messages {
     flex: 1;
     max-height: none;
     overflow-y: auto;
-    background: transparent;
-    padding: 20px 20px 12px;
+    background: #FAFAF8;
+    padding: 24px 28px 16px;
   }
-  .chat-composer {
-    padding: 16px 20px;
-    background: rgba(242,239,233,.97);
-    border-top: 1px solid rgba(0,0,0,.07);
+  .companion-grid.chat-active .chat-composer {
+    padding: 16px 28px;
+    background: rgba(250,250,248,.97);
+    border-top: 1px solid #E5E7EB;
   }
 }
 
