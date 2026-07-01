@@ -1,0 +1,25 @@
+<div class="chat-component" data-component="household_recap">
+  <div style="margin-bottom:12px;font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
+    Your Household
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+    <% DemoData::FAMILY.each do |person| %>
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 13px;background:#FAFAF8;border:1px solid #E5E7EB;border-radius:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#C27D1B);color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Sora',system-ui;flex-shrink:0">
+          <%= person[:name][0] %>
+        </div>
+        <div>
+          <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A"><%= person[:name] %></div>
+          <div style="font:400 11px 'Sora',system-ui;color:#9aa0ac">
+            <%= person[:role] %><% if person[:age_note].present? %> · <%= person[:age_note] %><% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <button class="chat-component-btn chat-component-btn--primary"
+          data-action="click->companion#sendSelection"
+          data-selection-type="household_confirmed">
+    That's us — let's start! →
+  </button>
+</div>

@@ -28,11 +28,12 @@ module DemoData
   ].freeze
 
   FLEX_PURPOSES = [
-    { key: "playroom",   label: "Playroom"    },
-    { key: "gym",        label: "Home Gym"    },
-    { key: "office",     label: "Home Office" },
-    { key: "guest_room", label: "Guest Room"  },
-    { key: "other",      label: "Other…"      },
+    { key: "bedroom",    label: "Bedroom"      },
+    { key: "playroom",   label: "Playroom"     },
+    { key: "gym",        label: "Home Gym"     },
+    { key: "office",     label: "Home Office"  },
+    { key: "guest_room", label: "Guest Room"   },
+    { key: "other",      label: "Other…"       },
     { key: "not_sure",   label: "Not sure yet" }
   ].freeze
 
