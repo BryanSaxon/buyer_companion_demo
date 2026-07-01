@@ -158,7 +158,6 @@ class DesignFlow
         updated_at:        Time.current },
       unique_by: :idx_design_selections_unique
     )
-    lock_previous_option_selector(session.current_room, sel_config[:type], option[:key])
     advance_design_cursor(llm_result["message"])
   end
 
@@ -368,7 +367,6 @@ class DesignFlow
       is_last_in_room: next_selection.nil?
     )
 
-    lock_previous_option_selector(room_key, selection_type, option_key)
     advance_design_cursor(warm_message)
   end
 
@@ -395,7 +393,6 @@ class DesignFlow
       "That's totally okay — Megan will help you land on #{label.downcase} at your design meeting. Let's wrap up #{room[:label]}!" :
       "No worries at all — Megan will sort out #{label.downcase} with you at your meeting. Let's move on to #{next_selection[:label].downcase}."
 
-    lock_previous_option_selector(room_key, selection_type, "pending")
     advance_design_cursor(skip_msg)
   end
 
@@ -573,24 +570,6 @@ class DesignFlow
     render_component("chat_components/option_selector",
                      session: session, selection: sel_config,
                      room_key: session.current_room, prior_selection: prior)
-  end
-
-  def lock_previous_option_selector(room_key, selection_type, option_key)
-    msg = lead.chat_messages.where(role: "concierge", component_type: "option_selector")
-              .order(:created_at).last
-    return unless msg
-
-    sel_config = DemoData.selections_for(room_key).find { |s| s[:type].to_s == selection_type.to_s }
-    return unless sel_config
-
-    prior = OpenStruct.new(option_key: option_key, pending: option_key == "pending")
-    locked_html = render_component("chat_components/option_selector",
-                                   session: session,
-                                   selection: sel_config,
-                                   room_key: room_key,
-                                   prior_selection: prior,
-                                   locked: true)
-    msg.update_column(:component_html, locked_html)
   end
 
   def confirmation_message_for_selection
