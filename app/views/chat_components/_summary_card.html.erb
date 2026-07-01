@@ -7,7 +7,7 @@
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
         <div style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A"><%= entry[:room][:label] %></div>
         <button style="font:600 11px 'Sora',system-ui;color:#F5A623;background:none;border:none;cursor:pointer;padding:2px 4px"
-                data-action="click->companion#editRoom"
+                data-action="click->concierge#editRoom"
                 data-room-key="<%= entry[:room][:key] %>">
           Edit
         </button>
@@ -26,11 +26,11 @@
   <% end %>
   <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
     <button class="chat-component-btn chat-component-btn--primary"
-            data-action="click->companion#summaryDone">
+            data-action="click->concierge#summaryDone">
       These look great — I'm happy! ✓
     </button>
     <button class="chat-component-btn chat-component-btn--secondary"
-            data-action="click->companion#summaryChangeIntent">
+            data-action="click->concierge#summaryChangeIntent">
       I'd like to change something
     </button>
   </div>

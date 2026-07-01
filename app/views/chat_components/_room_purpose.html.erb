@@ -5,7 +5,7 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="purpose-other-input-hidden" data-other-input-id="purpose-other-input">
     <% DemoData::FLEX_PURPOSES.each do |p| %>
       <button class="chat-component-btn chat-component-btn--option purpose-btn"
-              data-action="click->companion#selectPurpose"
+              data-action="click->concierge#selectPurpose"
               data-room-key="<%= room[:key] %>"
               data-purpose-key="<%= p[:key] %>">
         <%= p[:label] %>
@@ -18,7 +18,7 @@
            onfocus="this.style.borderColor='#F5A623'" onblur="this.style.borderColor='#E5E7EB'"
            data-purpose-other-input>
     <button class="chat-component-btn chat-component-btn--primary"
-            data-action="click->companion#confirmPurposeOther"
+            data-action="click->concierge#confirmPurposeOther"
             data-room-key="<%= room[:key] %>">
       Confirm
     </button>

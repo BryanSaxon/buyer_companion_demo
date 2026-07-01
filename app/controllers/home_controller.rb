@@ -11,7 +11,7 @@ class HomeController < ApplicationController
       flow = DesignFlow.new(session: @session, lead: @lead)
       msg  = flow.welcome_message
       html = flow.welcome_component_html
-      @lead.chat_messages.create!(role: "companion", content: msg, message_type: "text", component_type: "welcome_prompt")
+      @lead.chat_messages.create!(role: "concierge", content: msg, message_type: "text", component_type: "welcome_prompt")
       @initial_component_html = html
     end
 

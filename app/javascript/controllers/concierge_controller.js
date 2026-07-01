@@ -337,14 +337,14 @@ export default class extends Controller {
   updateProgress(roomsComplete, totalRooms) {
     // Trigger a page partial refresh for the design brief progress tracker.
     // Simplest approach: reload the left panel via fetch and innerHTML swap.
-    const panel = document.querySelector(".companion-main")
+    const panel = document.querySelector(".concierge-main")
     if (!panel) return
     fetch(window.location.href, { headers: { "Accept": "text/html" } })
       .then(r => r.text())
       .then(html => {
         const parser = new DOMParser()
         const doc    = parser.parseFromString(html, "text/html")
-        const fresh  = doc.querySelector(".companion-main")
+        const fresh  = doc.querySelector(".concierge-main")
         if (fresh) panel.innerHTML = fresh.innerHTML
       })
       .catch(() => {}) // silent — progress panel update is cosmetic

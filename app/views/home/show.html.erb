@@ -1,12 +1,12 @@
 <% org_name     = @lead.org_name %>
 <% org_initials = @lead.org_initials %>
 
-<div class="companion-outer">
-  <div class="companion-card"
-       data-controller="companion"
-       data-companion-messages-url-value="<%= lead_messages_path(@lead) %>"
-       data-companion-selections-url-value="<%= lead_selections_path(@lead) %>"
-       data-companion-org-name-value="<%= org_name %>">
+<div class="concierge-outer">
+  <div class="concierge-card"
+       data-controller="concierge"
+       data-concierge-messages-url-value="<%= lead_messages_path(@lead) %>"
+       data-concierge-selections-url-value="<%= lead_selections_path(@lead) %>"
+       data-concierge-org-name-value="<%= org_name %>">
 
     <!-- ============ BRAND BAR ============ -->
     <div class="brand-bar">
@@ -19,11 +19,11 @@
 
       <!-- Center: desktop segmented nav — Concierge first, My Build second -->
       <nav class="brand-nav">
-        <button class="brand-nav-btn active" data-action="click->companion#showChat" data-companion-target="chatTab">
+        <button class="brand-nav-btn active" data-action="click->concierge#showChat" data-concierge-target="chatTab">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Concierge
         </button>
-        <button class="brand-nav-btn" data-action="click->companion#showHome" data-companion-target="homeTab">
+        <button class="brand-nav-btn" data-action="click->concierge#showHome" data-concierge-target="homeTab">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
           My Build
         </button>
@@ -46,14 +46,14 @@
 
     <!-- ============ MOBILE TAB BAR — Concierge first, My Build second ============ -->
     <div class="mobile-tab-bar">
-      <button class="mobile-tab active" data-action="click->companion#showChat" data-companion-target="chatTab">
+      <button class="mobile-tab active" data-action="click->concierge#showChat" data-concierge-target="chatTab">
         <div class="mobile-tab__icon">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span class="tab-dot" data-companion-target="tabDot"></span>
+          <span class="tab-dot" data-concierge-target="tabDot"></span>
         </div>
         Concierge
       </button>
-      <button class="mobile-tab" data-action="click->companion#showHome" data-companion-target="homeTab">
+      <button class="mobile-tab" data-action="click->concierge#showHome" data-concierge-target="homeTab">
         <div class="mobile-tab__icon">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
         </div>
@@ -62,16 +62,16 @@
     </div>
 
     <!-- ============ CONTENT GRID ============ -->
-    <div class="companion-grid chat-active" data-companion-target="grid">
+    <div class="concierge-grid chat-active" data-concierge-target="grid">
 
       <!-- LEFT / MY BUILD -->
-      <div class="companion-main">
+      <div class="concierge-main">
         <%= render "home/design_brief", session: @session %>
       </div>
 
       <!-- RIGHT / CONCIERGE CHAT -->
-      <div class="companion-sidebar">
-        <div class="companion-sidebar-pad" style="animation:scRise .8s ease both">
+      <div class="concierge-sidebar">
+        <div class="concierge-sidebar-pad" style="animation:scRise .8s ease both">
           <div class="chat-panel">
 
             <div class="chat-header-bar">
@@ -85,7 +85,7 @@
               </div>
             </div>
 
-            <div class="chat-messages" data-companion-target="messageArea">
+            <div class="chat-messages" data-concierge-target="messageArea">
               <% @messages.each do |msg| %>
                 <% if msg.role == "user" %>
                   <div style="display:flex;margin:0 0 11px;justify-content:flex-end">
@@ -103,20 +103,20 @@
               <% end %>
 
               <% if @initial_component_html.present? %>
-                <div class="chat-component-wrapper" data-companion-target="componentWrapper">
+                <div class="chat-component-wrapper" data-concierge-target="componentWrapper">
                   <%= @initial_component_html.html_safe %>
                 </div>
               <% end %>
             </div>
 
             <div class="chat-composer">
-              <input data-companion-target="composer"
-                data-action="keydown->companion#composerKeydown"
+              <input data-concierge-target="composer"
+                data-action="keydown->concierge#composerKeydown"
                 placeholder="Ask anything…"
                 style="flex:1;padding:12px 16px;border:1px solid #E5E7EB;border-radius:999px;background:#F1F3F8;font:400 15px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,background .15s"
                 onfocus="this.style.borderColor='#F5A623';this.style.background='#fff'"
                 onblur="this.style.borderColor='#E5E7EB';this.style.background='#F1F3F8'" />
-              <button data-action="click->companion#send"
+              <button data-action="click->concierge#send"
                 style="width:46px;height:46px;flex:none;border:none;border-radius:50%;background:#F5A623;color:#0A0C10;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:filter .15s"
                 onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
                 &uarr;
@@ -124,10 +124,10 @@
             </div>
 
           </div><!-- /chat-panel -->
-        </div><!-- /companion-sidebar-pad -->
-      </div><!-- /companion-sidebar -->
+        </div><!-- /concierge-sidebar-pad -->
+      </div><!-- /concierge-sidebar -->
 
-    </div><!-- /companion-grid -->
+    </div><!-- /concierge-grid -->
 
-  </div><!-- /companion-card -->
-</div><!-- /companion-outer -->
+  </div><!-- /concierge-card -->
+</div><!-- /concierge-outer -->

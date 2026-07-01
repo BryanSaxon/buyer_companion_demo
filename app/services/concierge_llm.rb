@@ -1,4 +1,4 @@
-class CompanionLlm
+class ConciergeLlm
   MODEL      = "claude-sonnet-4-6"
   MAX_TOKENS = 600
 
@@ -91,7 +91,7 @@ class CompanionLlm
   def call(session:, lead:, user_input:, state_context:, history: [])
     system_prompt = build_system_prompt(lead, state_context)
 
-    messages = history.map { |m| { role: m.role == "companion" ? "assistant" : "user", content: m.content } }
+    messages = history.map { |m| { role: m.role == "concierge" ? "assistant" : "user", content: m.content } }
     messages << { role: "user", content: user_input }
 
     response = @client.messages.create(
@@ -104,7 +104,7 @@ class CompanionLlm
     raw = response.content.first.text.strip
     parse_json(raw)
   rescue StandardError => e
-    Rails.logger.error("CompanionLlm error: #{e.class}: #{e.message}")
+    Rails.logger.error("ConciergeLlm error: #{e.class}: #{e.message}")
     { "message" => fallback_message, "can_advance" => false, "is_off_topic" => false }
   end
 
@@ -140,7 +140,7 @@ class CompanionLlm
     end
 
     # Nothing parseable — log and fall back
-    Rails.logger.error("CompanionLlm: unparseable response: #{raw.truncate(300)}")
+    Rails.logger.error("ConciergeLlm: unparseable response: #{raw.truncate(300)}")
     { "message" => fallback_message, "can_advance" => false, "is_off_topic" => false }
   end
 
