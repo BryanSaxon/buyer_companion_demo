@@ -22,16 +22,16 @@
 <div class="build-layout">
 
   <!-- ==========================================
-       LEFT COLUMN — brief / progress
+       LEFT COLUMN — home & family (narrow)
        ========================================== -->
   <div class="build-layout__left">
+    <div class="c-section" style="padding-top:32px;padding-bottom:32px;animation:scRise .6s ease both">
 
-    <div class="c-section" style="padding-top:32px;padding-bottom:8px;animation:scRise .6s ease both">
       <!-- Property card -->
       <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04);margin-bottom:14px">
         <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:8px">Your Home</div>
-        <div style="font:700 17px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em;margin-bottom:6px">The Brookfield</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <div style="font:700 17px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em;margin-bottom:8px">The Brookfield</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px">
           <% [["Community", DemoData::HOME[:community]], ["Phase", DemoData::HOME[:phase]], ["Lot", DemoData::HOME[:lot]]].each do |label, val| %>
             <div style="display:flex;flex-direction:column;gap:2px;padding:7px 11px;background:#FAFAF8;border:1px solid #E5E7EB;border-radius:8px">
               <span style="font:500 8px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#9aa0ac"><%= label %></span>
@@ -39,13 +39,13 @@
             </div>
           <% end %>
         </div>
-        <div style="margin-top:9px;font:400 12px 'Sora',system-ui;color:#9aa0ac">
+        <div style="font:400 12px 'Sora',system-ui;color:#9aa0ac">
           <%= DemoData::HOME[:bedrooms] %> bed · <%= DemoData::HOME[:bathrooms] %> bath · Flex room · <%= DemoData::HOME[:sqft] %> sq ft
         </div>
       </div>
 
       <!-- Family card -->
-      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04);margin-bottom:14px">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04)">
         <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:10px">The Morgan Family</div>
         <div style="display:flex;gap:8px">
           <% DemoData::FAMILY.each do |person| %>
@@ -60,189 +60,39 @@
         </div>
       </div>
 
-      <!-- Progress tracker -->
-      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623">Design Journey</div>
-          <div style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;color:#9aa0ac"><%= rooms_complete %> of <%= total_rooms %> rooms</div>
-        </div>
-        <div style="height:4px;background:#E5E7EB;border-radius:2px;overflow:hidden;margin-bottom:14px">
-          <div style="height:100%;width:<%= pct %>%;background:#F5A623;border-radius:2px;transition:width .4s ease"></div>
-        </div>
-
-        <!-- Phase indicators -->
-        <% [
-          { label: "Room Planning", done: planning_done, active: session.room_planning? },
-          { label: "Design Styles", done: styles_done,   active: session.style_selection? },
-        ].each do |phase| %>
-          <div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #F5F4EF">
-            <% if phase[:done] %>
-              <div style="width:16px;height:16px;border-radius:50%;background:#22a06b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;flex:none">✓</div>
-              <span style="font:400 12.5px 'Sora',system-ui;color:#9aa0ac;text-decoration:line-through"><%= phase[:label] %></span>
-            <% elsif phase[:active] %>
-              <div style="width:16px;height:16px;border-radius:50%;border:2px solid #F5A623;background:rgba(245,166,35,.1);display:flex;align-items:center;justify-content:center;flex:none">
-                <div style="width:6px;height:6px;border-radius:50%;background:#F5A623"></div>
-              </div>
-              <span style="font:600 12.5px 'Sora',system-ui;color:#1A1A1A"><%= phase[:label] %></span>
-            <% else %>
-              <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #E5E7EB;flex:none"></div>
-              <span style="font:400 12.5px 'Sora',system-ui;color:#b3b8c0"><%= phase[:label] %></span>
-            <% end %>
-          </div>
-        <% end %>
-
-        <!-- Room rows -->
-        <% DemoData::ROOMS.each do |room| %>
-          <% is_done   = session.room_fully_designed?(room[:key]) %>
-          <% is_active = !session.complete? && session.designing? && session.current_room == room[:key] %>
-          <% if is_done %>
-            <div style="display:flex;align-items:center;gap:9px;padding:5px 0;cursor:pointer;user-select:none"
-                 data-action="click->companion#toggleRoomDrawer"
-                 data-room-key="<%= room[:key] %>">
-              <div style="width:16px;height:16px;border-radius:50%;background:#22a06b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;flex:none">✓</div>
-              <span style="font:400 12px 'Sora',system-ui;color:#9aa0ac;text-decoration:line-through"><%= room[:label] %></span>
-              <svg id="chevron-<%= room[:key] %>" style="margin-left:auto;flex:none;transition:transform .15s;color:#c8ccd4" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-            <div id="room-drawer-<%= room[:key] %>" style="display:none;padding:4px 0 10px 25px">
-              <% (selections_by_room[room[:key]] || []).each do |sel| %>
-                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:2px 0">
-                  <span style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#b3b8c0;white-space:nowrap;flex:none"><%= sel.selection_type.humanize %></span>
-                  <span style="font:500 11.5px 'Sora',system-ui;color:<%= sel.pending? ? '#b3b8c0' : '#1A1A1A' %>;text-align:right"><%= sel.pending? ? '—' : sel.option_label %></span>
-                </div>
-              <% end %>
-              <button style="margin-top:8px;font:600 11px 'Sora',system-ui;color:#F5A623;background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:3px"
-                      data-action="click->companion#editRoomFromBrief"
-                      data-room-key="<%= room[:key] %>">
-                Edit in chat
-                <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </div>
-          <% elsif is_active %>
-            <div style="display:flex;align-items:center;gap:9px;padding:5px 0">
-              <div style="width:16px;height:16px;border-radius:50%;border:2px solid #F5A623;background:rgba(245,166,35,.1);display:flex;align-items:center;justify-content:center;flex:none">
-                <div style="width:6px;height:6px;border-radius:50%;background:#F5A623"></div>
-              </div>
-              <span style="font:600 12px 'Sora',system-ui;color:#1A1A1A"><%= room[:label] %></span>
-            </div>
-          <% else %>
-            <div style="display:flex;align-items:center;gap:9px;padding:5px 0">
-              <div style="width:16px;height:16px;border-radius:50%;border:1.5px solid #E5E7EB;flex:none"></div>
-              <span style="font:400 12px 'Sora',system-ui;color:#b3b8c0"><%= room[:label] %></span>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
     </div>
 
-    <div style="padding-bottom:36px"></div>
+    <%# Mobile-only: show journey strip + palette below the info cards %>
+    <div class="build-mobile-journey">
+      <%= render "home/build_journey_strip",
+            session: session,
+            planning_done: planning_done,
+            styles_done: styles_done,
+            selections_by_room: selections_by_room,
+            completed_rooms: completed_rooms,
+            selected_styles: selected_styles,
+            has_palette: has_palette,
+            swatch_for: swatch_for %>
+    </div>
 
   </div><!-- /build-layout__left -->
 
 
   <!-- ==========================================
-       RIGHT COLUMN — live design palette
+       RIGHT COLUMN — journey strip + palette
        ========================================== -->
   <div class="build-layout__right">
-
-    <div style="padding:32px 28px 48px">
-
-      <!-- Section heading -->
-      <div style="margin-bottom:28px">
-        <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:4px">Your Palette</div>
-        <div style="font:700 20px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em">Design Story</div>
-        <div style="font:400 12.5px 'Sora',system-ui;color:#9aa0ac;margin-top:4px">Your selections build here in real time</div>
-      </div>
-
-      <% if !has_palette %>
-        <!-- Empty state -->
-        <div style="border:1.5px dashed #E5E7EB;border-radius:16px;padding:40px 24px;text-align:center;background:#fff">
-          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#D1D5DB" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 14px;display:block"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2.5 2.5"/><path d="M8 6.5C9.2 5.6 10.5 5 12 5c3.9 0 7 3.1 7 7s-3.1 7-7 7-7-3.1-7-7c0-1.5.5-2.8 1.2-3.9"/></svg>
-          <div style="font:600 13px 'Sora',system-ui;color:#9aa0ac;margin-bottom:6px">Palette in progress</div>
-          <div style="font:400 12px 'Sora',system-ui;color:#b3b8c0;line-height:1.5">Start chatting with your Concierge — your design choices will appear here as a live mood board.</div>
-        </div>
-      <% else %>
-
-        <%# ── Design Styles ────────────────────── %>
-        <% if selected_styles.any? %>
-          <div style="margin-bottom:28px">
-            <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac;margin-bottom:12px;display:flex;align-items:center;gap:8px">
-              <span>Design Style</span>
-              <div style="flex:1;height:1px;background:#E5E7EB"></div>
-            </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px">
-              <% selected_styles.each do |style| %>
-                <div style="border-radius:12px;overflow:hidden;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(0,0,0,.05)">
-                  <% if style[:image] %>
-                    <div style="aspect-ratio:4/3;overflow:hidden">
-                      <%= image_tag style[:image], style: "width:100%;height:100%;object-fit:cover;display:block", loading: "lazy" %>
-                    </div>
-                  <% else %>
-                    <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#F5F4EF,#E8E0D0)"></div>
-                  <% end %>
-                  <div style="padding:8px 10px;background:#fff">
-                    <div style="font:600 11.5px 'Sora',system-ui;color:#1A1A1A"><%= style[:label] %></div>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-        <%# ── Room Palettes ────────────────────── %>
-        <% if completed_rooms.any? %>
-          <div style="margin-bottom:8px">
-            <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac;margin-bottom:12px;display:flex;align-items:center;gap:8px">
-              <span>Room Selections</span>
-              <div style="flex:1;height:1px;background:#E5E7EB"></div>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:14px">
-              <% completed_rooms.each do |room| %>
-                <% room_sels = (selections_by_room[room[:key]] || []).sort_by(&:created_at) %>
-                <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
-                  <div style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#1A1A1A;margin-bottom:12px"><%= room[:label] %></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:14px">
-                    <% room_sels.each do |sel| %>
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:52px">
-                        <% if sel.pending? %>
-                          <div style="width:44px;height:44px;border-radius:50%;border:1.5px dashed #D1D5DB;background:#FAFAF8;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
-                        <% else %>
-                          <div style="width:44px;height:44px;border-radius:50%;background:<%= swatch_for.call(sel) %>;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 6px rgba(0,0,0,.1)"></div>
-                        <% end %>
-                        <div style="font:500 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#9aa0ac;text-align:center;line-height:1.3"><%= sel.selection_type.humanize %></div>
-                        <% unless sel.pending? %>
-                          <div style="font:500 10px 'Sora',system-ui;color:#1A1A1A;text-align:center;line-height:1.25;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%= sel.option_label.split(" - ").last || sel.option_label %></div>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-        <%# ── Remaining rooms placeholder ────── %>
-        <% pending_rooms = DemoData::ROOMS.reject { |r| session.room_fully_designed?(r[:key]) } %>
-        <% if pending_rooms.any? %>
-          <div style="margin-top:18px">
-            <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac;margin-bottom:12px;display:flex;align-items:center;gap:8px">
-              <span>Remaining</span>
-              <div style="flex:1;height:1px;background:#E5E7EB"></div>
-            </div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px">
-              <% pending_rooms.each do |room| %>
-                <div style="padding:6px 12px;border-radius:999px;background:#F5F4EF;border:1.5px dashed #E5E7EB">
-                  <span style="font:500 11px 'Sora',system-ui;color:#c8ccd4"><%= room[:label] %></span>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-      <% end %>
+    <div class="build-desktop-journey">
+      <%= render "home/build_journey_strip",
+            session: session,
+            planning_done: planning_done,
+            styles_done: styles_done,
+            selections_by_room: selections_by_room,
+            completed_rooms: completed_rooms,
+            selected_styles: selected_styles,
+            has_palette: has_palette,
+            swatch_for: swatch_for %>
     </div>
-
   </div><!-- /build-layout__right -->
 
 </div><!-- /build-layout -->
