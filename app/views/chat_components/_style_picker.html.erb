@@ -1,10 +1,17 @@
+<% locked         = local_assigns.fetch(:locked, false) %>
+<% chosen_styles = local_assigns.fetch(:chosen_styles, []) %>
 <div class="chat-component chat-component--wide" data-component="style_picker">
-  <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
-    Select all that apply
+  <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:<%= locked ? '#22a06b' : '#9aa0ac' %>">
+    <%= locked ? "✓ Style locked in" : "Select all that apply" %>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
     <% DemoData::DESIGN_STYLES.each do |style| %>
-      <button class="style-tile" data-action="click->concierge#toggleStyle" data-style-key="<%= style[:key] %>">
+      <% is_chosen = locked && chosen_styles.map(&:to_s).include?(style[:key].to_s) %>
+      <button class="style-tile <%= 'style-tile--selected' if is_chosen %>"
+              <%= "disabled" if locked %>
+              style="<%= locked ? "cursor:default;pointer-events:none;#{'opacity:0.35' unless is_chosen}" : "" %>"
+              data-action="<%= locked ? '' : 'click->concierge#toggleStyle' %>"
+              data-style-key="<%= style[:key] %>">
         <% if style[:image] %>
           <div style="width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#F1F3F8;margin-bottom:7px">
             <%= image_tag style[:image], style: "width:100%;height:100%;object-fit:cover;display:block", loading: "lazy" %>
@@ -16,12 +23,14 @@
         <% end %>
         <div style="font:600 12.5px 'Sora',system-ui;color:#1A1A1A;margin-bottom:2px"><%= style[:label] %></div>
         <div style="font:400 11px 'Sora',system-ui;color:#9aa0ac;line-height:1.3"><%= style[:desc] %></div>
-        <div class="style-tile__check" style="display:none;position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#F5A623;color:#fff;align-items:center;justify-content:center;font-size:11px">✓</div>
+        <div class="style-tile__check" style="display:<%= is_chosen ? 'flex' : 'none' %>;position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#F5A623;color:#fff;align-items:center;justify-content:center;font-size:11px">✓</div>
       </button>
     <% end %>
   </div>
-  <button class="chat-component-btn chat-component-btn--primary" style="margin-top:12px"
-          data-action="click->concierge#confirmStyles">
-    These feel right →
-  </button>
+  <% unless locked %>
+    <button class="chat-component-btn chat-component-btn--primary" style="margin-top:12px"
+            data-action="click->concierge#confirmStyles">
+      These feel right →
+    </button>
+  <% end %>
 </div>

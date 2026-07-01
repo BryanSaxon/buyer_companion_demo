@@ -132,6 +132,10 @@
                         <% else %>
                           <%= msg.component_html.html_safe %>
                         <% end %>
+                      <% elsif msg.component_type == "style_picker" %>
+                        <%= render partial: "chat_components/style_picker",
+                                   locals: { session: @session, locked: true,
+                                             chosen_styles: @session.design_styles_array } %>
                       <% else %>
                         <%= msg.component_html.html_safe %>
                       <% end %>
