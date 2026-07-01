@@ -8,14 +8,29 @@
        data-companion-selections-url-value="<%= lead_selections_path(@lead) %>"
        data-companion-org-name-value="<%= org_name %>">
 
-    <!-- ============ STICKY BRAND BAR ============ -->
+    <!-- ============ BRAND BAR ============ -->
     <div class="brand-bar">
+      <!-- Left: identity -->
       <div style="width:38px;height:38px;border-radius:12px;background:#F5A623;color:#1A1A2E;display:flex;align-items:center;justify-content:center;font:700 14px 'Sora',system-ui;flex:none"><%= org_initials %></div>
-      <div style="line-height:1.2;min-width:0">
+      <div style="line-height:1.2;min-width:0;flex:1">
         <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= org_name %></div>
         <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:#9aa0ac">Buyer design companion</div>
       </div>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:14px;flex:none">
+
+      <!-- Center: desktop segmented nav (hidden on mobile — mobile uses the tab bar below) -->
+      <nav class="brand-nav">
+        <button class="brand-nav-btn" data-action="click->companion#showHome" data-companion-target="homeTab">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
+          My Brief
+        </button>
+        <button class="brand-nav-btn active" data-action="click->companion#showChat" data-companion-target="chatTab">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Companion
+        </button>
+      </nav>
+
+      <!-- Right: status + reset -->
+      <div style="display:flex;align-items:center;gap:14px;flex:none">
         <div style="display:flex;align-items:center;gap:6px">
           <div style="width:7px;height:7px;border-radius:50%;background:#22a06b"></div>
           <span style="font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#9aa0ac">Live</span>
@@ -29,15 +44,32 @@
       </div>
     </div>
 
-    <!-- ============ RESPONSIVE CONTENT GRID ============ -->
+    <!-- ============ MOBILE TAB BAR — below brand bar, hidden on desktop ============ -->
+    <div class="mobile-tab-bar">
+      <button class="mobile-tab" data-action="click->companion#showHome" data-companion-target="homeTab">
+        <div class="mobile-tab__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
+        </div>
+        My Brief
+      </button>
+      <button class="mobile-tab active" data-action="click->companion#showChat" data-companion-target="chatTab">
+        <div class="mobile-tab__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="tab-dot" data-companion-target="tabDot"></span>
+        </div>
+        Companion
+      </button>
+    </div>
+
+    <!-- ============ CONTENT GRID ============ -->
     <div class="companion-grid chat-active" data-companion-target="grid">
 
-      <!-- ====== LEFT / DESIGN BRIEF ====== -->
+      <!-- LEFT / DESIGN BRIEF -->
       <div class="companion-main">
         <%= render "home/design_brief", session: @session %>
       </div>
 
-      <!-- ====== RIGHT / CHAT SIDEBAR ====== -->
+      <!-- RIGHT / CHAT -->
       <div class="companion-sidebar">
         <div class="companion-sidebar-pad" style="animation:scRise .8s ease both">
           <div class="chat-panel">
@@ -70,7 +102,6 @@
                 <% end %>
               <% end %>
 
-              <%# Render initial component for new sessions %>
               <% if @initial_component_html.present? %>
                 <div class="chat-component-wrapper" data-companion-target="componentWrapper">
                   <%= @initial_component_html.html_safe %>
@@ -97,23 +128,6 @@
       </div><!-- /companion-sidebar -->
 
     </div><!-- /companion-grid -->
-
-    <!-- ============ BOTTOM TAB BAR (mobile only, hidden on desktop) ============ -->
-    <div class="mobile-tab-bar">
-      <button class="mobile-tab" data-action="click->companion#showHome" data-companion-target="homeTab">
-        <div class="mobile-tab__icon">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
-        </div>
-        My Brief
-      </button>
-      <button class="mobile-tab active" data-action="click->companion#showChat" data-companion-target="chatTab">
-        <div class="mobile-tab__icon">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span class="tab-dot" data-companion-target="tabDot"></span>
-        </div>
-        Companion
-      </button>
-    </div>
 
   </div><!-- /companion-card -->
 </div><!-- /companion-outer -->
