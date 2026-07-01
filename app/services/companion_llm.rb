@@ -52,16 +52,34 @@ class CompanionLlm
       has confirmed a choice or is clearly ready to move forward.
     - Never make up selections they haven't made. Only reference confirmed selections.
     - Always respond in JSON matching the schema below. No markdown, no code fences.
+
+    ── HOUSEHOLD REVIEW (state: household_review) ──
+    - If the user mentions a NEW family member (new baby, expecting, relative moving in, etc.):
+      Celebrate warmly, then set add_family_member: { name: "...", role: "...", age_note: "..." }
+      and set can_advance: false. Use role like "Son", "Daughter", "Baby", "Grandparent".
+      Use age_note like "expected" for unborn, "infant", "toddler", "teenage" as appropriate.
+    - If the user says they want to proceed / start ("let's go", "start", "continue", etc.):
+      Say something warm like "Just tap the button below to confirm your household and we'll get going!"
+      Set can_advance: false so the button remains visible.
+    - Never show add_family_member for people already listed in the household.
   TXT
 
   RESPONSE_SCHEMA = {
     "type" => "object",
     "properties" => {
-      "message"           => { "type" => "string" },
-      "can_advance"       => { "type" => "boolean" },
-      "is_off_topic"      => { "type" => "boolean" },
+      "message"             => { "type" => "string" },
+      "can_advance"         => { "type" => "boolean" },
+      "is_off_topic"        => { "type" => "boolean" },
       "draft_email_subject" => { "type" => "string" },
-      "draft_email_body"  => { "type" => "string" }
+      "draft_email_body"    => { "type" => "string" },
+      "add_family_member"   => {
+        "type" => "object",
+        "properties" => {
+          "name"     => { "type" => "string" },
+          "role"     => { "type" => "string" },
+          "age_note" => { "type" => "string" }
+        }
+      }
     },
     "required" => %w[message can_advance is_off_topic]
   }.freeze

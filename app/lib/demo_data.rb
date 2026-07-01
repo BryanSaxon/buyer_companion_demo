@@ -17,7 +17,7 @@ module DemoData
   ].freeze
 
   ROOMS = [
-    { key: "master_bedroom",  label: "Master Bedroom",  type: :bedroom,  ask_purpose: false, ask_occupants: false, default_occupants: %w[chris cindy] },
+    { key: "master_bedroom",  label: "Master Bedroom",  type: :bedroom,  ask_purpose: false, ask_occupants: true },
     { key: "master_bathroom", label: "Master Bathroom",  type: :bathroom, ask_purpose: false, ask_occupants: false },
     { key: "bedroom_2",       label: "Bedroom 2",        type: :bedroom,  ask_purpose: false, ask_occupants: true  },
     { key: "bedroom_3",       label: "Bedroom 3",        type: :bedroom,  ask_purpose: false, ask_occupants: true  },
