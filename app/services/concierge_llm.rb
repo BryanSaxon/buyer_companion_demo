@@ -95,7 +95,8 @@ class ConciergeLlm
           "age_note" => { "type" => "string" }
         }
       },
-      "selected_option_key" => { "type" => "string" }
+      "selected_option_key" => { "type" => "string" },
+      "progress_next"       => { "type" => "boolean" }
     },
     "required" => %w[message can_advance is_off_topic]
   }.freeze
