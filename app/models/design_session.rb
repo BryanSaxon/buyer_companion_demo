@@ -24,18 +24,19 @@ class DesignSession < ApplicationRecord
   end
 
   def effective_family
-    base = DemoData::FAMILY.dup.map { |p| p.dup }
-    return base if custom_family_json.blank?
-    custom = JSON.parse(custom_family_json)
-    base + custom.map { |p| p.transform_keys(&:to_sym) }
+    # After household confirmation, custom_family_json is the sole source of truth
+    # (seeded with DemoData defaults + any additions). Before confirmation, fall back.
+    return DemoData::FAMILY if custom_family_json.blank?
+    JSON.parse(custom_family_json).map { |p| p.transform_keys(&:to_sym) }
   rescue
     DemoData::FAMILY
   end
 
   def add_family_member(attrs)
-    current = custom_family_json.present? ? JSON.parse(custom_family_json) : []
-    current << attrs.transform_keys(&:to_s)
-    update!(custom_family_json: current.to_json)
+    # Additions before confirmation merge on top of DemoData defaults
+    base    = custom_family_json.present? ? JSON.parse(custom_family_json) : DemoData::FAMILY.map { |p| p.transform_keys(&:to_s) }
+    base << attrs.transform_keys(&:to_s)
+    update!(custom_family_json: base.to_json)
   end
 
   def design_styles_array
