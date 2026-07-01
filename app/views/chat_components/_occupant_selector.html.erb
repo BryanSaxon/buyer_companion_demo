@@ -1,4 +1,6 @@
-<% show_floorplan = local_assigns.fetch(:show_floorplan, false) %>
+<% show_floorplan   = local_assigns.fetch(:show_floorplan, false) %>
+<% locked           = local_assigns.fetch(:locked, false) %>
+<% selected_keys    = local_assigns.fetch(:selected_occupant_keys, []) %>
 <div class="chat-component" data-component="occupant_selector" data-room-key="<%= room[:key] %>">
   <% if show_floorplan %>
     <div style="margin-bottom:12px;border-radius:10px;overflow:hidden;border:1px solid #E5E7EB">
@@ -8,31 +10,42 @@
       </div>
     </div>
   <% end %>
-  <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
-    Select all that apply
+  <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:<%= locked ? '#22a06b' : '#9aa0ac' %>">
+    <%= locked ? "✓ Confirmed" : "Select all that apply" %>
   </div>
   <div style="display:flex;flex-direction:column;gap:7px">
-    <% (remaining_family || DemoData::FAMILY).each do |person| %>
-      <button class="chat-component-btn chat-component-btn--option occupant-btn"
-              data-action="click->concierge#toggleOccupant"
+    <% all_people = (remaining_family || DemoData::FAMILY) %>
+    <% all_people.each do |person| %>
+      <% is_selected = locked && selected_keys.include?(person[:key].to_s) %>
+      <button class="chat-component-btn chat-component-btn--option occupant-btn<%= ' chat-component-btn--selected' if is_selected %>"
+              <%= "disabled" if locked %>
+              style="<%= locked ? "cursor:default;pointer-events:none;#{'opacity:0.35' unless is_selected}" : "" %>"
+              data-action="<%= locked ? '' : 'click->concierge#toggleOccupant' %>"
               data-occupant-key="<%= person[:key] %>"
               data-room-key="<%= room[:key] %>">
         <span style="font:600 13px 'Sora',system-ui"><%= person[:name] %></span>
         <span style="font:400 11px 'Sora',system-ui;color:#9aa0ac;margin-left:6px"><%= person[:role] %></span>
+        <% if is_selected %><span style="margin-left:auto;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;color:#22a06b">✓</span><% end %>
       </button>
     <% end %>
-    <button class="chat-component-btn chat-component-btn--option occupant-btn"
-            data-action="click->concierge#toggleOccupant"
+    <% is_guest = locked && selected_keys.include?("guest") %>
+    <button class="chat-component-btn chat-component-btn--option occupant-btn<%= ' chat-component-btn--selected' if is_guest %>"
+            <%= "disabled" if locked %>
+            style="<%= locked ? "cursor:default;pointer-events:none;#{'opacity:0.35' unless is_guest}" : "" %>"
+            data-action="<%= locked ? '' : 'click->concierge#toggleOccupant' %>"
             data-occupant-key="guest"
             data-room-key="<%= room[:key] %>">
       <span style="font:600 13px 'Sora',system-ui">Guest room</span>
       <span style="font:400 11px 'Sora',system-ui;color:#9aa0ac;margin-left:6px">Or not assigned yet</span>
+      <% if is_guest %><span style="margin-left:auto;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;color:#22a06b">✓</span><% end %>
     </button>
   </div>
-  <button class="chat-component-btn chat-component-btn--primary"
-          style="margin-top:10px"
-          data-action="click->concierge#confirmOccupants"
-          data-room-key="<%= room[:key] %>">
-    Confirm →
-  </button>
+  <% unless locked %>
+    <button class="chat-component-btn chat-component-btn--primary"
+            style="margin-top:10px"
+            data-action="click->concierge#confirmOccupants"
+            data-room-key="<%= room[:key] %>">
+      Confirm →
+    </button>
+  <% end %>
 </div>
