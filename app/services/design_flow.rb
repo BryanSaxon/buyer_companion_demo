@@ -89,7 +89,7 @@ class DesignFlow
                                                    family: session.effective_family)
     when "room_planning"     then planning_component_for(DemoData.room(session.current_room) || session.next_unplanned_room)
     when "style_selection"   then render_component("chat_components/style_picker", session: session)
-    when "designing"         then render_option_selector
+    when "designing"         then designing_component_html
     when "summary_review"    then render_component("chat_components/summary_card", session: session)
     end
   end
@@ -102,7 +102,7 @@ class DesignFlow
       room = DemoData.room(session.current_room) || session.next_unplanned_room
       planning_component_type_for(room)
     when "style_selection"   then "style_picker"
-    when "designing"         then "option_selector"
+    when "designing"         then designing_component_type
     when "summary_review"    then "summary_card"
     end
   end
@@ -453,6 +453,8 @@ class DesignFlow
         rooms_complete: session.rooms_complete_count,
         total_rooms: 8 }
     else
+      # Advance index past the end so refresh re-shows progress card, not the last option_selector
+      session.update!(current_selection_index: selections_for_room.size)
       room_label = DemoData.room(session.current_room)[:label]
       msg = warm_message || "#{room_label} is done! Great choices — these are going to look incredible together."
       { message: msg,
@@ -559,6 +561,25 @@ class DesignFlow
   end
 
   # --- Design helpers ---
+
+  def room_selections_exhausted?
+    sels = DemoData.selections_for(session.current_room.to_s)
+    session.current_selection_index.to_i >= sels.size
+  end
+
+  def designing_component_html
+    if room_selections_exhausted?
+      render_component("chat_components/progress_card",
+                       session: session, room_key: session.current_room,
+                       rooms_complete: session.rooms_complete_count)
+    else
+      render_option_selector
+    end
+  end
+
+  def designing_component_type
+    room_selections_exhausted? ? "progress_card" : "option_selector"
+  end
 
   def render_option_selector
     sel_config = session.current_selection_config

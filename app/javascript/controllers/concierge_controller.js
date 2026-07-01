@@ -332,9 +332,10 @@ export default class extends Controller {
     const dot = component.querySelector("[data-room-dot]")
     if (dot) dot.style.background = "#22a06b"
     const selLabel = component.querySelector("[data-selection-label]")
-    if (selLabel) selLabel.style.display = "none"
-    const lockIndicator = component.querySelector("[data-lock-indicator]")
-    if (lockIndicator) lockIndicator.style.display = "inline"
+    if (selLabel) {
+      selLabel.style.color = "#22a06b"
+      selLabel.textContent = "✓ " + selLabel.textContent
+    }
 
     component.querySelectorAll(".option-tile").forEach(tile => {
       const key = tile.dataset.optionKey
