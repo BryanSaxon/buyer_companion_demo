@@ -11,7 +11,7 @@ class SelectionsController < ApplicationController
     action_data = selection_params
     result = DesignFlow.new(session: session, lead: lead).handle_selection(action_data)
 
-    persist_companion_message(lead, result)
+    persist_concierge_message(lead, result)
     render json: result.slice(:message, :component_html, :component_type, :state, :rooms_complete, :total_rooms)
   end
 
@@ -30,10 +30,10 @@ class SelectionsController < ApplicationController
     end
   end
 
-  def persist_companion_message(lead, result)
+  def persist_concierge_message(lead, result)
     return if result[:message].blank?
     lead.chat_messages.create!(
-      role: "companion",
+      role: "concierge",
       content: result[:message],
       message_type: "text",
       component_type: result[:component_type]

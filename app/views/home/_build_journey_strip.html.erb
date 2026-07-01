@@ -44,7 +44,7 @@
       <% if is_done %>
         <button style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;background:#dcfce7;border:1px solid #bbf7d0;cursor:pointer;transition:filter .12s"
                 onmouseover="this.style.filter='brightness(.96)'" onmouseout="this.style.filter=''"
-                data-action="click->companion#editRoomFromBrief"
+                data-action="click->concierge#editRoomFromBrief"
                 data-room-key="<%= room[:key] %>">
           <svg viewBox="0 0 12 12" width="9" height="9" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
           <span style="font:600 10.5px 'Sora',system-ui;color:#166534"><%= room[:label] %></span>
@@ -52,14 +52,14 @@
       <% elsif is_active %>
         <button style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;background:rgba(245,166,35,.1);border:1.5px solid #F5A623;cursor:pointer;transition:filter .12s"
                 onmouseover="this.style.filter='brightness(.96)'" onmouseout="this.style.filter=''"
-                data-action="click->companion#showChat">
+                data-action="click->concierge#showChat">
           <div style="width:6px;height:6px;border-radius:50%;background:#F5A623;animation:tabDotPulse 1.4s ease-in-out infinite;flex:none"></div>
           <span style="font:600 10.5px 'Sora',system-ui;color:#C27D1B"><%= room[:label] %></span>
         </button>
       <% else %>
         <button style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#F5F4EF;border:1.5px dashed #D1D5DB;cursor:pointer;transition:filter .12s"
                 onmouseover="this.style.filter='brightness(.96)'" onmouseout="this.style.filter=''"
-                data-action="click->companion#showChat">
+                data-action="click->concierge#showChat">
           <span style="font:500 10.5px 'Sora',system-ui;color:#c8ccd4"><%= room[:label] %></span>
         </button>
       <% end %>

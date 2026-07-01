@@ -14,7 +14,7 @@
   <div style="display:flex;flex-direction:column;gap:7px">
     <% (remaining_family || DemoData::FAMILY).each do |person| %>
       <button class="chat-component-btn chat-component-btn--option occupant-btn"
-              data-action="click->companion#toggleOccupant"
+              data-action="click->concierge#toggleOccupant"
               data-occupant-key="<%= person[:key] %>"
               data-room-key="<%= room[:key] %>">
         <span style="font:600 13px 'Sora',system-ui"><%= person[:name] %></span>
@@ -22,7 +22,7 @@
       </button>
     <% end %>
     <button class="chat-component-btn chat-component-btn--option occupant-btn"
-            data-action="click->companion#toggleOccupant"
+            data-action="click->concierge#toggleOccupant"
             data-occupant-key="guest"
             data-room-key="<%= room[:key] %>">
       <span style="font:600 13px 'Sora',system-ui">Guest room</span>
@@ -31,7 +31,7 @@
   </div>
   <button class="chat-component-btn chat-component-btn--primary"
           style="margin-top:10px"
-          data-action="click->companion#confirmOccupants"
+          data-action="click->concierge#confirmOccupants"
           data-room-key="<%= room[:key] %>">
     Confirm →
   </button>

@@ -4,7 +4,7 @@ class DesignFlow
   def initialize(session:, lead:)
     @session = session
     @lead    = lead
-    @llm     = CompanionLlm.new
+    @llm     = ConciergeLlm.new
   end
 
   # Called by MessagesController for free-text input.
@@ -56,7 +56,7 @@ class DesignFlow
   # Auto-generates the welcome message for new sessions
   def welcome_message
     "Hi Chris and Cindy! Welcome to your design journey with #{lead.org_name}. " \
-    "I'm your personal home companion, and I'll be with you every step of the way as " \
+    "I'm your personal home concierge, and I'll be with you every step of the way as " \
     "you plan your beautiful new home at Crystal Ridge. We have your Brookfield floor plan " \
     "all set — 3 bedrooms, 2 bathrooms, plus a flex room you get to design exactly how you want. " \
     "Ready to start planning together?"

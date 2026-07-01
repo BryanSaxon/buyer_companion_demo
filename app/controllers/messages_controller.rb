@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
     result  = DesignFlow.new(session: session, lead: lead).handle_text(text)
 
     lead.chat_messages.create!(
-      role: "companion",
+      role: "concierge",
       content: result[:message],
       message_type: "text",
       component_type: result[:component_type]

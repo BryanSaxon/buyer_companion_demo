@@ -164,7 +164,7 @@ input::placeholder {
    ============================================================ */
 @media (max-width: 1023px) {
   /* Full-height flex column */
-  .companion-card {
+  .concierge-card {
     height: 100dvh;
     min-height: unset;
     overflow: hidden;
@@ -180,14 +180,14 @@ input::placeholder {
   }
 
   /* Grid fills remaining height */
-  .companion-grid {
+  .concierge-grid {
     flex: 1;
     min-height: 0;
     overflow: hidden;
   }
 
   /* Home panel: scrolls internally */
-  .companion-main {
+  .concierge-main {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -196,7 +196,7 @@ input::placeholder {
   }
 
   /* Chat panel: hidden until tab activated */
-  .companion-sidebar {
+  .concierge-sidebar {
     display: none;
     height: 100%;
     flex-direction: column;
@@ -204,17 +204,17 @@ input::placeholder {
   }
 
   /* --- Chat tab active --- */
-  .companion-grid.chat-active .companion-main { display: none; }
-  .companion-grid.chat-active .companion-sidebar { display: flex; }
+  .concierge-grid.chat-active .concierge-main { display: none; }
+  .concierge-grid.chat-active .concierge-sidebar { display: flex; }
 
-  .companion-grid.chat-active .companion-sidebar-pad {
+  .concierge-grid.chat-active .concierge-sidebar-pad {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding: 0;
     overflow: hidden;
   }
-  .companion-grid.chat-active .chat-panel {
+  .concierge-grid.chat-active .chat-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -224,20 +224,20 @@ input::placeholder {
     box-shadow: none;
     background: #FAFAF8;
   }
-  .companion-grid.chat-active .chat-header-bar {
+  .concierge-grid.chat-active .chat-header-bar {
     background: rgba(250,250,248,.96);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid #E5E7EB;
   }
-  .companion-grid.chat-active .chat-messages {
+  .concierge-grid.chat-active .chat-messages {
     flex: 1;
     max-height: none;
     background: #FAFAF8;
     overflow-y: auto;
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  .companion-grid.chat-active .chat-composer {
+  .concierge-grid.chat-active .chat-composer {
     background: rgba(250,250,248,.96);
     border-top: 1px solid #E5E7EB;
   }
@@ -290,14 +290,14 @@ input::placeholder {
 /* ============================================================
    COMPANION (HOME) PAGE
    ============================================================ */
-.companion-outer {
+.concierge-outer {
   min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
 
-.companion-card {
+.concierge-card {
   width: 100%;
   min-height: 100dvh;
   background: #FAFAF8;
@@ -365,7 +365,7 @@ input::placeholder {
 }
 
 /* Sidebar (chat): mobile = normal block flow */
-.companion-sidebar-pad {
+.concierge-sidebar-pad {
   padding: 24px 20px 36px;
 }
 
@@ -398,15 +398,15 @@ input::placeholder {
 
 /* ---- Tablet (640–1023px): card shadow, max-width ---- */
 @media (min-width: 640px) and (max-width: 1023px) {
-  .companion-card {
+  .concierge-card {
     max-width: 700px;
     box-shadow: 0 0 120px rgba(40,33,20,.13);
   }
 }
 
-/* ---- Desktop (≥1024px): companion-card full-width, no shadow ---- */
+/* ---- Desktop (≥1024px): concierge-card full-width, no shadow ---- */
 @media (min-width: 1024px) {
-  .companion-card {
+  .concierge-card {
     max-width: 100%;
     box-shadow: none;
   }
@@ -444,11 +444,11 @@ input::placeholder {
   }
 
   /* --- Outer shell: full-width --- */
-  .companion-outer {
+  .concierge-outer {
     padding: 0;
     align-items: stretch;
   }
-  .companion-card {
+  .concierge-card {
     max-width: 100%;
     height: 100dvh;
     min-height: unset;
@@ -459,7 +459,7 @@ input::placeholder {
   }
 
   /* --- Single-panel grid — one view at a time --- */
-  .companion-grid {
+  .concierge-grid {
     display: block;
     flex: 1;
     min-height: 0;
@@ -467,7 +467,7 @@ input::placeholder {
   }
 
   /* Brief panel: hosts the two-column build-layout — no outer scroll */
-  .companion-main {
+  .concierge-main {
     height: 100%;
     overflow: hidden;
     display: block;
@@ -504,7 +504,7 @@ input::placeholder {
   .build-desktop-journey { display: block; }
 
   /* Chat panel: hidden until chat-active — warm gutter matches My Build right column */
-  .companion-sidebar {
+  .concierge-sidebar {
     display: none;
     height: 100%;
     flex-direction: column;
@@ -514,10 +514,10 @@ input::placeholder {
   }
 
   /* Panel switching */
-  .companion-grid.chat-active .companion-main { display: none; }
-  .companion-grid.chat-active .companion-sidebar { display: flex; }
+  .concierge-grid.chat-active .concierge-main { display: none; }
+  .concierge-grid.chat-active .concierge-sidebar { display: flex; }
 
-  .companion-grid.chat-active .companion-sidebar-pad {
+  .concierge-grid.chat-active .concierge-sidebar-pad {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -527,7 +527,7 @@ input::placeholder {
     overflow: hidden;
   }
 
-  .companion-grid.chat-active .chat-panel {
+  .concierge-grid.chat-active .chat-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -538,27 +538,27 @@ input::placeholder {
     background: #FAFAF8;
     min-height: 0;
   }
-  .companion-grid.chat-active .chat-header-bar {
+  .concierge-grid.chat-active .chat-header-bar {
     padding: 18px 32px;
     background: rgba(250,250,248,.97);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid #E5E7EB;
   }
-  .companion-grid.chat-active .chat-messages {
+  .concierge-grid.chat-active .chat-messages {
     flex: 1;
     max-height: none;
     overflow-y: auto;
     background: #FAFAF8;
     padding: 24px 32px 16px;
   }
-  .companion-grid.chat-active .chat-composer {
+  .concierge-grid.chat-active .chat-composer {
     padding: 16px 32px;
     background: rgba(250,250,248,.97);
     border-top: 1px solid #E5E7EB;
   }
   /* Warm linen gutters on either side of the centered chat panel */
-  .companion-grid.chat-active .companion-sidebar-pad {
+  .concierge-grid.chat-active .concierge-sidebar-pad {
     background: #F7F6F3;
   }
 }

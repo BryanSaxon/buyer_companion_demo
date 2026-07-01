@@ -16,7 +16,7 @@
   </div>
   <button class="chat-component-btn chat-component-btn--secondary"
           style="font-size:12px"
-          data-action="click->companion#copyEmail"
+          data-action="click->concierge#copyEmail"
           data-email-id="<%= draft.id %>"
           data-copy-text="<%= CGI.escapeHTML("Subject: #{draft.subject}\n\n#{draft.body}") %>">
     Copy to clipboard

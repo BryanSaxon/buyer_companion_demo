@@ -4,7 +4,7 @@
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
     <% DemoData::DESIGN_STYLES.each do |style| %>
-      <button class="style-tile" data-action="click->companion#toggleStyle" data-style-key="<%= style[:key] %>">
+      <button class="style-tile" data-action="click->concierge#toggleStyle" data-style-key="<%= style[:key] %>">
         <% if style[:image] %>
           <div style="width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:#F1F3F8;margin-bottom:7px">
             <%= image_tag style[:image], style: "width:100%;height:100%;object-fit:cover;display:block", loading: "lazy" %>
@@ -21,7 +21,7 @@
     <% end %>
   </div>
   <button class="chat-component-btn chat-component-btn--primary" style="margin-top:12px"
-          data-action="click->companion#confirmStyles">
+          data-action="click->concierge#confirmStyles">
     These feel right →
   </button>
 </div>

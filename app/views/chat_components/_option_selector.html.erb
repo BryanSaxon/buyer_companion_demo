@@ -16,7 +16,7 @@
     <% selection[:options].each do |opt| %>
       <% is_prior = prior_selection&.option_key == opt[:key] %>
       <button class="option-tile <%= 'option-tile--selected' if is_prior %>"
-              data-action="click->companion#selectOption"
+              data-action="click->concierge#selectOption"
               data-option-key="<%= opt[:key] %>"
               data-option-label="<%= opt[:label] %>"
               data-room-key="<%= room_key %>"
@@ -32,7 +32,7 @@
   <div style="margin-top:8px;display:flex;gap:7px">
     <button class="chat-component-btn chat-component-btn--secondary"
             style="flex:none;padding:9px 14px;font-size:12px"
-            data-action="click->companion#skipOption"
+            data-action="click->concierge#skipOption"
             data-room-key="<%= room_key %>"
             data-selection-type="<%= selection[:type] %>">
       Not sure yet
