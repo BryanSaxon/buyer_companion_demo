@@ -257,19 +257,24 @@ class DesignFlow
     if needs_occupants
       room      = DemoData.room(room_key)
       remaining = unassigned_effective_family(session.assigned_occupant_keys)
-      occ_msg   = purpose == "bedroom" ?
-        "Who's going to be sleeping in the Flex Room?" :
-        "Great! Will specific family members be staying there, or keep it open as a general guest room?"
-      return {
-        message: occ_msg,
-        component_html: render_component("chat_components/occupant_selector",
-                                         room: room, remaining_family: remaining,
-                                         show_floorplan: false),
-        component_type: "occupant_selector",
-        state: session.aasm_state,
-        rooms_complete: 0,
-        total_rooms: 8
-      }
+      if remaining.present?
+        occ_msg = purpose == "bedroom" ?
+          "Who's going to be sleeping in the #{room[:label]}?" :
+          "Great! Will specific family members be staying there, or keep it open as a general guest room?"
+        return {
+          message: occ_msg,
+          component_html: render_component("chat_components/occupant_selector",
+                                           room: room, remaining_family: remaining,
+                                           show_floorplan: false),
+          component_type: "occupant_selector",
+          state: session.aasm_state,
+          rooms_complete: 0,
+          total_rooms: 8
+        }
+      end
+      # No one left to assign — mark it complete and fall through to next room
+      rp.complete = true
+      rp.save!
     end
 
     next_room = session.next_unplanned_room
@@ -507,7 +512,7 @@ class DesignFlow
           "Let's start with the Master Bedroom — who will be sleeping here?"
         elsif remaining.empty?
           "#{room[:label]} — it looks like everyone's been placed. " \
-          "Would you like to designate this one as a guest room?"
+          "How would you like to use this room?"
         else
           "#{room[:label]} — who will be sleeping here?"
         end
@@ -530,8 +535,12 @@ class DesignFlow
     elsif room[:ask_occupants]
       assigned  = session.assigned_occupant_keys
       remaining = unassigned_effective_family(assigned)
-      render_component("chat_components/occupant_selector",
-                       room: room, remaining_family: remaining, show_floorplan: true)
+      if remaining.empty?
+        render_component("chat_components/room_purpose", room: room)
+      else
+        render_component("chat_components/occupant_selector",
+                         room: room, remaining_family: remaining, show_floorplan: true)
+      end
     else
       nil
     end
@@ -543,7 +552,9 @@ class DesignFlow
 
   def planning_component_type_for(room)
     if room[:ask_purpose] then "room_purpose"
-    elsif room[:ask_occupants] then "occupant_selector"
+    elsif room[:ask_occupants]
+      remaining = unassigned_effective_family(session.assigned_occupant_keys)
+      remaining.empty? ? "room_purpose" : "occupant_selector"
     end
   end
 
