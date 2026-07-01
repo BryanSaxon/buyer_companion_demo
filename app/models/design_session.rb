@@ -8,17 +8,34 @@ class DesignSession < ApplicationRecord
 
   aasm column: :aasm_state, whiny_persistence: false do
     state :welcome, initial: true
+    state :household_review
     state :room_planning
     state :style_selection
     state :designing
     state :summary_review
     state :complete
 
-    event :begin_planning   do transitions from: :welcome,        to: :room_planning   end
-    event :finish_planning  do transitions from: :room_planning,  to: :style_selection end
-    event :finish_styles    do transitions from: :style_selection, to: :designing      end
-    event :finish_designing do transitions from: :designing,      to: :summary_review  end
-    event :finish_summary   do transitions from: :summary_review,  to: :complete       end
+    event :show_household_recap do transitions from: :welcome,           to: :household_review end
+    event :begin_planning       do transitions from: %i[welcome household_review], to: :room_planning end
+    event :finish_planning      do transitions from: :room_planning,  to: :style_selection end
+    event :finish_styles        do transitions from: :style_selection, to: :designing      end
+    event :finish_designing     do transitions from: :designing,      to: :summary_review  end
+    event :finish_summary       do transitions from: :summary_review,  to: :complete       end
+  end
+
+  def effective_family
+    base = DemoData::FAMILY.dup.map { |p| p.dup }
+    return base if custom_family_json.blank?
+    custom = JSON.parse(custom_family_json)
+    base + custom.map { |p| p.transform_keys(&:to_sym) }
+  rescue
+    DemoData::FAMILY
+  end
+
+  def add_family_member(attrs)
+    current = custom_family_json.present? ? JSON.parse(custom_family_json) : []
+    current << attrs.transform_keys(&:to_s)
+    update!(custom_family_json: current.to_json)
   end
 
   def design_styles_array

@@ -24,6 +24,10 @@ class DesignFlow
       return handle_off_topic(user_input, llm_result)
     end
 
+    if session.household_review? && llm_result["add_family_member"].present?
+      return handle_household_addition(llm_result)
+    end
+
     advance_if_ready(llm_result)
   end
 
@@ -43,6 +47,7 @@ class DesignFlow
     when "welcome_ready"         then handle_welcome_ready
     when "welcome_info"          then handle_welcome_info
     when "household_confirmed"   then handle_household_confirmed
+    when "household_info"        then handle_welcome_info
     else
       { message: "Something went wrong — let's try that again.", component_html: nil }
     end
@@ -66,10 +71,12 @@ class DesignFlow
   # --- State handlers ---
 
   def handle_welcome_ready
+    session.show_household_recap!
     msg = "Before we dive in, let me confirm who's moving into the home — " \
           "I want to make sure we plan every room for the right people."
     { message: msg,
-      component_html: render_component("chat_components/household_recap"),
+      component_html: render_component("chat_components/household_recap",
+                                       family: session.effective_family),
       component_type: "household_recap",
       state: session.aasm_state,
       rooms_complete: 0,
@@ -82,6 +89,24 @@ class DesignFlow
     result[:message] = "Here's your Brookfield floor plan for reference — " \
                        "it'll help as we place everyone. " + result[:message]
     result
+  end
+
+  def handle_household_addition(llm_result)
+    member = llm_result["add_family_member"]
+    session.add_family_member(
+      key:      member["name"].downcase.tr(" ", "_"),
+      name:     member["name"],
+      role:     member["role"],
+      age_note: member["age_note"].to_s
+    )
+    family = session.effective_family
+    updated_recap = render_component("chat_components/household_recap", family: family, just_added: member["name"])
+    { message: llm_result["message"],
+      component_html: updated_recap,
+      component_type: "household_recap",
+      state: session.aasm_state,
+      rooms_complete: 0,
+      total_rooms: 8 }
   end
 
   def handle_welcome_info
@@ -160,7 +185,7 @@ class DesignFlow
 
     if needs_occupants
       room      = DemoData.room(room_key)
-      remaining = DemoData.unassigned_family(session.assigned_occupant_keys)
+      remaining = unassigned_effective_family(session.assigned_occupant_keys)
       occ_msg   = purpose == "bedroom" ?
         "Who's going to be sleeping in the Flex Room?" :
         "Great! Will specific family members be staying there, or keep it open as a general guest room?"
@@ -405,16 +430,18 @@ class DesignFlow
     case room[:type]
     when :bedroom
       if room[:ask_occupants]
-        assigned = session.assigned_occupant_keys
-        remaining = DemoData.unassigned_family(assigned)
-        if remaining.empty?
-          "#{room[:label]} — it looks like everyone's been assigned a room. " \
+        assigned  = session.assigned_occupant_keys
+        remaining = unassigned_effective_family(assigned)
+        if room[:key] == "master_bedroom"
+          "Let's start with the Master Bedroom — who will be sleeping here?"
+        elsif remaining.empty?
+          "#{room[:label]} — it looks like everyone's been placed. " \
           "Would you like to designate this one as a guest room?"
         else
           "#{room[:label]} — who will be sleeping here?"
         end
       else
-        "Great! #{room[:label]} is set for Chris and Cindy."
+        "Great! #{room[:label]} is all set."
       end
     when :flex
       "Now for the flex room — this one is totally yours to design. " \
@@ -431,12 +458,16 @@ class DesignFlow
       render_component("chat_components/room_purpose", room: room)
     elsif room[:ask_occupants]
       assigned  = session.assigned_occupant_keys
-      remaining = DemoData.unassigned_family(assigned)
+      remaining = unassigned_effective_family(assigned)
       render_component("chat_components/occupant_selector",
                        room: room, remaining_family: remaining, show_floorplan: true)
     else
       nil
     end
+  end
+
+  def unassigned_effective_family(assigned_keys)
+    session.effective_family.reject { |p| assigned_keys.include?(p[:key]) }
   end
 
   def planning_component_type_for(room)
@@ -461,23 +492,26 @@ class DesignFlow
 
   def next_component_html
     case session.aasm_state
-    when "welcome"        then welcome_component_html
-    when "room_planning"  then planning_component_for(DemoData.room(session.current_room) || session.next_unplanned_room)
-    when "style_selection" then render_component("chat_components/style_picker", session: session)
-    when "designing"      then render_option_selector
-    when "summary_review" then render_component("chat_components/summary_card", session: session)
+    when "welcome"           then welcome_component_html
+    when "household_review"  then render_component("chat_components/household_recap",
+                                                   family: session.effective_family)
+    when "room_planning"     then planning_component_for(DemoData.room(session.current_room) || session.next_unplanned_room)
+    when "style_selection"   then render_component("chat_components/style_picker", session: session)
+    when "designing"         then render_option_selector
+    when "summary_review"    then render_component("chat_components/summary_card", session: session)
     end
   end
 
   def next_component_type
     case session.aasm_state
-    when "welcome"         then "welcome_prompt"
+    when "welcome"           then "welcome_prompt"
+    when "household_review"  then "household_recap"
     when "room_planning"
       room = DemoData.room(session.current_room) || session.next_unplanned_room
       planning_component_type_for(room)
-    when "style_selection" then "style_picker"
-    when "designing"       then "option_selector"
-    when "summary_review"  then "summary_card"
+    when "style_selection"   then "style_picker"
+    when "designing"         then "option_selector"
+    when "summary_review"    then "summary_card"
     end
   end
 
@@ -492,8 +526,9 @@ class DesignFlow
     room  = session.current_room ? DemoData.room(session.current_room)&.dig(:label) : nil
     sel   = session.current_selection_config
     case state
-    when "welcome"        then "Welcoming the family and checking if they're ready to start."
-    when "room_planning"  then "Assigning purposes and occupants to rooms. Currently on: #{room}."
+    when "welcome"           then "Welcoming the family and checking if they're ready to start."
+    when "household_review"  then "Reviewing who's moving into the home. The family can add members before confirming."
+    when "room_planning"     then "Assigning purposes and occupants to rooms. Currently on: #{room}."
     when "style_selection" then "Asking the family which design styles resonate with them."
     when "designing"      then "Making finish selections for #{room}, current selection: #{sel&.dig(:label)}."
     when "summary_review" then "Reviewing all selections with the family before finalizing."

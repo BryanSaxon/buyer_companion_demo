@@ -1,25 +1,36 @@
+<% display_family = local_assigns.fetch(:family, DemoData::FAMILY) %>
+<% newly_added    = local_assigns.fetch(:just_added, nil) %>
 <div class="chat-component" data-component="household_recap">
   <div style="margin-bottom:12px;font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">
     Your Household
   </div>
   <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-    <% DemoData::FAMILY.each do |person| %>
-      <div style="display:flex;align-items:center;gap:12px;padding:10px 13px;background:#FAFAF8;border:1px solid #E5E7EB;border-radius:10px">
+    <% display_family.each do |person| %>
+      <% is_new = newly_added.present? && person[:name] == newly_added %>
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 13px;background:<%= is_new ? '#FFF8EC' : '#FAFAF8' %>;border:1px solid <%= is_new ? '#F5A623' : '#E5E7EB' %>;border-radius:10px">
         <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#C27D1B);color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Sora',system-ui;flex-shrink:0">
           <%= person[:name][0] %>
         </div>
-        <div>
+        <div style="flex:1">
           <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A"><%= person[:name] %></div>
           <div style="font:400 11px 'Sora',system-ui;color:#9aa0ac">
             <%= person[:role] %><% if person[:age_note].present? %> · <%= person[:age_note] %><% end %>
           </div>
         </div>
+        <% if is_new %>
+          <span style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#F5A623">Added</span>
+        <% end %>
       </div>
     <% end %>
   </div>
+  <% if newly_added.present? %>
+    <div style="margin-bottom:10px;font:400 12px 'Sora',system-ui;color:#9aa0ac;text-align:center">
+      Does this look right now?
+    </div>
+  <% end %>
   <button class="chat-component-btn chat-component-btn--primary"
           data-action="click->companion#sendSelection"
           data-selection-type="household_confirmed">
-    That's us — let's start! →
+    <%= newly_added.present? ? "Yes, that's everyone — let's start! →" : "That's us — let's start! →" %>
   </button>
 </div>
