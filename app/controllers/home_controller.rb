@@ -6,13 +6,18 @@ class HomeController < ApplicationController
     @session = @lead.design_session || @lead.create_design_session!
     @messages = @lead.chat_messages.chronological
 
-    # Fire welcome message for brand-new sessions
+    flow = DesignFlow.new(session: @session, lead: @lead)
+
     if @messages.empty?
-      flow = DesignFlow.new(session: @session, lead: @lead)
       msg  = flow.welcome_message
       html = flow.welcome_component_html
-      @lead.chat_messages.create!(role: "concierge", content: msg, message_type: "text", component_type: "welcome_prompt")
+      @lead.chat_messages.create!(
+        role: "concierge", content: msg, message_type: "text",
+        component_type: "welcome_prompt", component_html: html
+      )
       @initial_component_html = html
+    else
+      @initial_component_html = flow.next_component_html
     end
 
     @messages = @lead.chat_messages.chronological
