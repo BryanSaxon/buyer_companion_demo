@@ -39,6 +39,6 @@
   <button class="chat-component-btn chat-component-btn--primary"
           style="background:#22a06b;color:#fff"
           data-action="click->concierge#progressNext">
-    Ready for the next room &rarr;
+    <%= rooms_complete >= 8 ? "Review my selections →" : "Ready for the next room →" %>
   </button>
 </div>
