@@ -1,6 +1,6 @@
 class CompanionLlm
   MODEL      = "claude-sonnet-4-6"
-  MAX_TOKENS = 400
+  MAX_TOKENS = 600
 
   HARD_CONSTRAINTS = <<~TXT.freeze
     You are the personal design concierge for the Morgan family — Chris (Dad), Cindy (Mom),
@@ -84,25 +84,46 @@ class CompanionLlm
     )
 
     raw = response.content.first.text.strip
-    JSON.parse(raw)
+    parse_json(raw)
   rescue StandardError => e
-    Rails.logger.error("CompanionLlm error: #{e.message}")
+    Rails.logger.error("CompanionLlm error: #{e.class}: #{e.message}")
     { "message" => fallback_message, "can_advance" => false, "is_off_topic" => false }
   end
 
   private
 
   def build_system_prompt(lead, state_context)
+    meeting_date = DemoData.next_design_meeting_date rescue "coming up soon"
     <<~PROMPT
       #{HARD_CONSTRAINTS}
 
       Builder brand: #{lead.org_name}
-      Design meeting date: #{DemoData.next_design_meeting_date}
+      Design meeting date: #{meeting_date}
       Current flow context: #{state_context}
 
-      Respond ONLY with valid JSON. Example:
-      {"message":"That's a beautiful choice — natural oak is going to feel so warm and inviting!","can_advance":true,"is_off_topic":false}
+      Respond ONLY with valid JSON. No markdown, no code fences, no prose outside the JSON object.
+      Example: {"message":"That's a beautiful choice — natural oak is going to feel so warm and inviting!","can_advance":true,"is_off_topic":false}
     PROMPT
+  end
+
+  # Extract and parse JSON from Claude's response, even if it's wrapped in
+  # markdown fences or mixed with prose (common with detailed system prompts).
+  def parse_json(raw)
+    # Happy path: clean JSON
+    return JSON.parse(raw) if raw.start_with?("{")
+
+    # Strip markdown code fences: ```json ... ``` or ``` ... ```
+    stripped = raw.gsub(/\A```(?:json)?\s*/i, "").gsub(/\s*```\z/, "").strip
+    return JSON.parse(stripped) if stripped.start_with?("{")
+
+    # Extract the first {...} object from prose
+    if (match = raw.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)?\}/m))
+      return JSON.parse(match[0])
+    end
+
+    # Nothing parseable — log and fall back
+    Rails.logger.error("CompanionLlm: unparseable response: #{raw.truncate(300)}")
+    { "message" => fallback_message, "can_advance" => false, "is_off_topic" => false }
   end
 
   def fallback_message
