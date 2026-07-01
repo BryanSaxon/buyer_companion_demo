@@ -99,11 +99,14 @@ class DesignFlow
   end
 
   def advance_if_ready(llm_result)
-    # In most free-text flows within designing/planning, advancing is done via component taps.
-    # Free text in those states mostly gets a warm LLM reply without state change.
+    # If the LLM flagged this as a conversational reply (can_advance: false),
+    # don't re-render the selection component — let the chat breathe naturally.
+    # The existing component is already visible; re-appending it feels robotic.
+    conversational = llm_result["can_advance"] == false
+
     { message: llm_result["message"],
-      component_html: next_component_html,
-      component_type: next_component_type,
+      component_html: conversational ? nil : next_component_html,
+      component_type: conversational ? nil : next_component_type,
       state: session.aasm_state,
       rooms_complete: session.rooms_complete_count,
       total_rooms: 8 }
