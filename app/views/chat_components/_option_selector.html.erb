@@ -1,12 +1,17 @@
-<div class="chat-component" data-component="option_selector"
+<% room_config = DemoData.room(room_key) %>
+<div class="chat-component chat-component--wide" data-component="option_selector"
      data-room-key="<%= room_key %>"
      data-selection-type="<%= selection[:type] %>"
      data-multi="<%= selection[:multi] %>">
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-    <span style="font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#F5A623">
-      <%= selection[:label] %>
-    </span>
+
+  <!-- Room context header -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #F0EEE9">
+    <div style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex:none"></div>
+    <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac"><%= room_config[:label] %></span>
+    <div style="flex:1;height:1px;background:#F0EEE9"></div>
+    <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#F5A623"><%= selection[:label] %></span>
   </div>
+
   <div style="display:grid;grid-template-columns:repeat(<%= [selection[:options].size, 3].min %>,1fr);gap:8px">
     <% selection[:options].each do |opt| %>
       <% is_prior = prior_selection&.option_key == opt[:key] %>

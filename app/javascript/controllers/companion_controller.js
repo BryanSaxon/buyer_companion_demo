@@ -11,6 +11,10 @@ export default class extends Controller {
   selectedStyles    = new Set()
 
   connect() {
+    // Mobile: always land on the chat tab — that's where the experience starts
+    if (window.innerWidth < 1024) {
+      this._activateChat()
+    }
     this.scrollToBottom()
   }
 
@@ -18,14 +22,21 @@ export default class extends Controller {
 
   showHome() {
     if (this.hasGridTarget) this.gridTarget.classList.remove("chat-active")
-    this.homeTabTarget.classList.add("active")
+    this.homeTabTarget.classList.remove("active")
     this.chatTabTarget.classList.remove("active")
+    this.homeTabTarget.classList.add("active")
   }
 
   showChat() {
+    this._activateChat()
+  }
+
+  _activateChat() {
     if (this.hasGridTarget) this.gridTarget.classList.add("chat-active")
-    this.homeTabTarget.classList.remove("active")
-    this.chatTabTarget.classList.add("active")
+    if (this.hasHomeTabTarget) this.homeTabTarget.classList.remove("active")
+    if (this.hasChatTabTarget) {
+      this.chatTabTarget.classList.add("active")
+    }
     if (this.hasTabDotTarget) this.tabDotTarget.classList.remove("visible")
     this.scrollToBottom()
   }
@@ -347,8 +358,14 @@ export default class extends Controller {
   }
 
   _notifyIfHidden() {
-    const onChat = this.hasGridTarget && this.gridTarget.classList.contains("chat-active")
-    if (!onChat && this.hasTabDotTarget) this.tabDotTarget.classList.add("visible")
+    const onChat = !this.hasGridTarget || this.gridTarget.classList.contains("chat-active")
+    if (!onChat) {
+      // On mobile: show dot then auto-switch after a beat so they see new content
+      if (this.hasTabDotTarget) this.tabDotTarget.classList.add("visible")
+      if (window.innerWidth < 1024) {
+        setTimeout(() => this._activateChat(), 900)
+      }
+    }
   }
 
   escapeHtml(text) {

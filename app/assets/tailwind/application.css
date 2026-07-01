@@ -58,63 +58,102 @@ input::placeholder {
    ============================================================ */
 :root {
   --brand-bar-h: 65px;
-  --tab-bar-h:   46px;
+  --tab-bar-h:   56px; /* taller for bottom nav + safe area */
 }
 
 /* ============================================================
-   MOBILE TAB BAR (hidden on desktop)
+   MOBILE TAB BAR — bottom navigation (hidden on desktop)
    ============================================================ */
 .mobile-tab-bar {
   display: flex;
   flex: none;
-  position: sticky;
-  top: var(--brand-bar-h);
-  z-index: 5;
-  background: #FAFAF8;
-  border-bottom: 1px solid #E5E7EB;
+  z-index: 9;
+  background: rgba(250,250,248,.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid #E5E7EB;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .mobile-tab {
   flex: 1;
-  padding: 13px 16px;
-  font: 600 13px 'Sora', system-ui;
+  padding: 8px 16px 10px;
+  font: 600 10px 'Sora', system-ui;
   color: #9aa0ac;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
   cursor: pointer;
-  letter-spacing: -.01em;
+  letter-spacing: .02em;
+  text-transform: uppercase;
   transition: color .15s;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 4px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-tab.active {
-  color: #1A1A1A;
-  border-bottom-color: #F5A623;
+  color: #F5A623;
 }
 
-/* Unread dot on Companion tab */
+/* Unread badge on Chat tab */
 .tab-dot {
-  width: 6px;
-  height: 6px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #F5A623;
+  border: 2px solid #FAFAF8;
   display: none;
 }
 .tab-dot.visible {
   display: block;
+  animation: tabDotPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes tabDotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.3); opacity: .85; }
+}
+
+/* Wrapper for icon + dot so badge positions correctly */
+.mobile-tab__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ============================================================
-   MOBILE PANEL SWITCHING (< 1024px)
+   MOBILE APP SHELL + PANEL SWITCHING (< 1024px)
+   Mobile uses a native-feeling flex column:
+   [brand bar] → [content grid] → [bottom tab bar]
    ============================================================ */
 @media (max-width: 1023px) {
-  /* Grid fills the remaining viewport below brand + tab bars */
+  /* Full-height flex column — no outer scrolling */
+  .companion-card {
+    height: 100dvh;
+    min-height: unset;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Brand bar sits in flex flow — no sticky needed */
+  .brand-bar {
+    position: relative;
+    top: 0;
+    flex: none;
+  }
+
+  /* Grid fills all space between brand bar and tab bar */
   .companion-grid {
-    height: calc(100dvh - var(--brand-bar-h) - var(--tab-bar-h));
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
   }
 
