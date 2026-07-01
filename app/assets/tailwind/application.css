@@ -379,6 +379,23 @@ input::placeholder {
   display: block;
 }
 
+/* Mobile/tablet (<1024px): build-layout stacks vertically */
+@media (max-width: 1023px) {
+  .build-layout {
+    display: block;
+  }
+  .build-layout__left {
+    overflow-y: visible;
+    height: auto;
+    border-right: none;
+  }
+  .build-layout__right {
+    display: none; /* journey strip shown in left column on mobile instead */
+  }
+  .build-mobile-journey { display: block; }
+  .build-desktop-journey { display: none; }
+}
+
 /* ---- Tablet (640–1023px): card shadow, max-width ---- */
 @media (min-width: 640px) and (max-width: 1023px) {
   .companion-card {
@@ -457,10 +474,10 @@ input::placeholder {
     border-right: none;
   }
 
-  /* Two-column build layout: left = brief, right = palette */
+  /* Two-column build layout: narrow left (home info) + wider right (journey + palette) */
   .build-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: clamp(300px, 35%, 420px) 1fr;
     height: 100%;
     overflow: hidden;
   }
@@ -472,8 +489,8 @@ input::placeholder {
   }
 
   .build-layout__left .c-section {
-    padding-left: 40px !important;
-    padding-right: 40px !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
   }
 
   .build-layout__right {
@@ -482,13 +499,17 @@ input::placeholder {
     background: #F7F6F3;
   }
 
-  /* Chat panel: hidden until chat-active */
+  /* Mobile: journey strip in left column, hidden on desktop right */
+  .build-mobile-journey { display: none; }
+  .build-desktop-journey { display: block; }
+
+  /* Chat panel: hidden until chat-active — warm gutter matches My Build right column */
   .companion-sidebar {
     display: none;
     height: 100%;
     flex-direction: column;
     overflow: hidden;
-    background: #FAFAF8;
+    background: #F7F6F3;
     align-items: center;
   }
 
@@ -535,6 +556,10 @@ input::placeholder {
     padding: 16px 32px;
     background: rgba(250,250,248,.97);
     border-top: 1px solid #E5E7EB;
+  }
+  /* Warm linen gutters on either side of the centered chat panel */
+  .companion-grid.chat-active .companion-sidebar-pad {
+    background: #F7F6F3;
   }
 }
 
