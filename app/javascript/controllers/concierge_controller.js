@@ -329,12 +329,12 @@ export default class extends Controller {
 
   _lockOptionSelector(component, chosenKey, isPending) {
     if (!component) return
-    const header = component.querySelector("[data-component='option_selector'] > div:first-child, .chat-component--wide > div:first-child")
-      || component.querySelector("div:first-child")
-    if (header) { header.style.color = "#22a06b" }
-    // Update the selection type label to "✓ Locked in"
-    const labelEl = component.querySelector("[style*='color:#F5A623']")
-    if (labelEl) { labelEl.textContent = "✓ Locked in"; labelEl.style.color = "#22a06b" }
+    const dot = component.querySelector("[data-room-dot]")
+    if (dot) dot.style.background = "#22a06b"
+    const selLabel = component.querySelector("[data-selection-label]")
+    if (selLabel) selLabel.style.display = "none"
+    const lockIndicator = component.querySelector("[data-lock-indicator]")
+    if (lockIndicator) lockIndicator.style.display = "inline"
 
     component.querySelectorAll(".option-tile").forEach(tile => {
       const key = tile.dataset.optionKey
