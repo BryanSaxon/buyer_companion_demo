@@ -139,14 +139,15 @@ class DesignFlow
   end
 
   def advance_if_ready(llm_result)
-    # If the LLM flagged this as a conversational reply (can_advance: false),
-    # don't re-render the selection component — let the chat breathe naturally.
-    # The existing component is already visible; re-appending it feels robotic.
     conversational = llm_result["can_advance"] == false
+    # Entry states always re-append their prompt so the user is never stranded
+    # without a button to advance (they typed instead of clicking).
+    entry_state = session.welcome? || session.household_review?
 
+    show_component = !conversational || entry_state
     { message: llm_result["message"],
-      component_html: conversational ? nil : next_component_html,
-      component_type: conversational ? nil : next_component_type,
+      component_html: show_component ? next_component_html : nil,
+      component_type: show_component ? next_component_type : nil,
       state: session.aasm_state,
       rooms_complete: session.rooms_complete_count,
       total_rooms: 8 }
