@@ -1,4 +1,5 @@
 <% room_config = DemoData.room(room_key) %>
+<% locked = local_assigns.fetch(:locked, false) %>
 <div class="chat-component chat-component--wide" data-component="option_selector"
      data-room-key="<%= room_key %>"
      data-selection-type="<%= selection[:type] %>"
@@ -6,36 +7,52 @@
 
   <!-- Room context header -->
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #F0EEE9">
-    <div style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex:none"></div>
+    <div style="width:6px;height:6px;border-radius:50%;background:<%= locked ? '#22a06b' : '#F5A623' %>;flex:none"></div>
     <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac"><%= room_config[:label] %></span>
     <div style="flex:1;height:1px;background:#F0EEE9"></div>
-    <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#F5A623"><%= selection[:label] %></span>
+    <% if locked %>
+      <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#22a06b">✓ Locked in</span>
+    <% else %>
+      <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#F5A623"><%= selection[:label] %></span>
+    <% end %>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(<%= [selection[:options].size, 3].min %>,1fr);gap:8px">
     <% selection[:options].each do |opt| %>
       <% is_prior = prior_selection&.option_key == opt[:key] %>
+      <% tile_opacity = locked && !is_prior ? "0.35" : "1" %>
       <button class="option-tile <%= 'option-tile--selected' if is_prior %>"
-              data-action="click->concierge#selectOption"
+              <%= "disabled" if locked %>
+              style="<%= locked ? "cursor:default;pointer-events:none;opacity:#{tile_opacity}" : "" %>"
+              data-action="<%= locked ? '' : 'click->concierge#selectOption' %>"
               data-option-key="<%= opt[:key] %>"
               data-option-label="<%= opt[:label] %>"
               data-room-key="<%= room_key %>"
               data-selection-type="<%= selection[:type] %>">
         <div class="option-tile__swatch" style="background:<%= opt[:swatch] || '#E8E4DC' %>"></div>
         <div style="font:600 11.5px 'Sora',system-ui;color:#1A1A1A;line-height:1.2;text-align:center"><%= opt[:label] %></div>
-        <% if is_prior %>
+        <% if is_prior && locked %>
+          <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#22a06b;margin-top:2px">Selected ✓</div>
+        <% elsif is_prior %>
           <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#F5A623;margin-top:2px">Current pick</div>
         <% end %>
       </button>
     <% end %>
   </div>
-  <div style="margin-top:8px;display:flex;gap:7px">
-    <button class="chat-component-btn chat-component-btn--secondary"
-            style="flex:none;padding:9px 14px;font-size:12px"
-            data-action="click->concierge#skipOption"
-            data-room-key="<%= room_key %>"
-            data-selection-type="<%= selection[:type] %>">
-      Not sure yet
-    </button>
-  </div>
+
+  <% if locked %>
+    <% if prior_selection&.pending? %>
+      <div style="margin-top:9px;font:500 11px 'Sora',system-ui;color:#9aa0ac;text-align:center">Deciding with Megan at the design meeting</div>
+    <% end %>
+  <% else %>
+    <div style="margin-top:8px;display:flex;gap:7px">
+      <button class="chat-component-btn chat-component-btn--secondary"
+              style="flex:none;padding:9px 14px;font-size:12px"
+              data-action="click->concierge#skipOption"
+              data-room-key="<%= room_key %>"
+              data-selection-type="<%= selection[:type] %>">
+        Not sure yet
+      </button>
+    </div>
+  <% end %>
 </div>
