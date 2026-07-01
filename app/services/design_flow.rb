@@ -76,7 +76,7 @@ class DesignFlow
           "wall colors, tile, hardware — all of it. At the end, you'll have a complete design " \
           "brief ready for your meeting with Megan. It usually takes about 15–20 minutes, and " \
           "you can pause and come back any time. Ready?"
-    { message: msg, component_html: render_component("chat_components/welcome_prompt", session: session),
+    { message: msg, component_html: render_component("chat_components/welcome_prompt", session: session, show_info_btn: false),
       component_type: "welcome_prompt", state: session.aasm_state, rooms_complete: 0, total_rooms: 8 }
   end
 

@@ -1,3 +1,4 @@
+<% show_info_btn = local_assigns.fetch(:show_info_btn, true) %>
 <div class="chat-component" data-component="welcome_prompt">
   <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
     <button class="chat-component-btn chat-component-btn--primary"
@@ -5,10 +6,12 @@
             data-selection-type="welcome_ready">
       Yes, let's get started! →
     </button>
-    <button class="chat-component-btn chat-component-btn--secondary"
-            data-action="click->companion#sendSelection"
-            data-selection-type="welcome_info">
-      Tell me how this works first
-    </button>
+    <% if show_info_btn %>
+      <button class="chat-component-btn chat-component-btn--secondary"
+              data-action="click->companion#sendSelection"
+              data-selection-type="welcome_info">
+        Tell me how this works first
+      </button>
+    <% end %>
   </div>
 </div>
