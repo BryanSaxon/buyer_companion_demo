@@ -449,25 +449,37 @@ input::placeholder {
     overflow: hidden;
   }
 
-  /* Brief panel: scrolls, centered at readable width */
+  /* Brief panel: hosts the two-column build-layout — no outer scroll */
   .companion-main {
     height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
+    display: block;
     border-right: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  .companion-main > * {
-    width: 100%;
-    max-width: 720px;
+  /* Two-column build layout: left = brief, right = palette */
+  .build-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    overflow: hidden;
   }
 
-  .c-section {
+  .build-layout__left {
+    overflow-y: auto;
+    height: 100%;
+    border-right: 1px solid #E5E7EB;
+  }
+
+  .build-layout__left .c-section {
     padding-left: 40px !important;
     padding-right: 40px !important;
+  }
+
+  .build-layout__right {
+    overflow-y: auto;
+    height: 100%;
+    background: #F7F6F3;
   }
 
   /* Chat panel: hidden until chat-active */

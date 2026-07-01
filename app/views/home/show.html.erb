@@ -14,18 +14,18 @@
       <div style="width:38px;height:38px;border-radius:12px;background:#F5A623;color:#1A1A2E;display:flex;align-items:center;justify-content:center;font:700 14px 'Sora',system-ui;flex:none"><%= org_initials %></div>
       <div style="line-height:1.2;min-width:0;flex:1">
         <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= org_name %></div>
-        <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:#9aa0ac">Buyer design companion</div>
+        <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:#9aa0ac">Buyer Concierge</div>
       </div>
 
-      <!-- Center: desktop segmented nav (hidden on mobile — mobile uses the tab bar below) -->
+      <!-- Center: desktop segmented nav — Concierge first, My Build second -->
       <nav class="brand-nav">
-        <button class="brand-nav-btn" data-action="click->companion#showHome" data-companion-target="homeTab">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
-          My Brief
-        </button>
         <button class="brand-nav-btn active" data-action="click->companion#showChat" data-companion-target="chatTab">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Companion
+          Concierge
+        </button>
+        <button class="brand-nav-btn" data-action="click->companion#showHome" data-companion-target="homeTab">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
+          My Build
         </button>
       </nav>
 
@@ -44,32 +44,32 @@
       </div>
     </div>
 
-    <!-- ============ MOBILE TAB BAR — below brand bar, hidden on desktop ============ -->
+    <!-- ============ MOBILE TAB BAR — Concierge first, My Build second ============ -->
     <div class="mobile-tab-bar">
-      <button class="mobile-tab" data-action="click->companion#showHome" data-companion-target="homeTab">
-        <div class="mobile-tab__icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
-        </div>
-        My Brief
-      </button>
       <button class="mobile-tab active" data-action="click->companion#showChat" data-companion-target="chatTab">
         <div class="mobile-tab__icon">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span class="tab-dot" data-companion-target="tabDot"></span>
         </div>
-        Companion
+        Concierge
+      </button>
+      <button class="mobile-tab" data-action="click->companion#showHome" data-companion-target="homeTab">
+        <div class="mobile-tab__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
+        </div>
+        My Build
       </button>
     </div>
 
     <!-- ============ CONTENT GRID ============ -->
     <div class="companion-grid chat-active" data-companion-target="grid">
 
-      <!-- LEFT / DESIGN BRIEF -->
+      <!-- LEFT / MY BUILD -->
       <div class="companion-main">
         <%= render "home/design_brief", session: @session %>
       </div>
 
-      <!-- RIGHT / CHAT -->
+      <!-- RIGHT / CONCIERGE CHAT -->
       <div class="companion-sidebar">
         <div class="companion-sidebar-pad" style="animation:scRise .8s ease both">
           <div class="chat-panel">
@@ -80,7 +80,7 @@
                 <span style="position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#22a06b;border:2px solid #fff"></span>
               </div>
               <div style="line-height:1.25">
-                <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A">Design Companion</div>
+                <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A">Concierge</div>
                 <div style="font:500 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Here every step of the way</div>
               </div>
             </div>
