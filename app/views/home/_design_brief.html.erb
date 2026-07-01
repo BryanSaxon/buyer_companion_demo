@@ -66,6 +66,9 @@
     <div class="build-mobile-journey">
       <%= render "home/build_journey_strip",
             session: session,
+            rooms_complete: rooms_complete,
+            total_rooms: total_rooms,
+            pct: pct,
             planning_done: planning_done,
             styles_done: styles_done,
             selections_by_room: selections_by_room,
@@ -85,6 +88,9 @@
     <div class="build-desktop-journey">
       <%= render "home/build_journey_strip",
             session: session,
+            rooms_complete: rooms_complete,
+            total_rooms: total_rooms,
+            pct: pct,
             planning_done: planning_done,
             styles_done: styles_done,
             selections_by_room: selections_by_room,
