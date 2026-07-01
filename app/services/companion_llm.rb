@@ -76,7 +76,7 @@ class CompanionLlm
     messages = history.map { |m| { role: m.role == "companion" ? "assistant" : "user", content: m.content } }
     messages << { role: "user", content: user_input }
 
-    response = @client.messages(
+    response = @client.messages.create(
       model: MODEL,
       max_tokens: MAX_TOKENS,
       system: system_prompt,
