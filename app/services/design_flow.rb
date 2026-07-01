@@ -28,6 +28,10 @@ class DesignFlow
       return handle_household_addition(llm_result)
     end
 
+    if session.designing? && llm_result["selected_option_key"].present?
+      return handle_text_selection(llm_result)
+    end
+
     advance_if_ready(llm_result)
   end
 
@@ -96,6 +100,28 @@ class DesignFlow
     result[:message] = "Here's your Brookfield floor plan for reference — " \
                        "it'll help as we place everyone. " + result[:message]
     result
+  end
+
+  def handle_text_selection(llm_result)
+    option_key = llm_result["selected_option_key"]
+    sel_config  = session.current_selection_config
+    # Validate key exists in the current selection's options
+    return advance_if_ready(llm_result) unless sel_config
+    option = sel_config[:options]&.find { |o| o[:key] == option_key }
+    return advance_if_ready(llm_result) unless option
+
+    session.design_selections.upsert(
+      { design_session_id: session.id,
+        room_key:          session.current_room,
+        selection_type:    sel_config[:type],
+        option_key:        option[:key],
+        option_label:      option[:label],
+        pending:           false,
+        created_at:        Time.current,
+        updated_at:        Time.current },
+      unique_by: :idx_design_selections_unique
+    )
+    advance_design_cursor(llm_result["message"])
   end
 
   def handle_household_addition(llm_result)
@@ -538,7 +564,10 @@ class DesignFlow
     when "household_review"  then "Reviewing who's moving into the home. The family can add members before confirming."
     when "room_planning"     then "Assigning purposes and occupants to rooms. Currently on: #{room}."
     when "style_selection" then "Asking the family which design styles resonate with them."
-    when "designing"      then "Making finish selections for #{room}, current selection: #{sel&.dig(:label)}."
+    when "designing"
+      opts = sel ? sel[:options]&.map { |o| "#{o[:key]}: #{o[:label]}" }&.join(", ") : nil
+      "Making finish selections for #{room}, current selection: #{sel&.dig(:label)}." \
+      "#{opts ? " Available options: #{opts}." : ''}"
     when "summary_review" then "Reviewing all selections with the family before finalizing."
     when "complete"       then "All selections are complete. Session is done."
     else "Unknown state."
