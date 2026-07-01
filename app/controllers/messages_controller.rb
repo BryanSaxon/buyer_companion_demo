@@ -17,7 +17,8 @@ class MessagesController < ApplicationController
       role: "concierge",
       content: result[:message],
       message_type: "text",
-      component_type: result[:component_type]
+      component_type: result[:component_type],
+      component_html: result[:component_html]
     )
 
     render json: result.slice(:message, :component_html, :component_type, :state, :rooms_complete, :total_rooms)
