@@ -29,9 +29,9 @@
         <div class="option-tile__swatch" style="background:<%= opt[:swatch] || '#E8E4DC' %>"></div>
         <div style="font:600 11.5px 'Sora',system-ui;color:#1A1A1A;line-height:1.2;text-align:center"><%= opt[:label] %></div>
         <% if is_prior && locked %>
-          <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#22a06b;margin-top:2px">Selected ✓</div>
+          <div data-tile-indicator style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#22a06b;margin-top:2px;text-align:center">Selected ✓</div>
         <% elsif is_prior %>
-          <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#F5A623;margin-top:2px">Current pick</div>
+          <div data-tile-indicator style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#F5A623;margin-top:2px;text-align:center">Current pick</div>
         <% end %>
       </button>
     <% end %>
