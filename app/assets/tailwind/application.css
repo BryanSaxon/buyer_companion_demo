@@ -407,25 +407,8 @@ input::placeholder {
     background: #fff;
   }
 
-  /* Collapsible info section toggle button */
-  .build-info-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 14px 20px;
-    border: none;
-    border-top: 1px solid #E5E7EB;
-    background: #fff;
-    cursor: pointer;
-    font: 600 10px 'IBM Plex Mono', ui-monospace, monospace;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: #9aa0ac;
-    -webkit-tap-highlight-color: transparent;
-    text-align: left;
-  }
-  .build-info-toggle:hover { background: #FAFAF8; }
+  /* Collapsible info section toggle — hidden on mobile (drawer used instead) */
+  .build-info-toggle { display: none; }
 
   /* Info cards hidden by default on mobile */
   .build-info-cards { display: none; }

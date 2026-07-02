@@ -141,6 +141,12 @@
                         <%= render partial: "chat_components/style_picker",
                                    locals: { session: @session, locked: true,
                                              chosen_styles: @session.design_styles_array } %>
+                      <% elsif msg.component_type == "progress_card" && rk %>
+                        <% rc = msg.component_html[/(\d+)\s+of\s+8\b/, 1].to_i %>
+                        <%= render partial: "chat_components/progress_card",
+                                   locals: { session: @session, room_key: rk,
+                                             rooms_complete: rc.positive? ? rc : @session.rooms_complete_count,
+                                             show_button: false } %>
                       <% else %>
                         <%= msg.component_html.html_safe %>
                       <% end %>

@@ -3,6 +3,7 @@
 <% sels = session.design_selections.where(room_key: room_key).order(:created_at) %>
 <% pct = (rooms_complete.to_f / 8 * 100).round %>
 <% design_render = session.design_renders.find_by(room_key: room_key) %>
+<% show_button = local_assigns.fetch(:show_button, true) %>
 <div class="chat-component chat-component--wide" data-component="progress_card"
      style="background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-color:#86efac;padding:18px 18px 16px">
 
@@ -33,7 +34,8 @@
   <% if design_render %>
     <div id="room-render-<%= room_key %>"
          style="margin-bottom:14px;border-radius:10px;overflow:hidden"
-         data-render-status="<%= design_render.status %>">
+         data-render-status="<%= design_render.status %>"
+         data-show-btn="<%= show_button ? 'true' : 'false' %>">
       <% if design_render.status == "complete" && design_render.image.attached? %>
         <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-bottom:6px">✦ AI Room Rendering</div>
         <%= image_tag url_for(design_render.image),
@@ -76,20 +78,26 @@
                     el.appendChild(label);
                     el.appendChild(img);
                     el.dataset.renderStatus = 'complete';
-                    var btn = document.getElementById(btnId);
-                    if (btn) btn.style.display = 'block';
+                    if (el.dataset.showBtn === 'true') {
+                      var btn = document.getElementById(btnId);
+                      if (btn) btn.style.display = 'block';
+                    }
                   };
                   img.onerror = function() {
                     el.style.display = 'none';
-                    var btn = document.getElementById(btnId);
-                    if (btn) btn.style.display = 'block';
+                    if (el.dataset.showBtn === 'true') {
+                      var btn = document.getElementById(btnId);
+                      if (btn) btn.style.display = 'block';
+                    }
                   };
                   img.src = d.image_url;
                 } else if (d.status === 'failed') {
                   clearInterval(poll);
                   el.style.display = 'none';
-                  var btn = document.getElementById(btnId);
-                  if (btn) btn.style.display = 'block';
+                  if (el.dataset.showBtn === 'true') {
+                    var btn = document.getElementById(btnId);
+                    if (btn) btn.style.display = 'block';
+                  }
                 }
               } catch(e) {}
             }, 3000);
@@ -111,7 +119,7 @@
   <% rendering_in_progress = design_render && %w[pending generating].include?(design_render.status) %>
   <button id="next-room-btn-<%= room_key %>"
           class="chat-component-btn chat-component-btn--primary"
-          style="background:#22a06b;color:#fff;<%= 'display:none' if rendering_in_progress %>"
+          style="background:#22a06b;color:#fff;<%= 'display:none' if rendering_in_progress || !show_button %>"
           data-action="click->concierge#progressNext"
           onclick="this.style.display='none'">
     <%= rooms_complete >= 8 ? "Review my selections →" : "Ready for the next room →" %>
