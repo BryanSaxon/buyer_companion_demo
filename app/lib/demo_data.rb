@@ -50,6 +50,14 @@ module DemoData
     ].freeze
   }.freeze
 
+  BUILD_STAGES = [
+    { key: "foundation", label: "Foundation",            stage: 1, status: :complete,     photos: %w[foundation-lot.jpg foundation-wide.jpg foundation-rebar.jpg foundation-detail.jpg] },
+    { key: "framing",    label: "Framing",               stage: 2, status: :complete,     photos: %w[framing-front.jpg framing-side.jpg framing-trusses.jpg framing-interior.jpg] },
+    { key: "drywall",    label: "Drywall & Mechanicals", stage: 3, status: :in_progress,  photos: %w[drywall-greatroom.jpg drywall-kitchen.jpg drywall-hallway.jpg drywall-bedroom.jpg] },
+    { key: "exterior",   label: "Exterior",              stage: 4, status: :upcoming,     photos: %w[exterior-front.jpg exterior-porch.jpg exterior-garage.jpg exterior-side.jpg] },
+    { key: "finishes",   label: "Finishes",              stage: 5, status: :upcoming,     photos: %w[finishes-kitchen.jpg finishes-living.jpg finishes-primary-bath.jpg finishes-bedroom.jpg] }
+  ].freeze
+
   FAMILY = [
     { key: "chris",  name: "Chris",  full: "Chris Morgan",  role: "Dad",      age_note: "adult"       },
     { key: "cindy",  name: "Cindy",  full: "Cindy Morgan",  role: "Mom",      age_note: "adult"       },
@@ -87,8 +95,8 @@ module DemoData
   ].freeze
 
   FLOORING_OPTIONS = [
-    { key: "hardwood_oak", label: "Natural Oak Hardwood", swatch: "#C8A97E" },
-    { key: "lvp_ash",      label: "Ash Grey LVP",         swatch: "#9DA8A0" },
+    { key: "hardwood_oak", label: "Natural Oak Hardwood", swatch: "#C8A97E", image: "design/flooring/flooring-coastal-oak.jpg" },
+    { key: "lvp_ash",      label: "Ash Grey LVP",         swatch: "#9DA8A0", image: "design/flooring/flooring-slate-grey-lvp.jpg" },
     { key: "carpet_oat",   label: "Warm Oat Carpet",      swatch: "#D4C8A8" }
   ].freeze
 
@@ -100,10 +108,10 @@ module DemoData
   ].freeze
 
   FIXTURE_OPTIONS = [
-    { key: "matte_black",     label: "Matte Black",      swatch: "#2A2A2A" },
-    { key: "brushed_nickel",  label: "Brushed Nickel",   swatch: "#9EA4A8" },
-    { key: "polished_chrome", label: "Polished Chrome",  swatch: "#C8CDD4" },
-    { key: "warm_gold",       label: "Warm Gold",        swatch: "#C8A84B" }
+    { key: "matte_black",     label: "Matte Black",       swatch: "#2A2A2A", image: "design/hardware/hardware-matte-black.jpg" },
+    { key: "brushed_nickel",  label: "Brushed Nickel",    swatch: "#9EA4A8", image: "design/hardware/hardware-brushed-nickel.jpg" },
+    { key: "polished_chrome", label: "Polished Chrome",   swatch: "#C8CDD4", image: "design/hardware/hardware-polished-chrome.jpg" },
+    { key: "warm_gold",       label: "Champagne Bronze",  swatch: "#C8A84B", image: "design/hardware/hardware-champagne-bronze.jpg" }
   ].freeze
 
   SELECTIONS = {
@@ -118,7 +126,7 @@ module DemoData
     ],
     "master_bathroom" => [
       { type: "floor_tile",     label: "Floor Tile",    multi: false, options: [
-        { key: "carrara_marble", label: "Carrara Marble Look", swatch: "#E8E4DC" },
+        { key: "carrara_marble", label: "Carrara Marble Look", swatch: "#E8E4DC", image: "design/flooring/flooring-carrara-tile.jpg" },
         { key: "large_grey",     label: "Large Format Grey",   swatch: "#9EA4A8" },
         { key: "hex_white",      label: "White Hex Mosaic",    swatch: "#F0EFEB" }
       ] },
@@ -154,7 +162,7 @@ module DemoData
     ],
     "bathroom_2" => [
       { type: "floor_tile",     label: "Floor Tile",    multi: false, options: [
-        { key: "carrara_marble", label: "Carrara Marble Look", swatch: "#E8E4DC" },
+        { key: "carrara_marble", label: "Carrara Marble Look", swatch: "#E8E4DC", image: "design/flooring/flooring-carrara-tile.jpg" },
         { key: "large_grey",     label: "Large Format Grey",   swatch: "#9EA4A8" },
         { key: "hex_white",      label: "White Hex Mosaic",    swatch: "#F0EFEB" }
       ] },
@@ -171,15 +179,15 @@ module DemoData
     ],
     "kitchen" => [
       { type: "cabinet_style", label: "Cabinet Style", multi: false, options: [
-        { key: "shaker",       label: "Shaker",       swatch: "#E8E4DC" },
+        { key: "shaker",       label: "Shaker",       swatch: "#E8E4DC", image: "design/cabinets/cabinet-shaker-white.jpg" },
         { key: "flat_panel",   label: "Flat Panel",   swatch: "#D4D0C8" },
         { key: "raised_panel", label: "Raised Panel", swatch: "#C8BEA8" }
       ] },
       { type: "cabinet_color", label: "Cabinet Color", multi: false, options: [
-        { key: "alpine_white", label: "Alpine White", swatch: "#F2EFE8" },
-        { key: "greige",       label: "Soft Greige",  swatch: "#C4B8A4" },
-        { key: "hale_navy",    label: "Hale Navy",    swatch: "#2A3A50" },
-        { key: "charcoal",     label: "Charcoal",     swatch: "#3A3A3A" }
+        { key: "alpine_white", label: "Alpine White",   swatch: "#F2EFE8", image: "design/cabinets/cabinet-shaker-white.jpg" },
+        { key: "greige",       label: "Soft Greige",    swatch: "#C4B8A4" },
+        { key: "hale_navy",    label: "Hale Navy",      swatch: "#2A3A50", image: "design/cabinets/cabinet-harbor-navy.jpg" },
+        { key: "charcoal",     label: "Natural Walnut", swatch: "#3A3A3A", image: "design/cabinets/cabinet-natural-walnut.jpg" }
       ] },
       { type: "countertop", label: "Countertop", multi: false, options: [
         { key: "calacatta_quartz", label: "Calacatta Gold Quartz", swatch: "#E8E0CC" },
@@ -194,10 +202,10 @@ module DemoData
         { key: "hex_mosaic",   label: "White Hex Mosaic",   swatch: "#ECEAE4" }
       ] },
       { type: "hardware", label: "Hardware", multi: false, options: [
-        { key: "matte_black",     label: "Matte Black",     swatch: "#2A2A2A" },
-        { key: "brushed_nickel",  label: "Brushed Nickel",  swatch: "#9EA4A8" },
-        { key: "warm_gold",       label: "Warm Gold",       swatch: "#C8A84B" },
-        { key: "chrome",          label: "Polished Chrome", swatch: "#C8CDD4" }
+        { key: "matte_black",    label: "Matte Black",      swatch: "#2A2A2A", image: "design/hardware/hardware-matte-black.jpg" },
+        { key: "brushed_nickel", label: "Brushed Nickel",   swatch: "#9EA4A8", image: "design/hardware/hardware-brushed-nickel.jpg" },
+        { key: "warm_gold",      label: "Champagne Bronze", swatch: "#C8A84B", image: "design/hardware/hardware-champagne-bronze.jpg" },
+        { key: "chrome",         label: "Polished Chrome",  swatch: "#C8CDD4", image: "design/hardware/hardware-polished-chrome.jpg" }
       ] }
     ],
     "living_room" => [
@@ -209,9 +217,14 @@ module DemoData
         { key: "slate_blue",    label: "Slate Blue",    swatch: "#6A7F9A" }
       ] },
       { type: "fireplace", label: "Fireplace Surround", multi: false, options: [
-        { key: "standard",        label: "Standard Surround",     swatch: "#E8E0D0" },
+        { key: "standard",         label: "Standard Surround",     swatch: "#E8E0D0" },
         { key: "floor_to_ceiling", label: "Floor-to-Ceiling Tile", swatch: "#9EA4A8" },
-        { key: "shiplap",         label: "Shiplap Surround",      swatch: "#F0EDEA" }
+        { key: "shiplap",          label: "Shiplap Surround",      swatch: "#F0EDEA" }
+      ] },
+      { type: "lighting", label: "Lighting Package", multi: false, options: [
+        { key: "brass_pendant", label: "Brass Pendant",  swatch: "#C8A84B", image: "design/fixtures/light-brass-pendant.jpg" },
+        { key: "ceiling_fan",   label: "Ceiling Fan",    swatch: "#9EA4A8", image: "design/fixtures/light-ceiling-fan.jpg" },
+        { key: "recessed_led",  label: "Recessed LED",   swatch: "#F0EFEB", image: "design/fixtures/light-recessed-led.jpg" }
       ] }
     ]
   }.freeze

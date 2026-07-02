@@ -145,4 +145,55 @@
     <% end %>
 
   <% end %>
+
+  <!-- ── Build Progress ────────────────────────────────────────── -->
+  <div style="height:1px;background:#E5E7EB;margin:28px 0"></div>
+
+  <div style="margin-bottom:24px">
+    <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:4px">Build Progress</div>
+    <div style="font:700 20px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em">Your Home, Taking Shape</div>
+    <div style="font:400 12.5px 'Sora',system-ui;color:#9aa0ac;margin-top:4px">Live updates from your lot at Magnolia Grove</div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <% DemoData::BUILD_STAGES.each do |stage| %>
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+
+        <!-- Stage header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #F0EEE9">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font:700 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Stage <%= stage[:stage] %></span>
+            <span style="font:600 12.5px 'Sora',system-ui;color:#1A1A1A"><%= stage[:label] %></span>
+          </div>
+          <% if stage[:status] == :complete %>
+            <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:#dcfce7;border:1px solid #bbf7d0">
+              <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+              <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#166534">Complete</span>
+            </div>
+          <% elsif stage[:status] == :in_progress %>
+            <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:rgba(245,166,35,.1);border:1.5px solid #F5A623">
+              <div style="width:5px;height:5px;border-radius:50%;background:#F5A623;animation:tabDotPulse 1.4s ease-in-out infinite;flex:none"></div>
+              <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#C27D1B">In Progress</span>
+            </div>
+          <% else %>
+            <div style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;background:#F5F4EF;border:1.5px dashed #D1D5DB">
+              <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#c8ccd4">Upcoming</span>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- 2×2 photo grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#E5E7EB">
+          <% stage[:photos].first(4).each do |photo| %>
+            <%= image_tag "progress/stage-#{stage[:stage]}/#{photo}",
+                  style: "width:100%;aspect-ratio:4/3;object-fit:cover;display:block",
+                  loading: "lazy",
+                  alt: "#{stage[:label]} progress photo" %>
+          <% end %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+
 </div>

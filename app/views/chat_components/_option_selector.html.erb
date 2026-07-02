@@ -26,7 +26,11 @@
               data-option-label="<%= opt[:label] %>"
               data-room-key="<%= room_key %>"
               data-selection-type="<%= selection[:type] %>">
-        <div class="option-tile__swatch" style="background:<%= opt[:swatch] || '#E8E4DC' %>"></div>
+        <% if opt[:image] %>
+          <%= image_tag opt[:image], style: "width:100%;height:90px;object-fit:cover;display:block;border-radius:8px 8px 0 0", loading: "lazy", alt: opt[:label] %>
+        <% else %>
+          <div class="option-tile__swatch" style="background:<%= opt[:swatch] || '#E8E4DC' %>"></div>
+        <% end %>
         <div style="font:600 11.5px 'Sora',system-ui;color:#1A1A1A;line-height:1.2;text-align:center"><%= opt[:label] %></div>
         <% if is_prior && locked %>
           <div data-tile-indicator style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;color:#22a06b;margin-top:2px;text-align:center">Selected ✓</div>

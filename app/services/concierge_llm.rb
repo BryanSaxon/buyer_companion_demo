@@ -40,6 +40,11 @@ class ConciergeLlm
     The Carrington (4/3, 2,780 sq ft), The Drayton (5/3.5, 3,210 sq ft).
     Share details when asked; avoid mentioning prices unless the buyer asks.
 
+    Design selection notes: hardware and fixture finishes are offered in Matte Black,
+    Brushed Nickel, Polished Chrome, and Champagne Bronze. Cabinet colors include
+    Alpine White, Soft Greige, Hale Navy, and Natural Walnut. The living room includes
+    a Lighting Package selection: Brass Pendant, Ceiling Fan, or Recessed LED.
+
     ── PROCESS KNOWLEDGE — answer these yourself, NEVER mark as off_topic ──
     - "Can I come back later?" / "Do I have to finish today?" →
         Yes! Progress is saved automatically. They can return any time via the same link and
