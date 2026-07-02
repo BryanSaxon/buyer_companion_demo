@@ -148,14 +148,24 @@
               <% if room_render&.image&.attached? %>
                 <%# Two-column: selections card left, bare AI image right %>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
-                  <%# Left: card with room label + text selection list %>
+                  <%# Left: card with room label + swatch grid %>
                   <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
                     <div style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#1A1A1A;margin-bottom:12px"><%= room[:label] %></div>
-                    <div style="display:flex;flex-direction:column;gap:6px">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                       <% room_sels.each do |sel| %>
-                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-                          <span style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#9aa0ac;flex:none"><%= sel.selection_type.humanize %></span>
-                          <span style="font:600 11.5px 'Sora',system-ui;color:<%= sel.pending? ? '#c8ccd4' : '#1A1A1A' %>;text-align:right"><%= sel.pending? ? "TBD" : sel.option_label %></span>
+                        <% sel_image = sel.pending? ? nil : image_for.call(sel) %>
+                        <div style="display:flex;flex-direction:column;gap:7px">
+                          <% if sel.pending? %>
+                            <div style="width:100%;aspect-ratio:3/2;border-radius:8px;border:1.5px dashed #D1D5DB;background:#FAFAF8;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
+                          <% elsif sel_image %>
+                            <%= image_tag sel_image, style: "width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.08);display:block", loading: "lazy", alt: "" %>
+                          <% else %>
+                            <div style="width:100%;aspect-ratio:3/2;border-radius:8px;background:<%= swatch_for.call(sel) %>;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.08)"></div>
+                          <% end %>
+                          <div>
+                            <div style="font:500 8px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#9aa0ac;margin-bottom:2px"><%= sel.selection_type.humanize %></div>
+                            <div style="font:600 11px 'Sora',system-ui;color:<%= sel.pending? ? '#c8ccd4' : '#1A1A1A' %>;line-height:1.3"><%= sel.pending? ? "TBD" : sel.option_label %></div>
+                          </div>
                         </div>
                       <% end %>
                     </div>
