@@ -42,7 +42,28 @@ class RoomRenderService
                          .reject(&:pending?)
                          .each_with_object({}) { |s, h| h[s.selection_type] = s.option_label }
 
-    room_label = DemoData::ROOMS.find { |r| r[:key] == @room_key }&.dig(:label) || @room_key.humanize
+    room_config = DemoData::ROOMS.find { |r| r[:key] == @room_key }
+    room_plan   = @session.room_plans.find_by(room_key: @room_key)
+
+    # Resolve the room label — flex rooms use their chosen purpose
+    purpose_label = nil
+    if room_config&.dig(:ask_purpose) && room_plan&.purpose.present?
+      purpose_entry = DemoData::FLEX_PURPOSES.find { |p| p[:key] == room_plan.purpose }
+      purpose_label = purpose_entry&.dig(:label) || room_plan.purpose.humanize
+    end
+    room_label = purpose_label || room_config&.dig(:label) || @room_key.humanize
+
+    # Occupant context — who this room is for
+    occupant_desc = nil
+    if room_plan && room_plan.occupants_array.any?
+      members = room_plan.occupant_labels.zip(
+        room_plan.occupants_array.map { |k| DemoData.family_member(k) }
+      ).filter_map do |name, member|
+        next unless member
+        "#{name} (#{member[:role]}, #{member[:age_note]})"
+      end
+      occupant_desc = "This room is for #{members.to_sentence}." if members.any?
+    end
 
     styles = @session.design_styles_array
                      .reject { |k| k == "not_sure" }
@@ -65,9 +86,12 @@ class RoomRenderService
 
     style_phrase = styles.any? ? " in a #{styles.join(' and ')} style" : ""
 
-    "Photorealistic interior design rendering of a luxury new-construction #{room_label}#{style_phrase}. " \
-    "#{specs.join(', ')}. " \
-    "Warm natural light, wide-angle view showing the full room, no people present. " \
-    "Premium home builder marketing photography, 4K photorealistic quality."
+    parts = []
+    parts << "Photorealistic interior design rendering of a luxury new-construction #{room_label}#{style_phrase}."
+    parts << occupant_desc if occupant_desc
+    parts << "#{specs.join(', ')}." if specs.any?
+    parts << "Warm natural light, wide-angle view showing the full room, no people present."
+    parts << "Premium home builder marketing photography, 4K photorealistic quality."
+    parts.join(" ")
   end
 end
