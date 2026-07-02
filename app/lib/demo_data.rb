@@ -97,7 +97,7 @@ module DemoData
   FLOORING_OPTIONS = [
     { key: "hardwood_oak", label: "Natural Oak Hardwood", swatch: "#C8A97E", image: "design/flooring/flooring-coastal-oak.jpg" },
     { key: "lvp_ash",      label: "Ash Grey LVP",         swatch: "#9DA8A0", image: "design/flooring/flooring-slate-grey-lvp.jpg" },
-    { key: "carpet_oat",   label: "Warm Oat Carpet",      swatch: "#D4C8A8" }
+    { key: "carpet_oat",   label: "Warm Oat Carpet",      swatch: "#D4C8A8", image: "design/flooring/flooring-warm-oat-carpet.jpg" }
   ].freeze
 
   NEUTRAL_WALL_OPTIONS = [
