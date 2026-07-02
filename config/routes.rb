@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :leads, only: [ :create ] do
     resources :messages,   only: [ :create ]
     resource  :selections, only: [ :create ]
+    get "rooms/:room_key/render", to: "renders#show", as: :room_render
   end
 
   get "home", to: "home#show", as: :home
