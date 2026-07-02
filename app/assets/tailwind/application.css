@@ -394,6 +394,36 @@ input::placeholder {
   }
   .build-mobile-journey { display: block; }
   .build-desktop-journey { display: none; }
+
+  /* Compact home identity strip above the tab bar */
+  .build-mobile-homestrip {
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid #F0EEE9;
+    background: #fff;
+  }
+
+  /* Collapsible info section toggle button */
+  .build-info-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-top: 1px solid #E5E7EB;
+    background: #fff;
+    cursor: pointer;
+    font: 600 10px 'IBM Plex Mono', ui-monospace, monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #9aa0ac;
+    -webkit-tap-highlight-color: transparent;
+    text-align: left;
+  }
+  .build-info-toggle:hover { background: #FAFAF8; }
+
+  /* Info cards hidden by default on mobile */
+  .build-info-cards { display: none; }
 }
 
 /* ---- Tablet (640–1023px): card shadow, max-width ---- */
@@ -502,6 +532,11 @@ input::placeholder {
   /* Mobile: journey strip in left column, hidden on desktop right */
   .build-mobile-journey { display: none; }
   .build-desktop-journey { display: block; }
+
+  /* On desktop: hide mobile-only elements, always show info cards */
+  .build-mobile-homestrip { display: none; }
+  .build-info-toggle { display: none; }
+  .build-info-cards { display: block; }
 
   /* Chat panel: hidden until chat-active — warm gutter matches My Build right column */
   .concierge-sidebar {
