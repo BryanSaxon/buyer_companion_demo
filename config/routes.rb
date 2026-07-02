@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   get "admin", to: "admin#show", as: :admin
 
-  mount MissionControl::Jobs::Engine, at: "/jobs"
+  mount MissionControl::Jobs::Engine, at: "/jobs" if Rails.env.development?
 
   get "reset", to: "demo#reset", as: :demo_reset
 end
