@@ -86,12 +86,53 @@ module DemoData
   ].freeze
 
   DESIGN_STYLES = [
-    { key: "contemporary", label: "Contemporary",         desc: "Clean lines, neutral palette, open space",          image: "design/styles/style_contemporary.jpg" },
-    { key: "modern",       label: "Modern",               desc: "Bold minimalism, high contrast, statement pieces",   image: "design/styles/style_modern.jpg"       },
-    { key: "traditional",  label: "Classic / Traditional", desc: "Warm woods, ornate details, timeless comfort",      image: "design/styles/style_traditional.jpg"  },
-    { key: "farmhouse",    label: "Farmhouse",            desc: "Shiplap, warm whites, natural textures",            image: "design/styles/style_farmhouse.jpg"    },
-    { key: "transitional", label: "Transitional",         desc: "Classic meets contemporary, balanced warmth",        image: "design/styles/style_transitional.jpg" },
-    { key: "not_sure",     label: "Not sure yet",         desc: "We'll explore together at your design meeting",     image: nil                                    }
+    {
+      key: "contemporary", label: "Contemporary", desc: "Clean lines, neutral palette, open space",
+      about: "Effortlessly refined and right now. Contemporary design embraces open, airy spaces with a " \
+             "neutral base palette — whites, warm greiges, and soft grays — punctuated by carefully chosen " \
+             "accent tones. Furniture is sleek and uncluttered, materials mix thoughtfully (linen, marble, " \
+             "brushed metal), and every detail feels intentional. The result is a home that feels calm, " \
+             "sophisticated, and genuinely livable.",
+      image: "design/styles/style_contemporary.jpg"
+    },
+    {
+      key: "modern", label: "Modern", desc: "Bold minimalism, high contrast, statement pieces",
+      about: "Architecture as art. Modern style strips away the ornamental and lets form follow function — " \
+             "but with drama. Expect high-contrast pairings (matte black against white, concrete beside warm " \
+             "wood), geometric furniture silhouettes, and lighting that makes a statement. Every piece earns " \
+             "its place. The spaces feel bold, curated, and unapologetically striking.",
+      image: "design/styles/style_modern.jpg"
+    },
+    {
+      key: "traditional", label: "Classic / Traditional", desc: "Warm woods, ornate details, timeless comfort",
+      about: "Timeless elegance that never goes out of fashion. Traditional design draws on centuries of " \
+             "European craftsmanship — rich hardwoods, detailed millwork, crown molding, and layered textiles " \
+             "in velvets, silks, and damasks. Furniture is substantial and graceful, rooms feel warm and " \
+             "welcoming, and the overall effect is one of enduring quality and understated luxury.",
+      image: "design/styles/style_traditional.jpg"
+    },
+    {
+      key: "farmhouse", label: "Farmhouse", desc: "Shiplap, warm whites, natural textures",
+      about: "Relaxed, rooted, and full of soul. Farmhouse style brings the warmth of the countryside " \
+             "indoors — shiplap walls, reclaimed wood beams, galvanized metal accents, and a palette of " \
+             "warm whites and earthy naturals. Linen, cotton, and chunky knit textiles add texture; vintage " \
+             "finds and handcrafted pieces add character. It's casual enough for real life, beautiful enough " \
+             "for any magazine.",
+      image: "design/styles/style_farmhouse.jpg"
+    },
+    {
+      key: "transitional", label: "Transitional", desc: "Classic meets contemporary, balanced warmth",
+      about: "The best of both worlds, perfectly balanced. Transitional design pairs classic furniture " \
+             "silhouettes with contemporary finishes — think an upholstered sofa in a clean-lined profile, " \
+             "or traditional trim work alongside streamlined cabinetry. Warm neutrals, subtle pattern mixing, " \
+             "and materials like brushed nickel and natural stone tie it together. Approachable, " \
+             "versatile, and always in style.",
+      image: "design/styles/style_transitional.jpg"
+    },
+    {
+      key: "not_sure", label: "Not sure yet", desc: "We'll explore together at your design meeting",
+      about: nil, image: nil
+    }
   ].freeze
 
   FLOORING_OPTIONS = [
