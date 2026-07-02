@@ -127,6 +127,13 @@
       <% end %>
 
       <%# ── Room palettes ──────────────────────────────────────── %>
+      <% image_for = lambda { |sel|
+        DemoData.selections_for(sel.room_key)
+                .find { |s| s[:type] == sel.selection_type }
+                &.dig(:options)
+                &.find { |o| o[:key] == sel.option_key }
+                &.dig(:image)
+      } %>
       <% if completed_rooms.any? %>
         <div style="margin-bottom:8px">
           <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac;margin-bottom:10px;display:flex;align-items:center;gap:8px">
@@ -140,9 +147,12 @@
                 <div style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#1A1A1A;margin-bottom:11px"><%= room[:label] %></div>
                 <div style="display:flex;flex-wrap:wrap;gap:14px">
                   <% room_sels.each do |sel| %>
+                    <% sel_image = sel.pending? ? nil : image_for.call(sel) %>
                     <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:50px">
                       <% if sel.pending? %>
-                        <div style="width:42px;height:42px;border-radius:50%;border:1.5px dashed #D1D5DB;background:#FAFAF8;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
+                        <div style="width:42px;height:42px;border-radius:8px;border:1.5px dashed #D1D5DB;background:#FAFAF8;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
+                      <% elsif sel_image %>
+                        <%= image_tag sel_image, style: "width:42px;height:42px;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 6px rgba(0,0,0,.1);display:block", loading: "lazy", alt: "" %>
                       <% else %>
                         <div style="width:42px;height:42px;border-radius:50%;background:<%= swatch_for.call(sel) %>;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 6px rgba(0,0,0,.1)"></div>
                       <% end %>
