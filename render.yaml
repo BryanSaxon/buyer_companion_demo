@@ -19,14 +19,6 @@ services:
         value: "false"
       - key: RAILS_MASTER_KEY
         sync: false
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: JOBS_USERNAME
-        sync: false
-      - key: JOBS_PASSWORD
-        sync: false
-      - key: ANTHROPIC_API_KEY
-        sync: false
       - key: DATABASE_URL
         fromDatabase:
           name: buyer-companion-demo-db
@@ -49,8 +41,6 @@ services:
           type: web
           envVarKey: SECRET_KEY_BASE
       - key: RAILS_MASTER_KEY
-        sync: false
-      - key: OPENAI_API_KEY
         sync: false
       - key: DATABASE_URL
         fromDatabase:
