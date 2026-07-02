@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_035200) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_01_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "chat_messages", force: :cascade do |t|
+    t.text "component_html"
     t.string "component_type"
     t.text "content"
     t.datetime "created_at", null: false
@@ -43,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_035200) do
     t.datetime "created_at", null: false
     t.string "current_room"
     t.integer "current_selection_index", default: 0, null: false
+    t.text "custom_family_json"
     t.text "design_styles"
     t.bigint "lead_id", null: false
     t.boolean "planning_complete", default: false, null: false
