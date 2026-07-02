@@ -480,6 +480,7 @@ class DesignFlow
       { message: msg,
         component_html: render_component("chat_components/progress_card",
                                          session: session, room_key: session.current_room,
+                                         room_display_label: friendly_room_label(session.current_room),
                                          rooms_complete: session.rooms_complete_count),
         component_type: "progress_card",
         state: session.aasm_state,
@@ -592,6 +593,7 @@ class DesignFlow
     if room_selections_exhausted?
       render_component("chat_components/progress_card",
                        session: session, room_key: session.current_room,
+                       room_display_label: friendly_room_label(session.current_room),
                        rooms_complete: session.rooms_complete_count)
     else
       render_option_selector
