@@ -34,10 +34,16 @@
     width: 100%;
     height: 200px;
     object-fit: cover;
+    border-radius: 14px 14px 0 0;
   }
 
   .design-style-card__image-placeholder {
     height: 200px;
     min-height: unset;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .design-style-card > div:last-child {
+    border-radius: 0 0 14px 14px;
   }
 }
