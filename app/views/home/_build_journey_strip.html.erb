@@ -154,10 +154,10 @@
               <% room_sels = (selections_by_room[room[:key]] || []).sort_by(&:created_at) %>
               <% room_render = preloaded_renders.find { |dr| dr.room_key == room[:key] && dr.status == "complete" } %>
               <% if room_render&.image&.attached? %>
-                <%# Two-column: selections card left, bare AI image right — same height via stretch %>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-                  <%# Left: card stretches to match right height %>
-                  <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+                <%# Two-column on desktop, image-top stacked on mobile %>
+                <div class="room-render-card">
+                  <%# Left on desktop / bottom on mobile: selections card %>
+                  <div class="room-render-card__sels" style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
                     <div style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#1A1A1A;margin-bottom:12px"><%= room[:label] %></div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                       <% room_sels.each do |sel| %>
@@ -178,8 +178,8 @@
                       <% end %>
                     </div>
                   </div>
-                  <%# Right: image fills full height of the row via object-fit:cover %>
-                  <div style="display:flex;flex-direction:column">
+                  <%# Right on desktop / top on mobile: AI render %>
+                  <div class="room-render-card__render" style="display:flex;flex-direction:column">
                     <div style="font:500 8px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#F5A623;margin-bottom:6px">✦ AI Rendering</div>
                     <%= image_tag url_for(room_render.image),
                           style: "flex:1;width:100%;min-height:0;object-fit:cover;border-radius:12px;display:block;box-shadow:0 4px 16px rgba(0,0,0,.12)",
