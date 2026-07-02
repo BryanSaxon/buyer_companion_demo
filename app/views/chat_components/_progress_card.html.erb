@@ -38,6 +38,14 @@
         <%= image_tag url_for(design_render.image),
               style: "width:100%;display:block;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)",
               alt: "#{room_config[:label]} rendering" %>
+      <% elsif design_render.status == "deferred" %>
+        <div style="border-radius:10px;background:#F5F4EF;border:1.5px dashed #D1D5DB;padding:18px 16px;display:flex;align-items:flex-start;gap:12px">
+          <div style="width:32px;height:32px;border-radius:50%;background:#E8E0D0;display:flex;align-items:center;justify-content:center;flex:none;font-size:15px">🎨</div>
+          <div>
+            <div style="font:600 11.5px 'Sora',system-ui;color:#1A1A1A;margin-bottom:4px">Room preview on hold</div>
+            <div style="font:400 11.5px/1.55 'Sora',system-ui;color:#6b7280">Your AI rendering will generate automatically once you've chosen a design style. Head back to your Concierge and pick a style — all your room previews will appear at once.</div>
+          </div>
+        </div>
       <% else %>
         <div style="height:150px;border-radius:10px;background:linear-gradient(90deg,rgba(34,160,107,.08) 25%,rgba(34,160,107,.16) 50%,rgba(34,160,107,.08) 75%);background-size:200% 100%;animation:shimmer 1.8s ease-in-out infinite;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #86efac">
           <div style="font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80">✦ AI Rendering</div>
@@ -99,7 +107,7 @@
     <div style="font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#4ade80;white-space:nowrap">rooms done</div>
   </div>
 
-  <% rendering_in_progress = design_render && design_render.status != "complete" && design_render.status != "failed" %>
+  <% rendering_in_progress = design_render && %w[pending generating].include?(design_render.status) %>
   <button id="next-room-btn-<%= room_key %>"
           class="chat-component-btn chat-component-btn--primary"
           style="background:#22a06b;color:#fff;<%= 'display:none' if rendering_in_progress %>"
