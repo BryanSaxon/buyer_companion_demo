@@ -1,13 +1,53 @@
 module DemoData
   HOME = {
-    community: "Crystal Ridge",
-    phase:     "Phase 2",
+    community: "Magnolia Grove",
+    phase:     "Phase 1",
     lot:       "Lot 24",
-    floorplan: "The Brookfield",
-    bedrooms:  3,
-    bathrooms: 2,
-    sqft:      "1,842",
+    floorplan: "The Bellwood",
+    bedrooms:  4,
+    bathrooms: 2.5,
+    sqft:      "2,340",
     designer:  "Megan Cole"
+  }.freeze
+
+  COMMUNITY = {
+    name:        "Magnolia Grove",
+    tagline:     "Room to grow, minutes from everything.",
+    address:     "5400 Magnolia Grove Parkway",
+    city:        "Hoover",
+    state:       "AL",
+    zip:         "35244",
+    sales_phone: "(205) 555-0188",
+    amenities: [
+      "Resort-style pool",
+      "Clubhouse",
+      "Walking trails",
+      "Playground",
+      "Dog park",
+      "Community green"
+    ].freeze,
+    hoa: {
+      name:             "Magnolia Grove Community Association",
+      management:       "Alabama Property Management Group",
+      management_phone: "(205) 555-0142",
+      management_email: "hello@apmg-hoa.com",
+      monthly_dues:     "$95 / month",
+      initiation_fee:   "$500 (one-time, at closing)",
+      capital_contrib:  "$1,000 (one-time, at closing)",
+      covers: "Common-area landscaping, amenity center, trails, community lighting, front entrance, master insurance for common areas."
+    }.freeze,
+    schools: {
+      district:   "Hoover City Schools",
+      elementary: "Trace Crossings Elementary (K–5)",
+      middle:     "R.F. Bumpus Middle School (6–8)",
+      high:       "Hoover High School (9–12)"
+    }.freeze,
+    floor_plans: [
+      { name: "The Ashby",      beds: 3, baths: 2,   sqft: "1,850" },
+      { name: "The Bellwood",   beds: 4, baths: 2.5, sqft: "2,340" },
+      { name: "The Carrington", beds: 4, baths: 3,   sqft: "2,780" },
+      { name: "The Drayton",    beds: 5, baths: 3.5, sqft: "3,210" }
+    ].freeze
   }.freeze
 
   FAMILY = [

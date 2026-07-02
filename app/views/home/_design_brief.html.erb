@@ -30,7 +30,7 @@
       <!-- Property card -->
       <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04);margin-bottom:14px">
         <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:8px">Your Home</div>
-        <div style="font:700 17px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em;margin-bottom:8px">The Brookfield</div>
+        <div style="font:700 17px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em;margin-bottom:8px"><%= DemoData::HOME[:floorplan] %></div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px">
           <% [["Community", DemoData::HOME[:community]], ["Phase", DemoData::HOME[:phase]], ["Lot", DemoData::HOME[:lot]]].each do |label, val| %>
             <div style="display:flex;flex-direction:column;gap:2px;padding:7px 11px;background:#FAFAF8;border:1px solid #E5E7EB;border-radius:8px">
@@ -57,6 +57,44 @@
               <div style="font:400 10px 'Sora',system-ui;color:#9aa0ac"><%= person[:role] %></div>
             </div>
           <% end %>
+        </div>
+      </div>
+
+      <!-- Community card -->
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04);margin-top:14px">
+        <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:6px">The Community</div>
+        <div style="font:700 15px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em;margin-bottom:2px"><%= DemoData::COMMUNITY[:name] %></div>
+        <div style="font:400 11.5px 'Sora',system-ui;color:#9aa0ac;margin-bottom:12px"><%= DemoData::COMMUNITY[:tagline] %></div>
+
+        <!-- Amenities -->
+        <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;margin-bottom:6px">Amenities</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+          <% DemoData::COMMUNITY[:amenities].each do |amenity| %>
+            <span style="font:500 10.5px 'Sora',system-ui;color:#1A1A1A;background:#F5F4EF;border:1px solid #E5E7EB;border-radius:20px;padding:3px 9px"><%= amenity %></span>
+          <% end %>
+        </div>
+
+        <!-- HOA -->
+        <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;margin-bottom:5px">HOA</div>
+        <div style="font:500 11.5px 'Sora',system-ui;color:#1A1A1A;margin-bottom:2px"><%= DemoData::COMMUNITY[:hoa][:monthly_dues] %></div>
+        <div style="font:400 10.5px 'Sora',system-ui;color:#9aa0ac;margin-bottom:12px;line-height:1.4"><%= DemoData::COMMUNITY[:hoa][:covers] %></div>
+
+        <!-- Schools -->
+        <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;margin-bottom:6px">Schools · <%= DemoData::COMMUNITY[:schools][:district] %></div>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
+          <% [[:elementary, "Elementary"], [:middle, "Middle"], [:high, "High School"]].each do |key, level| %>
+            <div style="display:flex;align-items:baseline;gap:6px">
+              <span style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#9aa0ac;flex:none;width:64px"><%= level %></span>
+              <span style="font:500 11px 'Sora',system-ui;color:#1A1A1A"><%= DemoData::COMMUNITY[:schools][key] %></span>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Sales contact -->
+        <div style="display:flex;align-items:center;gap:7px;padding-top:10px;border-top:1px solid #F0EEE9">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9aa0ac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span style="font:500 11.5px 'Sora',system-ui;color:#1A1A1A">Sales Office</span>
+          <span style="font:600 11.5px 'Sora',system-ui;color:#F5A623"><%= DemoData::COMMUNITY[:sales_phone] %></span>
         </div>
       </div>
 
