@@ -390,7 +390,7 @@ class DesignFlow
     next_selection      = selections_for_room[next_idx]
     room                = DemoData.room(room_key)
     skip_msg = next_selection.nil? ?
-      "That's totally okay — Megan will help you land on #{label.downcase} at your design meeting. Let's wrap up #{room[:label]}!" :
+      "That's totally okay — Megan will help you land on #{label.downcase} at your design meeting. Let's wrap up #{friendly_room_label(room_key)}!" :
       "No worries at all — Megan will sort out #{label.downcase} with you at your meeting. Let's move on to #{next_selection[:label].downcase}."
 
     advance_design_cursor(skip_msg)
@@ -400,7 +400,7 @@ class DesignFlow
     next_room = session.next_undesigned_room
     if next_room
       session.update!(current_room: next_room[:key], current_selection_index: 0)
-      { message: "Let's design the #{next_room[:label]}!",
+      { message: "Let's design the #{friendly_room_label(next_room[:key])}!",
         component_html: render_option_selector,
         component_type: "option_selector",
         state: session.aasm_state,
@@ -419,7 +419,7 @@ class DesignFlow
     session.update!(current_room: room_key, current_selection_index: 0, aasm_state: "designing")
     session.save!
 
-    { message: "Sure! Let's revisit the #{room[:label]}. I'll show your previous picks — just tap to change any you'd like.",
+    { message: "Sure! Let's revisit the #{friendly_room_label(room_key)}. I'll show your previous picks — just tap to change any you'd like.",
       component_html: render_option_selector,
       component_type: "option_selector",
       state: "designing",
@@ -455,7 +455,7 @@ class DesignFlow
     else
       # Advance index past the end so refresh re-shows progress card, not the last option_selector
       session.update!(current_selection_index: selections_for_room.size)
-      room_label = DemoData.room(session.current_room)[:label]
+      room_label = friendly_room_label(session.current_room)
       msg = warm_message || "#{room_label} is done! Great choices — these are going to look incredible together."
 
       # Kick off AI room rendering in the background
@@ -518,13 +518,13 @@ class DesignFlow
         if room[:key] == "master_bedroom"
           "Let's start with the Master Bedroom — who will be sleeping here?"
         elsif remaining.empty?
-          "#{room[:label]} — it looks like everyone's been placed. " \
+          "#{friendly_room_label(room[:key])} — it looks like everyone's been placed. " \
           "How would you like to use this room?"
         else
-          "#{room[:label]} — who will be sleeping here?"
+          "#{friendly_room_label(room[:key])} — who will be sleeping here?"
         end
       else
-        "Great! #{room[:label]} is all set."
+        "Great! #{friendly_room_label(room[:key])} is all set."
       end
     when :flex
       "Now for the flex room — this one is totally yours to design. " \
@@ -532,7 +532,7 @@ class DesignFlow
     when :bathroom
       "#{room[:label]} — we'll design this one when we get to finishes. Moving on!"
     else
-      "Let's talk about the #{room[:label]}."
+      "Let's talk about the #{friendly_room_label(room[:key])}."
     end
   end
 
@@ -633,6 +633,27 @@ class DesignFlow
     when "complete"       then "All selections are complete. Session is done."
     else "Unknown state."
     end
+  end
+
+  # Returns a human-friendly room name using occupants or chosen purpose where available.
+  # e.g. "Sarah's Room", "Chris & Cindy's Room", "Home Gym", or fallback "Bedroom 3".
+  def friendly_room_label(room_key)
+    room_config = DemoData.room(room_key)
+    room_plan   = session.room_plans.find_by(room_key: room_key)
+
+    # Flex room with a chosen purpose
+    if room_config&.dig(:type) == :flex && room_plan&.purpose.present?
+      purpose_entry = DemoData::FLEX_PURPOSES.find { |p| p[:key] == room_plan.purpose }
+      return purpose_entry&.dig(:label) || room_plan.purpose.humanize
+    end
+
+    # Bedroom with assigned occupants
+    if room_plan && room_plan.occupants_array.any?
+      names = room_plan.occupant_labels
+      return names.length == 1 ? "#{names.first}'s Room" : "#{names.first(2).join(' & ')}'s Room"
+    end
+
+    room_config&.dig(:label) || room_key.humanize
   end
 
   # --- Rendering ---
