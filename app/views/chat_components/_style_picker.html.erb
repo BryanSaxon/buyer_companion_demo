@@ -2,7 +2,7 @@
 <% chosen_styles = local_assigns.fetch(:chosen_styles, []) %>
 <div class="chat-component chat-component--wide" data-component="style_picker">
   <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:<%= locked ? '#22a06b' : '#9aa0ac' %>">
-    <%= locked ? "✓ Style locked in" : "Select all that apply" %>
+    <%= locked ? "✓ Style locked in" : "Select your style" %>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
     <% DemoData::DESIGN_STYLES.each do |style| %>
@@ -27,10 +27,4 @@
       </button>
     <% end %>
   </div>
-  <% unless locked %>
-    <button class="chat-component-btn chat-component-btn--primary" style="margin-top:12px"
-            data-action="click->concierge#confirmStyles">
-      These feel right →
-    </button>
-  <% end %>
 </div>
