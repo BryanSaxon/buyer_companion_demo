@@ -10,12 +10,15 @@ class RoomRenderService
     prompt = build_prompt
     @render.update!(prompt: prompt)
 
-    client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
+    client = OpenAI::Client.new(
+      access_token: ENV.fetch("OPENAI_API_KEY"),
+      request_timeout: 300
+    )
     response = client.images.generate(parameters: {
       model: "gpt-image-1",
       prompt: prompt,
       n: 1,
-      size: "1536x1024",
+      size: "1024x1024",
       quality: "medium"
     })
 
