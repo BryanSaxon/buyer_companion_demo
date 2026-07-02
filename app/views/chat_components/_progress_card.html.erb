@@ -58,12 +58,12 @@
                   el.innerHTML = '<div style="font:500 9px \'IBM Plex Mono\',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-bottom:6px">✦ AI Room Rendering</div>';
                   var img = new Image();
                   img.src = d.image_url;
-                  img.style = 'width:100%;display:block;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)';
+                  img.setAttribute('style', 'width:100%;display:block;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)');
                   el.appendChild(img);
                   el.dataset.renderStatus = 'complete';
                 } else if (d.status === 'failed') {
                   clearInterval(poll);
-                  el.remove();
+                  el.style.display = 'none';
                 }
               } catch(e) {}
             }, 3000);
