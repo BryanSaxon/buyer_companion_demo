@@ -45,22 +45,30 @@
         </div>
         <script>
           (function() {
-            var el = document.getElementById('room-render-<%= room_key %>');
-            if (!el || el.dataset.renderStatus === 'complete') return;
             var leadId = '<%= session.lead_id %>';
             var roomKey = '<%= room_key %>';
+            var elId = 'room-render-' + roomKey;
             var poll = setInterval(async function() {
               try {
                 var r = await fetch('/leads/' + leadId + '/rooms/' + roomKey + '/render');
                 var d = await r.json();
+                var el = document.getElementById(elId);
+                if (!el) { clearInterval(poll); return; }
                 if (d.status === 'complete') {
                   clearInterval(poll);
-                  el.innerHTML = '<div style="font:500 9px \'IBM Plex Mono\',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-bottom:6px">✦ AI Room Rendering</div>';
+                  var label = document.createElement('div');
+                  label.setAttribute('style', 'font:500 9px \'IBM Plex Mono\',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-bottom:6px');
+                  label.textContent = '❆ AI Room Rendering';
                   var img = new Image();
-                  img.src = d.image_url;
                   img.setAttribute('style', 'width:100%;display:block;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)');
-                  el.appendChild(img);
-                  el.dataset.renderStatus = 'complete';
+                  img.onload = function() {
+                    el.innerHTML = '';
+                    el.appendChild(label);
+                    el.appendChild(img);
+                    el.dataset.renderStatus = 'complete';
+                  };
+                  img.onerror = function() { el.style.display = 'none'; };
+                  img.src = d.image_url;
                 } else if (d.status === 'failed') {
                   clearInterval(poll);
                   el.style.display = 'none';
