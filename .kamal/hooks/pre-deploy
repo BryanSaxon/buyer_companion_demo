@@ -3,3 +3,6 @@ set -e
 
 echo "Running database migrations..."
 kamal app exec --reuse 'bin/rails db:migrate'
+
+echo "Loading Solid Queue schema..."
+kamal app exec --reuse 'bin/rails db:schema:load:queue'
