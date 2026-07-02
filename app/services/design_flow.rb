@@ -410,7 +410,7 @@ class DesignFlow
     next_room = session.next_undesigned_room
     if next_room
       session.update!(current_room: next_room[:key], current_selection_index: 0)
-      { message: "Let's design the #{friendly_room_label(next_room[:key])}!",
+      { message: "Let's design #{room_article(friendly_room_label(next_room[:key]))}#{friendly_room_label(next_room[:key])}!",
         component_html: render_option_selector,
         component_type: "option_selector",
         state: session.aasm_state,
@@ -429,7 +429,7 @@ class DesignFlow
     session.update!(current_room: room_key, current_selection_index: 0, aasm_state: "designing")
     session.save!
 
-    { message: "Sure! Let's revisit the #{friendly_room_label(room_key)}. I'll show your previous picks — just tap to change any you'd like.",
+    { message: "Sure! Let's revisit #{room_article(friendly_room_label(room_key))}#{friendly_room_label(room_key)}. I'll show your previous picks — just tap to change any you'd like.",
       component_html: render_option_selector,
       component_type: "option_selector",
       state: "designing",
@@ -669,6 +669,11 @@ class DesignFlow
     end
 
     room_config&.dig(:label) || room_key.humanize
+  end
+
+  # Returns "the " for generic room names, "" for possessive names like "Sarah's Room".
+  def room_article(label)
+    label.include?("'s") ? "" : "the "
   end
 
   # --- Rendering ---
