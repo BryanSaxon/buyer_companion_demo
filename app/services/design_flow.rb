@@ -327,6 +327,16 @@ class DesignFlow
     session.finish_styles!
     session.save!
 
+    # If a real style was chosen, kick off any renders that were deferred
+    # because the buyer previously selected "Not sure yet"
+    real_style_chosen = styles.reject { |k| k == "not_sure" }.any?
+    if real_style_chosen
+      session.design_renders.deferred.each do |dr|
+        dr.update!(status: "pending")
+        GenerateRoomRenderJob.perform_later(dr.id)
+      end
+    end
+
     first_room = DemoData::ROOMS.first
     session.update!(current_room: first_room[:key], current_selection_index: 0)
 
@@ -458,9 +468,14 @@ class DesignFlow
       room_label = friendly_room_label(session.current_room)
       msg = warm_message || "#{room_label} is done! Great choices — these are going to look incredible together."
 
-      # Kick off AI room rendering in the background
+      # Kick off AI room rendering — defer if no real style chosen yet
+      style_chosen = session.design_styles_array.reject { |k| k == "not_sure" }.any?
       design_render = session.design_renders.find_or_create_by(room_key: session.current_room)
-      GenerateRoomRenderJob.perform_later(design_render.id) if design_render.status == "pending"
+      if style_chosen
+        GenerateRoomRenderJob.perform_later(design_render.id) if design_render.status.in?(%w[pending deferred])
+      elsif design_render.status == "pending"
+        design_render.update!(status: "deferred")
+      end
 
       { message: msg,
         component_html: render_component("chat_components/progress_card",
