@@ -537,13 +537,14 @@ class DesignFlow
   end
 
   def planning_component_for(room)
+    all_placed = unassigned_effective_family(session.assigned_occupant_keys).empty?
+
     if room[:ask_purpose]
-      render_component("chat_components/room_purpose", room: room)
+      render_component("chat_components/room_purpose", room: room, hide_bedroom: all_placed)
     elsif room[:ask_occupants]
-      assigned  = session.assigned_occupant_keys
-      remaining = unassigned_effective_family(assigned)
+      remaining = unassigned_effective_family(session.assigned_occupant_keys)
       if remaining.empty?
-        render_component("chat_components/room_purpose", room: room)
+        render_component("chat_components/room_purpose", room: room, hide_bedroom: true)
       else
         render_component("chat_components/occupant_selector",
                          room: room, remaining_family: remaining, show_floorplan: true)
