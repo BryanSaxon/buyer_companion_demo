@@ -11,7 +11,7 @@ class RoomRenderService
     @render.update!(prompt: prompt)
 
     client = OpenAI::Client.new(
-      access_token: ENV.fetch("OPENAI_API_KEY"),
+      access_token: Rails.application.credentials.openai.api_key,
       request_timeout: 300
     )
     response = client.images.generate(parameters: {

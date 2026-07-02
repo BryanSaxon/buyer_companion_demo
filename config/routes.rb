@@ -14,8 +14,8 @@ Rails.application.routes.draw do
   get "admin", to: "admin#show", as: :admin
 
   JOBS_AUTH = Rack::Auth::Basic.new(MissionControl::Jobs::Engine) do |u, p|
-    ActiveSupport::SecurityUtils.secure_compare(u, ENV.fetch("JOBS_USERNAME", "admin")) &
-    ActiveSupport::SecurityUtils.secure_compare(p, ENV.fetch("JOBS_PASSWORD", ""))
+    ActiveSupport::SecurityUtils.secure_compare(u, Rails.application.credentials.jobs.username) &
+    ActiveSupport::SecurityUtils.secure_compare(p, Rails.application.credentials.jobs.password)
   end
   mount JOBS_AUTH, at: "/jobs"
 

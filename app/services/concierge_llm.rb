@@ -134,7 +134,7 @@ class ConciergeLlm
   }.freeze
 
   def initialize
-    @client = Anthropic::Client.new(api_key: ENV["ANTHROPIC_API_KEY"])
+    @client = Anthropic::Client.new(api_key: Rails.application.credentials.anthropic.api_key)
   end
 
   def call(session:, lead:, user_input:, state_context:, history: [])
