@@ -112,7 +112,8 @@
   <button id="next-room-btn-<%= room_key %>"
           class="chat-component-btn chat-component-btn--primary"
           style="background:#22a06b;color:#fff;<%= 'display:none' if rendering_in_progress %>"
-          data-action="click->concierge#progressNext">
+          data-action="click->concierge#progressNext"
+          onclick="this.style.display='none'">
     <%= rooms_complete >= 8 ? "Review my selections →" : "Ready for the next room →" %>
   </button>
 </div>
