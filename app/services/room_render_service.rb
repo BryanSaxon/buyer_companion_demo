@@ -19,18 +19,23 @@ class RoomRenderService
       prompt: prompt,
       n: 1,
       size: "1024x1024",
-      quality: "low"
+      quality: "medium"
     })
 
     b64 = response.dig("data", 0, "b64_json")
     raise "No image data returned from OpenAI" if b64.blank?
 
-    image_data = Base64.decode64(b64)
-    @render.image.attach(
-      io: StringIO.new(image_data),
-      filename: "render-#{@room_key}-#{@render.id}.png",
-      content_type: "image/png"
-    )
+    Tempfile.create([ "render-#{@room_key}", ".png" ]) do |tmp|
+      tmp.binmode
+      tmp.write(Base64.decode64(b64))
+      b64 = nil # allow GC to free the base64 string
+      tmp.rewind
+      @render.image.attach(
+        io: tmp,
+        filename: "render-#{@room_key}-#{@render.id}.png",
+        content_type: "image/png"
+      )
+    end
     @render.update!(status: "complete")
   rescue => e
     Rails.logger.error("RoomRenderService failed for render #{@render.id}: #{e.message}\n#{e.respond_to?(:response) ? e.response.inspect : ''}")

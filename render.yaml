@@ -16,7 +16,7 @@ services:
       - key: SECRET_KEY_BASE
         generateValue: true
       - key: SOLID_QUEUE_IN_PUMA
-        value: "true"
+        value: "false"
       - key: R2_ACCESS_KEY_ID
         sync: false
       - key: R2_SECRET_ACCESS_KEY
@@ -32,6 +32,37 @@ services:
       - key: JOBS_PASSWORD
         sync: false
       - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: buyer-companion-demo-db
+          property: connectionString
+
+  - type: worker
+    name: buyer-companion-demo-worker
+    runtime: ruby
+    plan: starter
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rails solid_queue:start"
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - key: SECRET_KEY_BASE
+        fromService:
+          name: buyer-companion-demo
+          type: web
+          envVarKey: SECRET_KEY_BASE
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET
+        sync: false
+      - key: R2_ENDPOINT
         sync: false
       - key: DATABASE_URL
         fromDatabase:
