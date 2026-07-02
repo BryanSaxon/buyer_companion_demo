@@ -19,7 +19,7 @@ class RoomRenderService
       prompt: prompt,
       n: 1,
       size: "1024x1024",
-      quality: "medium"
+      quality: "low"
     })
 
     b64 = response.dig("data", 0, "b64_json")
