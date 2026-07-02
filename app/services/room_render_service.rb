@@ -1,5 +1,3 @@
-require "open-uri"
-
 class RoomRenderService
   def initialize(design_render)
     @render  = design_render
@@ -14,26 +12,25 @@ class RoomRenderService
 
     client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
     response = client.images.generate(parameters: {
-      model: "dall-e-3",
+      model: "gpt-image-1",
       prompt: prompt,
       n: 1,
-      size: "1792x1024",
-      quality: "standard",
-      style: "natural"
+      size: "1536x1024",
+      quality: "medium"
     })
 
-    image_url = response.dig("data", 0, "url")
-    raise "No image URL returned from DALL-E" if image_url.blank?
+    b64 = response.dig("data", 0, "b64_json")
+    raise "No image data returned from OpenAI" if b64.blank?
 
-    downloaded = URI.open(image_url) # rubocop:disable Security/Open
+    image_data = Base64.decode64(b64)
     @render.image.attach(
-      io: downloaded,
-      filename: "render-#{@room_key}-#{@render.id}.jpg",
-      content_type: "image/jpeg"
+      io: StringIO.new(image_data),
+      filename: "render-#{@room_key}-#{@render.id}.png",
+      content_type: "image/png"
     )
     @render.update!(status: "complete")
   rescue => e
-    Rails.logger.error("RoomRenderService failed for render #{@render.id}: #{e.message}")
+    Rails.logger.error("RoomRenderService failed for render #{@render.id}: #{e.message}\n#{e.respond_to?(:response) ? e.response.inspect : ''}")
     @render.update!(status: "failed")
   end
 
