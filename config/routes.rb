@@ -13,7 +13,11 @@ Rails.application.routes.draw do
 
   get "admin", to: "admin#show", as: :admin
 
-  mount MissionControl::Jobs::Engine, at: "/jobs" if Rails.env.development?
+  JOBS_AUTH = Rack::Auth::Basic.new(MissionControl::Jobs::Engine) do |u, p|
+    ActiveSupport::SecurityUtils.secure_compare(u, ENV.fetch("JOBS_USERNAME", "admin")) &
+    ActiveSupport::SecurityUtils.secure_compare(p, ENV.fetch("JOBS_PASSWORD", ""))
+  end
+  mount JOBS_AUTH, at: "/jobs"
 
   get "reset", to: "demo#reset", as: :demo_reset
 end
