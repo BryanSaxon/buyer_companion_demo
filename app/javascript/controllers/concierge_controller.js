@@ -131,42 +131,22 @@ export default class extends Controller {
   toggleStyle(e) {
     const { styleKey } = e.currentTarget.dataset
     const tile = e.currentTarget
+    const component = tile.closest("[data-component='style_picker']")
     const checkEl = tile.querySelector(".style-tile__check")
 
-    if (styleKey === "not_sure") {
-      this.selectedStyles.clear()
-      tile.closest("[data-component]").querySelectorAll(".style-tile").forEach(t => {
-        t.classList.remove("style-tile--selected")
-        const c = t.querySelector(".style-tile__check"); if (c) c.style.display = "none"
-      })
-      this.selectedStyles.add("not_sure")
-      tile.classList.add("style-tile--selected")
-      if (checkEl) checkEl.style.display = "flex"
-      return
-    }
+    // Select this tile visually, then immediately submit
+    component.querySelectorAll(".style-tile").forEach(t => {
+      t.classList.remove("style-tile--selected")
+      const c = t.querySelector(".style-tile__check"); if (c) c.style.display = "none"
+    })
+    tile.classList.add("style-tile--selected")
+    if (checkEl) checkEl.style.display = "flex"
 
-    this.selectedStyles.delete("not_sure")
-    tile.closest("[data-component]").querySelector("[data-style-key='not_sure']")
-        ?.classList.remove("style-tile--selected")
-    const notSureCheck = tile.closest("[data-component]").querySelector("[data-style-key='not_sure'] .style-tile__check")
-    if (notSureCheck) notSureCheck.style.display = "none"
+    this.selectedStyles.clear()
+    this.selectedStyles.add(styleKey)
 
-    if (this.selectedStyles.has(styleKey)) {
-      this.selectedStyles.delete(styleKey)
-      tile.classList.remove("style-tile--selected")
-      if (checkEl) checkEl.style.display = "none"
-    } else {
-      this.selectedStyles.add(styleKey)
-      tile.classList.add("style-tile--selected")
-      if (checkEl) checkEl.style.display = "flex"
-    }
-  }
-
-  confirmStyles(e) {
-    const component = e.currentTarget.closest("[data-component='style_picker']")
-    if (this.selectedStyles.size === 0) return
-    this._lockStylePicker(component, [...this.selectedStyles])
-    this.postSelection({ type: "design_styles", styles: [...this.selectedStyles] })
+    this._lockStylePicker(component, [styleKey])
+    this.postSelection({ type: "design_styles", styles: [styleKey] })
     this.selectedStyles.clear()
   }
 
