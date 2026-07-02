@@ -1,6 +1,7 @@
 <% room_config = DemoData.room(room_key) %>
 <% sels = session.design_selections.where(room_key: room_key).order(:created_at) %>
 <% pct = (rooms_complete.to_f / 8 * 100).round %>
+<% design_render = session.design_renders.find_by(room_key: room_key) %>
 <div class="chat-component chat-component--wide" data-component="progress_card"
      style="background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border-color:#86efac;padding:18px 18px 16px">
 
@@ -26,6 +27,51 @@
       </div>
     <% end %>
   </div>
+
+  <!-- AI room rendering preview -->
+  <% if design_render %>
+    <div id="room-render-<%= room_key %>"
+         style="margin-bottom:14px;border-radius:10px;overflow:hidden"
+         data-render-status="<%= design_render.status %>">
+      <% if design_render.status == "complete" && design_render.image.attached? %>
+        <div style="font:500 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-bottom:6px">✦ AI Room Rendering</div>
+        <%= image_tag url_for(design_render.image),
+              style: "width:100%;display:block;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)",
+              alt: "#{room_config[:label]} rendering" %>
+      <% else %>
+        <div style="height:150px;border-radius:10px;background:linear-gradient(90deg,rgba(34,160,107,.08) 25%,rgba(34,160,107,.16) 50%,rgba(34,160,107,.08) 75%);background-size:200% 100%;animation:shimmer 1.8s ease-in-out infinite;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #86efac">
+          <div style="font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80">✦ AI Rendering</div>
+          <div style="font:500 11.5px 'Sora',system-ui;color:#6b7280">Generating your room…</div>
+        </div>
+        <script>
+          (function() {
+            var el = document.getElementById('room-render-<%= room_key %>');
+            if (!el || el.dataset.renderStatus === 'complete') return;
+            var leadId = '<%= session.lead_id %>';
+            var roomKey = '<%= room_key %>';
+            var poll = setInterval(async function() {
+              try {
+                var r = await fetch('/leads/' + leadId + '/rooms/' + roomKey + '/render');
+                var d = await r.json();
+                if (d.status === 'complete') {
+                  clearInterval(poll);
+                  el.innerHTML = '<div style="font:500 9px \'IBM Plex Mono\',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#4ade80;margin-bottom:6px">✦ AI Room Rendering</div>';
+                  var img = new Image();
+                  img.src = d.image_url;
+                  img.style = 'width:100%;display:block;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)';
+                  el.appendChild(img);
+                  el.dataset.renderStatus = 'complete';
+                } else if (d.status === 'failed') {
+                  clearInterval(poll);
+                  el.remove();
+                }
+              } catch(e) {}
+            }, 3000);
+          })();
+        </script>
+      <% end %>
+    </div>
+  <% end %>
 
   <!-- Progress bar -->
   <div style="display:flex;align-items:center;gap:9px;padding:11px 0;border-top:1px solid #bbf7d0;border-bottom:1px solid #bbf7d0;margin-bottom:12px">

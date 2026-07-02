@@ -457,6 +457,11 @@ class DesignFlow
       session.update!(current_selection_index: selections_for_room.size)
       room_label = DemoData.room(session.current_room)[:label]
       msg = warm_message || "#{room_label} is done! Great choices — these are going to look incredible together."
+
+      # Kick off AI room rendering in the background
+      design_render = session.design_renders.find_or_create_by(room_key: session.current_room)
+      GenerateRoomRenderJob.perform_later(design_render.id) if design_render.status == "pending"
+
       { message: msg,
         component_html: render_component("chat_components/progress_card",
                                          session: session, room_key: session.current_room,

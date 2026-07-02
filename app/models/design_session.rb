@@ -5,6 +5,7 @@ class DesignSession < ApplicationRecord
   has_many :room_plans,       dependent: :destroy
   has_many :design_selections, dependent: :destroy
   has_many :draft_emails,     dependent: :destroy
+  has_many :design_renders,   dependent: :destroy
 
   aasm column: :aasm_state, whiny_persistence: false do
     state :welcome, initial: true
