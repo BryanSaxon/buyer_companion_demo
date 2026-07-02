@@ -1,7 +1,7 @@
 <% locked           = local_assigns.fetch(:locked, false) %>
 <% selected_purpose = local_assigns.fetch(:selected_purpose, nil) %>
 <% hide_bedroom     = local_assigns.fetch(:hide_bedroom, false) %>
-<% purposes = hide_bedroom ? DemoData::FLEX_PURPOSES.reject { |p| %w[bedroom guest_room].include?(p[:key]) } : DemoData::FLEX_PURPOSES %>
+<% purposes = hide_bedroom ? DemoData::FLEX_PURPOSES.reject { |p| p[:key] == "bedroom" } : DemoData::FLEX_PURPOSES %>
 <div class="chat-component" data-component="room_purpose" data-room-key="<%= room[:key] %>">
   <div style="margin-bottom:10px;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:<%= locked ? '#22a06b' : '#9aa0ac' %>">
     <%= locked ? "✓ Locked in" : "Select a purpose" %>
