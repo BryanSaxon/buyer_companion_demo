@@ -297,6 +297,13 @@ export default class extends Controller {
     wrapper.style.cssText = "margin:0 0 14px;animation:scRise .35s ease both"
     wrapper.innerHTML = html
     this.messageAreaTarget.appendChild(wrapper)
+    // innerHTML doesn't execute scripts — re-create each one so it runs
+    wrapper.querySelectorAll("script").forEach(old => {
+      const s = document.createElement("script")
+      Array.from(old.attributes).forEach(a => s.setAttribute(a.name, a.value))
+      s.textContent = old.textContent
+      old.replaceWith(s)
+    })
   }
 
   appendTypingIndicator() {
