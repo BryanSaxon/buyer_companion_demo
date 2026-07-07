@@ -46,19 +46,14 @@ Rails.application.configure do
 
   config.active_storage.service = :cloudflare
 
-  # Email via SendGrid SMTP
-  config.action_mailer.delivery_method = :smtp
+  # Email via SendGrid HTTP API (avoids SMTP port blocking on cloud platforms)
+  config.action_mailer.delivery_method = :sendgrid_actionmailer
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = { host: Rails.application.credentials.app_host }
-  config.action_mailer.smtp_settings = {
-    user_name: "apikey",
-    password: Rails.application.credentials.dig(:sendgrid, :api_key),
-    domain: Rails.application.credentials.app_host,
-    address: "smtp.sendgrid.net",
-    port: 587,
-    authentication: :plain,
-    enable_starttls_auto: true
+  config.action_mailer.sendgrid_actionmailer_settings = {
+    api_key: Rails.application.credentials.dig(:sendgrid, :api_key),
+    raise_delivery_errors: true
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

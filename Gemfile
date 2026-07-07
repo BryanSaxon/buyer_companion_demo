@@ -22,6 +22,7 @@ gem "tailwindcss-rails"
 gem "aasm"
 gem "anthropic"
 gem "ruby-openai"
+gem "sendgrid-actionmailer"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
