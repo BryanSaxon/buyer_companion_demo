@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def show
     @lead    = current_lead
-    @session = @lead.design_session || @lead.create_design_session!
+    @session = @lead.design_session || @lead.create_design_session!(aasm_state: "complete")
     @messages = @lead.chat_messages.chronological
 
     flow = DesignFlow.new(session: @session, lead: @lead)

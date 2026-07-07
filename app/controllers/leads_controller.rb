@@ -12,7 +12,7 @@ class LeadsController < ApplicationController
     @lead.assign_attributes(lead_params.except(:email))
 
     if @lead.save
-      @lead.create_design_session!
+      @lead.create_design_session!(aasm_state: "complete")
       session[:lead_id] = @lead.id
       LeadMailer.intake_notification(@lead, ip_address: request.remote_ip).deliver_later
       render json: { success: true, lead_id: @lead.id }
