@@ -1,10 +1,11 @@
 class DemoController < ApplicationController
   def reset
     lead = current_lead
-    if lead.design_session
-      lead.design_session.destroy
-    end
     lead.chat_messages.delete_all
+    lead.design_session&.destroy
+
+    DemoSeeder.seed_harrison_session(lead)
+
     redirect_to home_path
   end
 end

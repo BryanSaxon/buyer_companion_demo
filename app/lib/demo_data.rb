@@ -1,62 +1,82 @@
 module DemoData
   HOME = {
-    community: "Magnolia Grove",
-    phase:     "Phase 1",
-    lot:       "Lot 24",
-    floorplan: "The Bellwood",
-    bedrooms:  4,
-    bathrooms: 2.5,
-    sqft:      "2,340",
-    designer:  "Megan Cole"
+    community: "Reeds Vale",
+    phase:     "Final Phase",
+    lot:       "Home Site 405",
+    floorplan: "The Amelia",
+    bedrooms:  5,
+    bathrooms: 4.5,
+    sqft:      "4,177",
+    designer:  "Kassie Holley"
   }.freeze
 
   COMMUNITY = {
-    name:        "Magnolia Grove",
-    tagline:     "Room to grow, minutes from everything.",
-    address:     "5400 Magnolia Grove Parkway",
-    city:        "Hoover",
-    state:       "AL",
-    zip:         "35244",
-    sales_phone: "(205) 555-0188",
+    name:        "Reeds Vale",
+    tagline:     "Where the mountains come to you.",
+    address:     "Home Site 405",
+    city:        "College Grove",
+    state:       "TN",
+    zip:         "37046",
+    sales_phone: "(615) 204-8817",
     amenities: [
       "Resort-style pool",
-      "Clubhouse",
-      "Walking trails",
-      "Playground",
-      "Dog park",
-      "Community green"
+      "Pickleball courts",
+      "Grand Social Space",
+      "State-of-the-art fitness studio",
+      "Kid's play area",
+      "River Walk Trail"
     ].freeze,
     hoa: {
-      name:             "Magnolia Grove Community Association",
-      management:       "Alabama Property Management Group",
-      management_phone: "(205) 555-0142",
-      management_email: "hello@apmg-hoa.com",
-      monthly_dues:     "$95 / month",
-      initiation_fee:   "$500 (one-time, at closing)",
-      capital_contrib:  "$1,000 (one-time, at closing)",
-      covers: "Common-area landscaping, amenity center, trails, community lighting, front entrance, master insurance for common areas."
+      name:             "Reeds Vale HOA",
+      management:       nil,
+      management_phone: nil,
+      management_email: nil,
+      monthly_dues:     "$185 / month",
+      initiation_fee:   nil,
+      capital_contrib:  nil,
+      covers:           "Common-area landscaping, amenity center, trails, community lighting."
     }.freeze,
     schools: {
-      district:   "Hoover City Schools",
-      elementary: "Trace Crossings Elementary (K–5)",
-      middle:     "R.F. Bumpus Middle School (6–8)",
-      high:       "Hoover High School (9–12)"
+      district:   "Williamson County Schools",
+      elementary: "Arrington Elementary School",
+      middle:     "Page Middle School",
+      high:       "Page High School"
     }.freeze,
     floor_plans: [
-      { name: "The Ashby",      beds: 3, baths: 2,   sqft: "1,850" },
-      { name: "The Bellwood",   beds: 4, baths: 2.5, sqft: "2,340" },
-      { name: "The Carrington", beds: 4, baths: 3,   sqft: "2,780" },
-      { name: "The Drayton",    beds: 5, baths: 3.5, sqft: "3,210" }
+      { name: "The Amelia", beds: 5, baths: 4.5, sqft: "4,177" }
     ].freeze
   }.freeze
 
   BUILD_STAGES = [
     { key: "foundation", label: "Foundation",            stage: 1, status: :complete,     photos: %w[foundation-lot.jpg foundation-wide.jpg foundation-rebar.jpg foundation-detail.jpg] },
     { key: "framing",    label: "Framing",               stage: 2, status: :complete,     photos: %w[framing-front.jpg framing-side.jpg framing-trusses.jpg framing-interior.jpg] },
-    { key: "drywall",    label: "Drywall & Mechanicals", stage: 3, status: :in_progress,  photos: %w[drywall-greatroom.jpg drywall-kitchen.jpg drywall-hallway.jpg drywall-bedroom.jpg] },
-    { key: "exterior",   label: "Exterior",              stage: 4, status: :upcoming,     photos: %w[exterior-front.jpg exterior-porch.jpg exterior-garage.jpg exterior-side.jpg] },
-    { key: "finishes",   label: "Finishes",              stage: 5, status: :upcoming,     photos: %w[finishes-kitchen.jpg finishes-living.jpg finishes-primary-bath.jpg finishes-bedroom.jpg] }
+    { key: "rough_in",   label: "Rough-In",              stage: 3, status: :in_progress,  photos: %w[drywall-greatroom.jpg drywall-kitchen.jpg drywall-hallway.jpg drywall-bedroom.jpg] },
+    { key: "drywall",    label: "Drywall & Finishes",    stage: 4, status: :upcoming,     photos: %w[exterior-front.jpg exterior-porch.jpg exterior-garage.jpg exterior-side.jpg] },
+    { key: "finishes",   label: "Final Finishes",        stage: 5, status: :upcoming,     photos: %w[finishes-kitchen.jpg finishes-living.jpg finishes-primary-bath.jpg finishes-bedroom.jpg] }
   ].freeze
+
+  BUILD_STATUS = {
+    current_phase:       "Rough-In — Plumbing, Electrical, and HVAC",
+    current_phase_short: "Rough-In",
+    status_note:         "Plumbing rough-in is underway. Electrical crew starts Wednesday. HVAC ductwork begins Friday. The home is fully framed and sheathed.",
+    trade_on_site:       "T&M Plumbing (Signature preferred trade partner)",
+    next_milestone:      "Insulation, starting July 14, 2026",
+    projected_close:     "October 3, 2026",
+    delay_note:          "Framing ran 3 days behind due to rain delays the week of June 9. Currently back on schedule. No impact to close date.",
+    milestones: [
+      { label: "Foundation / Slab Pour",      planned: "April 28, 2026",    actual: "April 30, 2026",  status: :complete    },
+      { label: "Framing Start",               planned: "May 12, 2026",      actual: "May 14, 2026",    status: :complete    },
+      { label: "Framing Complete",            planned: "June 9, 2026",      actual: "June 12, 2026",   status: :complete    },
+      { label: "Rough-In (Plumbing/Elec/HVAC)", planned: "June 23, 2026",  actual: nil,               status: :in_progress },
+      { label: "Insulation",                  planned: "July 14, 2026",     actual: nil,               status: :upcoming    },
+      { label: "Drywall",                     planned: "July 21, 2026",     actual: nil,               status: :upcoming    },
+      { label: "Paint",                       planned: "August 4, 2026",    actual: nil,               status: :upcoming    },
+      { label: "Cabinets Installed",          planned: "August 11, 2026",   actual: nil,               status: :upcoming    },
+      { label: "Countertops",                 planned: "August 25, 2026",   actual: nil,               status: :upcoming    },
+      { label: "Trim / Millwork",             planned: "September 2, 2026", actual: nil,               status: :upcoming    },
+      { label: "Final Walkthrough",           planned: "September 22, 2026",actual: nil,               status: :upcoming    }
+    ].freeze
+  }.freeze
 
   DOCUMENTS = [
     # Add documents here when sample PDFs are provided.
@@ -64,20 +84,23 @@ module DemoData
   ].freeze
 
   FAMILY = [
-    { key: "chris",  name: "Chris",  full: "Chris Morgan",  role: "Dad",      age_note: "adult"       },
-    { key: "cindy",  name: "Cindy",  full: "Cindy Morgan",  role: "Mom",      age_note: "adult"       },
-    { key: "sarah",  name: "Sarah",  full: "Sarah Morgan",  role: "Daughter", age_note: "8 years old" }
+    { key: "michael",   name: "Michael",   full: "Michael Harrison",   role: "Husband / Buyer", age_note: "adult"        },
+    { key: "sarah",     name: "Sarah",     full: "Sarah Harrison",     role: "Wife / Co-Buyer", age_note: "adult"        },
+    { key: "owen",      name: "Owen",      full: "Owen Harrison",      role: "Son",             age_note: "14 years old" },
+    { key: "lily",      name: "Lily",      full: "Lily Harrison",      role: "Daughter",        age_note: "11 years old" },
+    { key: "charlotte", name: "Charlotte", full: "Charlotte Harrison", role: "Daughter",        age_note: "7 years old"  }
   ].freeze
 
   ROOMS = [
-    { key: "master_bedroom",  label: "Master Bedroom",  type: :bedroom,  ask_purpose: false, ask_occupants: true },
-    { key: "master_bathroom", label: "Master Bathroom",  type: :bathroom, ask_purpose: false, ask_occupants: false },
-    { key: "bedroom_2",       label: "Bedroom 2",        type: :bedroom,  ask_purpose: false, ask_occupants: true  },
-    { key: "bedroom_3",       label: "Bedroom 3",        type: :bedroom,  ask_purpose: false, ask_occupants: true  },
-    { key: "bathroom_2",      label: "Bathroom 2",       type: :bathroom, ask_purpose: false, ask_occupants: false },
-    { key: "flex_room",       label: "Flex Room",        type: :flex,     ask_purpose: true,  ask_occupants: false },
-    { key: "kitchen",         label: "Kitchen",          type: :kitchen,  ask_purpose: false, ask_occupants: false },
-    { key: "living_room",     label: "Living Room",      type: :living,   ask_purpose: false, ask_occupants: false }
+    { key: "master_bedroom",  label: "Primary Suite",  type: :bedroom,  ask_purpose: false, ask_occupants: true },
+    { key: "master_bathroom", label: "Primary Bath",   type: :bathroom, ask_purpose: false, ask_occupants: false },
+    { key: "bedroom_2",       label: "Bedroom 2",      type: :bedroom,  ask_purpose: false, ask_occupants: true  },
+    { key: "bedroom_3",       label: "Bedroom 3",      type: :bedroom,  ask_purpose: false, ask_occupants: true  },
+    { key: "bedroom_4",       label: "Bedroom 4",      type: :bedroom,  ask_purpose: false, ask_occupants: true  },
+    { key: "bedroom_5",       label: "Bedroom 5",      type: :bedroom,  ask_purpose: false, ask_occupants: true  },
+    { key: "bathroom_2",      label: "Bathroom 2",     type: :bathroom, ask_purpose: false, ask_occupants: false },
+    { key: "kitchen",         label: "Kitchen",        type: :kitchen,  ask_purpose: false, ask_occupants: false },
+    { key: "living_room",     label: "Living Room",    type: :living,   ask_purpose: false, ask_occupants: false }
   ].freeze
 
   FLEX_PURPOSES = [
@@ -206,6 +229,19 @@ module DemoData
         { key: "forest_green",  label: "Forest Green",  swatch: "#3A5A44" }
       ] }
     ],
+    "bedroom_4" => [
+      { type: "flooring",   label: "Flooring",   multi: false, options: FLOORING_OPTIONS },
+      { type: "wall_color", label: "Wall Color",  multi: false, options: [
+        { key: "white_classic", label: "Classic White",  swatch: "#F5F4EF" },
+        { key: "blush",         label: "Soft Blush",     swatch: "#E8C8B8" },
+        { key: "lavender",      label: "Lavender Mist",  swatch: "#C4BAD8" },
+        { key: "sky_blue",      label: "Sky Blue",       swatch: "#A8C4D8" }
+      ] }
+    ],
+    "bedroom_5" => [
+      { type: "flooring",   label: "Flooring",   multi: false, options: FLOORING_OPTIONS },
+      { type: "wall_color", label: "Wall Color",  multi: false, options: NEUTRAL_WALL_OPTIONS }
+    ],
     "bathroom_2" => [
       { type: "floor_tile",     label: "Floor Tile",    multi: false, options: [
         { key: "carrara_marble", label: "Carrara Marble Look", swatch: "#E8E4DC", image: "design/flooring/flooring-carrara-tile.jpg" },
@@ -218,10 +254,6 @@ module DemoData
         { key: "wood_tone",    label: "Natural Wood Tone", swatch: "#A07850", image: "design/vanity/vanity-wood-tone.jpg" }
       ] },
       { type: "fixture_finish", label: "Fixture Finish", multi: false, options: FIXTURE_OPTIONS }
-    ],
-    "flex_room" => [
-      { type: "flooring",   label: "Flooring",   multi: false, options: FLOORING_OPTIONS },
-      { type: "wall_color", label: "Wall Color",  multi: false, options: NEUTRAL_WALL_OPTIONS }
     ],
     "kitchen" => [
       { type: "cabinet_style", label: "Cabinet Style", multi: false, options: [
@@ -274,6 +306,47 @@ module DemoData
       ] }
     ]
   }.freeze
+
+  # Locked selections from the June 5, 2026 design appointment.
+  # Used by seeds.rb to pre-populate the Harrison demo session.
+  CONFIRMED_SELECTIONS = [
+    # Main level flooring
+    { room_key: "living_room",    selection_type: "flooring",       option_key: "hardwood_oak",     option_label: "Natural Oak Hardwood" },
+    { room_key: "living_room",    selection_type: "wall_color",     option_key: "greige_warm",      option_label: "Warm Greige" },
+    { room_key: "living_room",    selection_type: "fireplace",      option_key: "standard",         option_label: "Standard Surround" },
+    { room_key: "living_room",    selection_type: "lighting",       option_key: "brass_pendant",    option_label: "Brass Pendant" },
+    # Kitchen
+    { room_key: "kitchen",        selection_type: "cabinet_style",  option_key: "shaker",           option_label: "Shaker" },
+    { room_key: "kitchen",        selection_type: "cabinet_color",  option_key: "greige",           option_label: "Soft Greige (Accessible Beige SW)" },
+    { room_key: "kitchen",        selection_type: "countertop",     option_key: "calacatta_quartz", option_label: "Calacatta Gold Quartz" },
+    { room_key: "kitchen",        selection_type: "backsplash",     option_key: "zellige",          option_label: "Zellige White" },
+    { room_key: "kitchen",        selection_type: "hardware",       option_key: "matte_black",      option_label: "Matte Black" },
+    # Primary Suite
+    { room_key: "master_bedroom", selection_type: "flooring",       option_key: "hardwood_oak",     option_label: "Natural Oak Hardwood" },
+    { room_key: "master_bedroom", selection_type: "wall_color",     option_key: "greige_warm",      option_label: "Warm Greige (Agreeable Gray SW)" },
+    { room_key: "master_bedroom", selection_type: "ceiling",        option_key: "standard",         option_label: "Standard Flat" },
+    # Primary Bathroom
+    { room_key: "master_bathroom", selection_type: "floor_tile",    option_key: "carrara_marble",   option_label: "Carrara Marble Look" },
+    { room_key: "master_bathroom", selection_type: "shower_tile",   option_key: "vertical_stack",   option_label: "Vertical Stack (24x48 Warm Gray Stone)" },
+    { room_key: "master_bathroom", selection_type: "vanity",        option_key: "modern_grey",      option_label: "Modern Grey (Two-tone: Black Magic lower / White upper)" },
+    { room_key: "master_bathroom", selection_type: "fixture_finish", option_key: "matte_black",     option_label: "Matte Black" },
+    # Owen's Room (Bedroom 2 — Hale Navy, guitar outlet)
+    { room_key: "bedroom_2",      selection_type: "flooring",       option_key: "carpet_oat",       option_label: "Warm Oat Carpet (Shaw Coastal Comfort)" },
+    { room_key: "bedroom_2",      selection_type: "wall_color",     option_key: "navy_deep",        option_label: "Deep Navy (Hale Navy BM)" },
+    # Lily's Room (Bedroom 3 — natural light, art)
+    { room_key: "bedroom_3",      selection_type: "flooring",       option_key: "carpet_oat",       option_label: "Warm Oat Carpet (Shaw Coastal Comfort)" },
+    { room_key: "bedroom_3",      selection_type: "wall_color",     option_key: "greige_warm",      option_label: "Warm Greige (Agreeable Gray SW)" },
+    # Charlotte's Room (Bedroom 4 — purple accent wall, high outlet)
+    { room_key: "bedroom_4",      selection_type: "flooring",       option_key: "carpet_oat",       option_label: "Warm Oat Carpet (Shaw Coastal Comfort)" },
+    { room_key: "bedroom_4",      selection_type: "wall_color",     option_key: "lavender",         option_label: "Lavender Mist (Violet Mist BM accent wall)" },
+    # Guest Room (Bedroom 5)
+    { room_key: "bedroom_5",      selection_type: "flooring",       option_key: "carpet_oat",       option_label: "Warm Oat Carpet (Shaw Coastal Comfort)" },
+    { room_key: "bedroom_5",      selection_type: "wall_color",     option_key: "white_classic",    option_label: "Classic White" },
+    # Bathroom 2
+    { room_key: "bathroom_2",     selection_type: "floor_tile",     option_key: "large_grey",       option_label: "Large Format Grey (12x24 Matte White Porcelain)" },
+    { room_key: "bathroom_2",     selection_type: "vanity",         option_key: "shaker_white",     option_label: "Shaker White" },
+    { room_key: "bathroom_2",     selection_type: "fixture_finish", option_key: "matte_black",      option_label: "Matte Black" }
+  ].freeze
 
   def self.room(key)
     ROOMS.find { |r| r[:key] == key.to_s }

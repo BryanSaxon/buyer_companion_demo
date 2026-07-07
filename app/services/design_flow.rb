@@ -71,10 +71,14 @@ class DesignFlow
 
   # Auto-generates the welcome message for new sessions
   def welcome_message
-    "Hi Chris and Cindy! Welcome to your design journey with #{lead.org_name}. " \
+    family = DemoData::FAMILY
+    buyers = family.select { |m| m[:age_note] == "adult" }.map { |m| m[:name] }
+    names  = buyers.any? ? "#{buyers.first(2).join(' and ')}!" : "there!"
+    home   = DemoData::HOME
+    "Hi #{names} Welcome to your design journey with #{lead.org_name}. " \
     "I'm your personal home concierge, and I'll be with you every step of the way as " \
-    "you plan your beautiful new home at Crystal Ridge. We have your Brookfield floor plan " \
-    "all set — 3 bedrooms, 2 bathrooms, plus a flex room you get to design exactly how you want. " \
+    "you plan your beautiful new home. We have your #{home[:floorplan]} floor plan " \
+    "all set — #{home[:bedrooms]} bedrooms, #{home[:bathrooms]} bathrooms. " \
     "Ready to start planning together?"
   end
 
@@ -134,7 +138,7 @@ class DesignFlow
     end
     session.begin_planning!
     result = plan_first_room
-    result[:message] = "Here's your Brookfield floor plan for reference — " \
+    result[:message] = "Here's your #{DemoData::HOME[:floorplan]} floor plan for reference — " \
                        "it'll help as we place everyone. " + result[:message]
     result
   end
@@ -180,18 +184,20 @@ class DesignFlow
   end
 
   def handle_welcome_info
+    designer = DemoData::HOME[:designer]
     msg = "Of course! Here's how it works: we'll start by mapping out every room — " \
           "who's sleeping where, what you'll use your flex room for. Then we'll get a sense " \
           "of your design style. After that, we'll go room by room picking finishes: flooring, " \
           "wall colors, tile, hardware — all of it. At the end, you'll have a complete design " \
-          "brief ready for your meeting with Megan. It usually takes about 15–20 minutes, and " \
+          "brief ready for your meeting with #{designer}. It usually takes about 15–20 minutes, and " \
           "you can pause and come back any time. Ready?"
     { message: msg, component_html: render_component("chat_components/welcome_prompt", session: session, show_info_btn: false),
       component_type: "welcome_prompt", state: session.aasm_state, rooms_complete: 0, total_rooms: 8 }
   end
 
   def handle_off_topic(user_input, llm_result)
-    subject = llm_result["draft_email_subject"] || "Question from the Morgan family"
+    family_name = lead.last_name.presence || "family"
+    subject = llm_result["draft_email_subject"] || "Question from the #{family_name} family"
     body    = llm_result["draft_email_body"] || generate_draft_body(user_input)
 
     draft = session.draft_emails.create!(
@@ -400,8 +406,8 @@ class DesignFlow
     next_selection      = selections_for_room[next_idx]
     room                = DemoData.room(room_key)
     skip_msg = next_selection.nil? ?
-      "That's totally okay — Megan will help you land on #{label.downcase} at your design meeting. Let's wrap up #{friendly_room_label(room_key)}!" :
-      "No worries at all — Megan will sort out #{label.downcase} with you at your meeting. Let's move on to #{next_selection[:label].downcase}."
+      "That's totally okay — #{DemoData::HOME[:designer]} will help you land on #{label.downcase} at your design meeting. Let's wrap up #{friendly_room_label(room_key)}!" :
+      "No worries at all — #{DemoData::HOME[:designer]} will sort out #{label.downcase} with you at your meeting. Let's move on to #{next_selection[:label].downcase}."
 
     advance_design_cursor(skip_msg)
   end
@@ -440,10 +446,13 @@ class DesignFlow
   def handle_summary_done
     session.finish_summary!
     session.save!
-    date = DemoData.next_design_meeting_date
-    msg  = "Chris and Cindy, your design selections are complete — and they are going to be stunning. " \
-           "We can't wait to see you at your design meeting with Megan on #{date}. " \
-           "She'll have everything laid out so you can see it all in person. " \
+    date     = DemoData.next_design_meeting_date
+    designer = DemoData::HOME[:designer]
+    family   = session.effective_family.select { |m| m[:age_note] == "adult" }.map { |m| m[:name] }
+    names    = family.any? ? family.first(2).join(" and ") : "there"
+    msg  = "#{names}, your design selections are complete — and they are going to be stunning. " \
+           "We can't wait to see you at your design meeting with #{designer} on #{date}. " \
+           "They'll have everything laid out so you can see it all in person. " \
            "Thank you so much for planning your home with #{lead.org_name}!"
     { message: msg, component_html: nil, component_type: nil,
       state: "complete", rooms_complete: 8, total_rooms: 8 }
@@ -696,7 +705,8 @@ class DesignFlow
       DemoData::DESIGN_STYLES.find { |s| s[:key] == k }&.dig(:label)
     }.join(", ")
 
-    context = "The Morgan family just selected '#{option_label}' for " \
+    family_name = lead.last_name.presence || "family"
+    context = "The #{family_name} family just selected '#{option_label}' for " \
               "#{selection_type.humanize.downcase} in the #{room[:label]}." \
               "#{styles.present? ? " Their design style is #{styles}." : ''}" \
               "#{is_last_in_room ?
@@ -722,7 +732,10 @@ class DesignFlow
   end
 
   def generate_draft_body(question)
-    "Hi Megan,\n\nChris and Cindy had a question that came up during their design planning:\n\n" \
+    designer = DemoData::HOME[:designer]
+    family   = session.effective_family.select { |m| m[:age_note] == "adult" }.map { |m| m[:name] }
+    names    = family.any? ? family.first(2).join(" and ") : "the family"
+    "Hi #{designer},\n\n#{names} had a question that came up:\n\n" \
     "\"#{question}\"\n\n" \
     "Could you follow up with them when you get a chance? Thank you!\n\n" \
     "— Their Home Companion"
