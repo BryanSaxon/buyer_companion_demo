@@ -1,7 +1,7 @@
 module DemoData
   HOME = {
     community: "Reeds Vale",
-    phase:     "Final Phase",
+    phase:     "Stage 3 — Rough-In",
     lot:       "Home Site 405",
     floorplan: "The Amelia",
     bedrooms:  5,
