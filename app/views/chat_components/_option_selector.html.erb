@@ -6,10 +6,10 @@
      data-multi="<%= selection[:multi] %>">
 
   <!-- Room context header -->
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #F0EEE9">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #F0F0EE">
     <div style="width:6px;height:6px;border-radius:50%;background:<%= locked ? '#22a06b' : '#F5A623' %>;flex:none" data-room-dot></div>
     <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac"><%= room_config[:label] %></span>
-    <div style="flex:1;height:1px;background:#F0EEE9"></div>
+    <div style="flex:1;height:1px;background:#F0F0EE"></div>
     <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:<%= locked ? '#22a06b' : '#F5A623' %>" data-selection-label><%= locked ? "✓ #{selection[:label]}" : selection[:label] %></span>
     <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#22a06b;display:none" data-lock-indicator>✓ <%= selection[:label] %></span>
   </div>
