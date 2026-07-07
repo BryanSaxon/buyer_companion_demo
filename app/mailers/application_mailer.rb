@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "Buyer Companion <noreply@#{Rails.application.credentials.app_host || 'example.com'}>"
+  default from: "Buyer Companion <#{Rails.application.credentials.dig(:notifications, :email) || 'noreply@example.com'}>"
   layout "mailer"
 end
