@@ -1,7 +1,7 @@
 <div data-build-tabs style="animation:scRise .65s ease both">
 
   <!-- ── Tab bar ───────────────────────────────────────────────── -->
-  <div style="display:flex;position:sticky;top:0;z-index:5;background:rgba(247,246,243,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #E5E7EB">
+  <div style="display:flex;position:sticky;top:0;z-index:5;background:rgba(247,247,246,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #E5E7EB">
     <button onclick="window.switchBuildTab(this,'design')" data-build-tab="design"
             style="flex:1;padding:12px 16px;border:none;border-bottom:2px solid #F5A623;background:none;cursor:pointer;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#F5A623;-webkit-tap-highlight-color:transparent">
       Design Journey
@@ -9,6 +9,10 @@
     <button onclick="window.switchBuildTab(this,'progress')" data-build-tab="progress"
             style="flex:1;padding:12px 16px;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;-webkit-tap-highlight-color:transparent">
       Build Progress
+    </button>
+    <button onclick="window.switchBuildTab(this,'documents')" data-build-tab="documents"
+            style="flex:1;padding:12px 16px;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;-webkit-tap-highlight-color:transparent">
+      Documents
     </button>
   </div>
 
@@ -271,6 +275,61 @@
     </div>
 
   </div><!-- /data-build-panel="progress" -->
+
+  <!-- ── Documents panel ──────────────────────────────────────── -->
+  <div data-build-panel="documents" style="padding:28px 28px 48px;display:none">
+
+    <div style="margin-bottom:24px">
+      <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:4px">Documents</div>
+      <div style="font:700 20px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em">Your Home Documents</div>
+      <div style="font:400 12.5px 'Sora',system-ui;color:#9aa0ac;margin-top:4px">Contracts, warranties, and important paperwork</div>
+    </div>
+
+    <% if DemoData::DOCUMENTS.any? %>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <% DemoData::DOCUMENTS.each do |doc| %>
+          <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;align-items:center;gap:14px">
+            <!-- PDF icon -->
+            <div style="width:40px;height:40px;border-radius:10px;background:#FEF2F2;border:1px solid #FECACA;display:flex;align-items:center;justify-content:center;flex:none">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                <line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="11" y2="11"/>
+              </svg>
+            </div>
+            <!-- Doc info -->
+            <div style="flex:1;min-width:0">
+              <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= doc[:name] %></div>
+              <div style="font:400 10.5px 'Sora',system-ui;color:#9aa0ac;margin-top:2px"><%= doc[:category] %><% if doc[:size].present? %> &middot; <%= doc[:size] %><% end %></div>
+            </div>
+            <!-- Actions -->
+            <div style="display:flex;gap:8px;flex:none">
+              <a href="<%= asset_path("documents/#{doc[:file]}") %>" target="_blank" rel="noopener"
+                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F5F5F3;border:1px solid #E5E7EB;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:background .12s"
+                 onmouseover="this.style.background='#EAEAE7'" onmouseout="this.style.background='#F5F5F3'">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </a>
+              <a href="<%= asset_path("documents/#{doc[:file]}") %>" download="<%= doc[:name] %>"
+                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F5A623;border:none;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:filter .12s"
+                 onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download
+              </a>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div style="text-align:center;padding:48px 24px">
+        <div style="width:52px;height:52px;border-radius:14px;background:#F5F5F3;border:1.5px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8ccd4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A;margin-bottom:4px">No documents yet</div>
+        <div style="font:400 12px 'Sora',system-ui;color:#9aa0ac">Your contracts and important paperwork will appear here.</div>
+      </div>
+    <% end %>
+
+  </div><!-- /data-build-panel="documents" -->
 
   <script>
     window.switchBuildTab = function(btn, tab) {

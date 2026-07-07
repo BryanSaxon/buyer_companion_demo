@@ -58,6 +58,11 @@ module DemoData
     { key: "finishes",   label: "Finishes",              stage: 5, status: :upcoming,     photos: %w[finishes-kitchen.jpg finishes-living.jpg finishes-primary-bath.jpg finishes-bedroom.jpg] }
   ].freeze
 
+  DOCUMENTS = [
+    # Add documents here when sample PDFs are provided.
+    # Format: { name: "Display Name", file: "filename.pdf", category: "Category", size: "1.2 MB" }
+  ].freeze
+
   FAMILY = [
     { key: "chris",  name: "Chris",  full: "Chris Morgan",  role: "Dad",      age_note: "adult"       },
     { key: "cindy",  name: "Cindy",  full: "Cindy Morgan",  role: "Mom",      age_note: "adult"       },
