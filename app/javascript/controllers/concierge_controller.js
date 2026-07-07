@@ -309,7 +309,7 @@ export default class extends Controller {
   appendTypingIndicator() {
     const div = document.createElement("div")
     div.style.cssText = "display:flex;margin:0 0 11px;justify-content:flex-start"
-    div.innerHTML = `<div style="max-width:88%;background:#fff;color:#1A1A1A;padding:11px 15px;border-radius:16px 16px 16px 5px;border:1px solid #E5E7EB;box-shadow:0 1px 6px rgba(0,0,0,.04)"><span style="display:inline-flex;align-items:center;gap:8px">${HOUSE_SVG}<span style="font:500 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Thinking</span></span></div>`
+    div.innerHTML = `<div style="display:inline-block;background:#fff;color:#1A1A1A;padding:10px 14px;border-radius:16px 16px 16px 5px;border:1px solid #E5E7EB;box-shadow:0 1px 6px rgba(0,0,0,.04)"><span style="display:inline-flex;align-items:center;gap:8px">${HOUSE_SVG}<span style="font:500 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Thinking</span></span></div>`
     this.messageAreaTarget.appendChild(div)
     return div
   }
