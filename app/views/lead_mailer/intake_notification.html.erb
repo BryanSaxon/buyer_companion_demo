@@ -1,0 +1,46 @@
+<div class="header">
+  <div class="header-label">New Buyer Inquiry</div>
+  <div class="header-title"><%= @lead.first_name %> <%= @lead.last_name %></div>
+</div>
+
+<div class="body">
+  <div class="section-title">Contact</div>
+  <div class="card">
+    <div class="field-row">
+      <span class="field-label">Name</span>
+      <span class="field-value"><%= @lead.first_name %> <%= @lead.last_name %></span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Email</span>
+      <span class="field-value"><%= @lead.email %></span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Company / Builder</span>
+      <span class="field-value"><%= @lead.company %></span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Submitted</span>
+      <span class="field-value"><%= @submitted_at.strftime("%B %-d, %Y at %-I:%M %p %Z") %></span>
+    </div>
+  </div>
+
+  <div class="section-title">Home</div>
+  <div class="card">
+    <div class="field-row">
+      <span class="field-label">Community</span>
+      <span class="field-value"><%= @community %></span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Plan</span>
+      <span class="field-value"><%= @home[:floorplan] %></span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Specs</span>
+      <span class="field-value"><%= @home[:bedrooms] %>bd · <%= @home[:bathrooms] %>ba · <%= @home[:sqft] %> sq ft</span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Phase / Lot</span>
+      <span class="field-value">Phase <%= @home[:phase] %> · Lot <%= @home[:lot] %></span>
+    </div>
+  </div>
+</div>

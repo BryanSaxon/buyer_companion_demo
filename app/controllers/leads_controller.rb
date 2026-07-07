@@ -4,6 +4,7 @@ class LeadsController < ApplicationController
 
     if @lead.persisted?
       session[:lead_id] = @lead.id
+      LeadMailer.intake_notification(@lead).deliver_later
       render json: { success: true, lead_id: @lead.id }
       return
     end
@@ -13,6 +14,7 @@ class LeadsController < ApplicationController
     if @lead.save
       @lead.create_design_session!
       session[:lead_id] = @lead.id
+      LeadMailer.intake_notification(@lead).deliver_later
       render json: { success: true, lead_id: @lead.id }
     else
       render json: { success: false, errors: @lead.errors.as_json }, status: :unprocessable_entity
