@@ -70,7 +70,7 @@ class ConciergeLlm
     27. Sales Manager: Kassie Holley — kholley@e-signaturehomes.com
 
     Community Description: Reeds Vale is located in College Grove, TN — a mountain-inspired resort
-    community by Signature Homes. Just 15 minutes from Downtown Franklin and ~30 minutes from Nashville.
+    community by {{BUILDER}}. Just 15 minutes from Downtown Franklin and ~30 minutes from Nashville.
     It is in its FINAL PHASE — once these lots sell, no more will be available in this community.
 
     Amenities: Resort-style pool, Pickleball courts, Grand Social Space, State-of-the-art fitness studio,
@@ -158,7 +158,7 @@ class ConciergeLlm
 
     DESIGN APPOINTMENT
     81. Date: June 5, 2026 at 10:00 AM
-    82. Location: Signature Homes Design Studio, Franklin, TN
+    82. Location: {{BUILDER}} Design Studio, Franklin, TN
     83. Designer / Sales Manager: Kassie Holley — kholley@e-signaturehomes.com
     84. Status: COMPLETED — all selections confirmed and locked
 
@@ -494,8 +494,9 @@ class ConciergeLlm
   private
 
   def build_system_prompt(lead, state_context)
+    constraints = HARD_CONSTRAINTS.gsub("{{BUILDER}}", lead.org_name)
     <<~PROMPT
-      #{HARD_CONSTRAINTS}
+      #{constraints}
 
       Builder brand: #{lead.org_name}
       Current flow context: #{state_context}
