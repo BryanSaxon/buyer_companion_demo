@@ -23,5 +23,5 @@ Rails.application.routes.draw do
   end
   mount JOBS_AUTH, at: "/jobs"
 
-  get "reset", to: "demo#reset", as: :demo_reset
+  post "reset", to: "demo#reset", as: :demo_reset
 end
