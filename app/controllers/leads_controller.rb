@@ -26,7 +26,7 @@ class LeadsController < ApplicationController
   def send_notification(lead)
     LeadMailer.intake_notification(lead, ip_address: request.remote_ip).deliver_now
   rescue StandardError => e
-    Rails.logger.error("LeadMailer failed: #{e.class}: #{e.message}")
+    Rails.logger.error("LeadMailer failed: #{e.class}: #{e.message}\n#{e.backtrace.first(5).join("\n")}")
   end
 
   def lead_params
