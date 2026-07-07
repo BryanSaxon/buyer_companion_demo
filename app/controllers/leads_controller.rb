@@ -4,7 +4,7 @@ class LeadsController < ApplicationController
 
     if @lead.persisted?
       session[:lead_id] = @lead.id
-      LeadMailer.intake_notification(@lead, ip_address: request.remote_ip).deliver_now
+      send_notification(@lead)
       render json: { success: true, lead_id: @lead.id }
       return
     end
@@ -14,7 +14,7 @@ class LeadsController < ApplicationController
     if @lead.save
       @lead.create_design_session!(aasm_state: "complete")
       session[:lead_id] = @lead.id
-      LeadMailer.intake_notification(@lead, ip_address: request.remote_ip).deliver_now
+      send_notification(@lead)
       render json: { success: true, lead_id: @lead.id }
     else
       render json: { success: false, errors: @lead.errors.as_json }, status: :unprocessable_entity
@@ -23,10 +23,15 @@ class LeadsController < ApplicationController
 
   private
 
+  def send_notification(lead)
+    LeadMailer.intake_notification(lead, ip_address: request.remote_ip).deliver_now
+  rescue StandardError => e
+    Rails.logger.error("LeadMailer failed: #{e.class}: #{e.message}")
+  end
+
   def lead_params
     params.require(:lead).permit(:first_name, :last_name, :email, :company).tap do |p|
       p[:email] = p[:email].to_s.strip.downcase
     end
   end
-
 end
