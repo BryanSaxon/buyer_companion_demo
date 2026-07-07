@@ -81,7 +81,6 @@
             </div>
 
             <div class="chat-messages" data-concierge-target="messageArea">
-              <% last_concierge = @messages.select { |m| m.role == "concierge" }.last %>
               <% @messages.each do |msg| %>
                 <% if msg.role == "user" %>
                   <div style="display:flex;margin:0 0 11px;justify-content:flex-end">
@@ -89,67 +88,11 @@
                       <%= h msg.content %>
                     </div>
                   </div>
-                <% else %>
-                  <div style="display:flex;flex-direction:column;margin:0 0 11px;justify-content:flex-start;gap:6px">
-                    <% if msg.content.present? %>
-                      <div style="max-width:88%;overflow-wrap:break-word;background:#fff;color:#1A1A1A;padding:11px 15px;border-radius:16px 16px 16px 5px;font:400 14.5px/1.52 'Sora',system-ui;border:1px solid #E5E7EB;box-shadow:0 1px 6px rgba(0,0,0,.04)">
-                        <%= h msg.content %>
-                      </div>
-                    <% end %>
-                    <% if msg.component_html.present? && msg != last_concierge && !@session.complete? %>
-                      <% rk = msg.component_html.match(/data-room-key="([^"]+)"/)&.[](1) %>
-                      <% if msg.component_type == "welcome_prompt" %>
-                        <%= render partial: "chat_components/welcome_prompt", locals: { locked: true } %>
-                      <% elsif msg.component_type == "household_recap" %>
-                        <%= render partial: "chat_components/household_recap",
-                                   locals: { family: @session.effective_family, locked: true } %>
-                      <% elsif msg.component_type == "option_selector" %>
-                        <% st = msg.component_html.match(/data-selection-type="([^"]+)"/)&.[](1) %>
-                        <% sel_cfg = rk && st ? DemoData.selections_for(rk).find { |s| s[:type].to_s == st } : nil %>
-                        <% prior_sel = rk && st ? @session.design_selections.find_by(room_key: rk, selection_type: st) : nil %>
-                        <% if sel_cfg %>
-                          <%= render partial: "chat_components/option_selector",
-                                     locals: { selection: sel_cfg, room_key: rk,
-                                               prior_selection: prior_sel, locked: true } %>
-                        <% else %>
-                          <%= msg.component_html.html_safe %>
-                        <% end %>
-                      <% elsif msg.component_type == "occupant_selector" && rk %>
-                        <% rp = @session.room_plans.find_by(room_key: rk) %>
-                        <% occ_keys = rp&.occupants ? (JSON.parse(rp.occupants) rescue []) : [] %>
-                        <% room_cfg = DemoData.room(rk) %>
-                        <% if room_cfg %>
-                          <%= render partial: "chat_components/occupant_selector",
-                                     locals: { room: room_cfg, remaining_family: @session.effective_family,
-                                               show_floorplan: true, locked: true,
-                                               selected_occupant_keys: occ_keys } %>
-                        <% else %>
-                          <%= msg.component_html.html_safe %>
-                        <% end %>
-                      <% elsif msg.component_type == "room_purpose" && rk %>
-                        <% rp = @session.room_plans.find_by(room_key: rk) %>
-                        <% room_cfg = DemoData.room(rk) %>
-                        <% if room_cfg %>
-                          <%= render partial: "chat_components/room_purpose",
-                                     locals: { room: room_cfg, locked: true,
-                                               selected_purpose: rp&.purpose } %>
-                        <% else %>
-                          <%= msg.component_html.html_safe %>
-                        <% end %>
-                      <% elsif msg.component_type == "style_picker" %>
-                        <%= render partial: "chat_components/style_picker",
-                                   locals: { session: @session, locked: true,
-                                             chosen_styles: @session.design_styles_array } %>
-                      <% elsif msg.component_type == "progress_card" && rk %>
-                        <% rc = msg.component_html[/(\d+)\s+of\s+8\b/, 1].to_i %>
-                        <%= render partial: "chat_components/progress_card",
-                                   locals: { session: @session, room_key: rk,
-                                             rooms_complete: rc.positive? ? rc : @session.rooms_complete_count,
-                                             show_button: false } %>
-                      <% else %>
-                        <%= msg.component_html.html_safe %>
-                      <% end %>
-                    <% end %>
+                <% elsif msg.content.present? %>
+                  <div style="display:flex;margin:0 0 11px;justify-content:flex-start">
+                    <div style="max-width:88%;overflow-wrap:break-word;background:#fff;color:#1A1A1A;padding:11px 15px;border-radius:16px 16px 16px 5px;font:400 14.5px/1.52 'Sora',system-ui;border:1px solid #E5E7EB;box-shadow:0 1px 6px rgba(0,0,0,.04)">
+                      <%= h msg.content %>
+                    </div>
                   </div>
                 <% end %>
               <% end %>
