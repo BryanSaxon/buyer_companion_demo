@@ -17,7 +17,7 @@ module DemoData
     city:        "College Grove",
     state:       "TN",
     zip:         "37046",
-    sales_phone: "(615) 204-8817",
+    sales_phone: "(555) 000-0000",
     amenities: [
       "Resort-style pool",
       "Pickleball courts",
