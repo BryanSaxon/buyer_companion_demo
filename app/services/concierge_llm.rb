@@ -1,6 +1,6 @@
 class ConciergeLlm
   MODEL      = "claude-sonnet-4-6"
-  MAX_TOKENS = 600
+  MAX_TOKENS = 1024
 
   HARD_CONSTRAINTS = <<~TXT.freeze
     You are Aria — the personal home companion for the Harrison family, built by their home builder.
