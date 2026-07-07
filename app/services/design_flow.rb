@@ -196,8 +196,9 @@ class DesignFlow
   end
 
   def handle_off_topic(user_input, llm_result)
-    family_name = lead.last_name.presence || "family"
-    subject = llm_result["draft_email_subject"] || "Question from the #{family_name} family"
+    adults = session.effective_family.select { |m| m[:age_note] == "adult" }
+    family_last = adults.first&.dig(:full)&.split&.last || lead.last_name.presence || "family"
+    subject = llm_result["draft_email_subject"] || "Question from the #{family_last} family"
     body    = llm_result["draft_email_body"] || generate_draft_body(user_input)
 
     draft = session.draft_emails.create!(
