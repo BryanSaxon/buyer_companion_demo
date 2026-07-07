@@ -17,7 +17,7 @@ class ConciergeLlm
     1.  Buyer first name: Michael
     2.  Buyer last name: Harrison
     3.  Buyer email: michael.harrison@gmail.com
-    4.  Buyer phone: (615) 204-8817
+    4.  Buyer phone: (555) 000-0001
     5.  Co-buyer first name: Sarah
     6.  Co-buyer last name: Harrison
     7.  Loan pre-qualification status: Approved — Conventional, 20% down
