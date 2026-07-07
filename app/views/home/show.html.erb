@@ -96,7 +96,7 @@
                         <%= h msg.content %>
                       </div>
                     <% end %>
-                    <% if msg.component_html.present? && msg != last_concierge %>
+                    <% if msg.component_html.present? && msg != last_concierge && !@session.complete? %>
                       <% rk = msg.component_html.match(/data-room-key="([^"]+)"/)&.[](1) %>
                       <% if msg.component_type == "welcome_prompt" %>
                         <%= render partial: "chat_components/welcome_prompt", locals: { locked: true } %>

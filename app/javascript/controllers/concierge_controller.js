@@ -67,7 +67,7 @@ export default class extends Controller {
       .then(data => this.handleResponse(data, typingEl))
       .catch(() => {
         typingEl.remove()
-        this.appendCompanionBubble("That's a great question for Megan at your design meeting — I've noted it. Shall we keep going?")
+        this.appendCompanionBubble("I ran into a hiccup on my end — please try again in a moment.")
         this.scrollToBottom()
       })
       .finally(() => { this.sending = false })
