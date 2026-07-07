@@ -47,7 +47,7 @@
             <span style="font:600 10.5px 'Sora',system-ui;color:#C27D1B"><%= phase[:label] %></span>
           </div>
         <% else %>
-          <div style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:#F5F5F3;border:1.5px dashed #D1D5DB">
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:#F4F5F7;border:1.5px dashed #D1D5DB">
             <span style="font:500 10.5px 'Sora',system-ui;color:#c8ccd4"><%= phase[:label] %></span>
           </div>
         <% end %>
@@ -76,7 +76,7 @@
             <span style="font:600 10.5px 'Sora',system-ui;color:#C27D1B"><%= room[:label] %></span>
           </button>
         <% else %>
-          <button style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#F5F5F3;border:1.5px dashed #D1D5DB;cursor:pointer;transition:filter .12s"
+          <button style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#F4F5F7;border:1.5px dashed #D1D5DB;cursor:pointer;transition:filter .12s"
                   onmouseover="this.style.filter='brightness(.96)'" onmouseout="this.style.filter=''"
                   data-action="click->concierge#showChat">
             <span style="font:500 10.5px 'Sora',system-ui;color:#c8ccd4"><%= room[:label] %></span>
@@ -168,7 +168,7 @@
                         <% sel_image = sel.pending? ? nil : image_for.call(sel) %>
                         <div style="display:flex;flex-direction:column;gap:7px">
                           <% if sel.pending? %>
-                            <div style="width:100%;aspect-ratio:3/2;border-radius:8px;border:1.5px dashed #D1D5DB;background:#FAFAFA;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
+                            <div style="width:100%;aspect-ratio:3/2;border-radius:8px;border:1.5px dashed #D1D5DB;background:#FAFBFC;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
                           <% elsif sel_image %>
                             <%= image_tag sel_image, style: "width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.08);display:block", loading: "lazy", alt: "" %>
                           <% else %>
@@ -200,7 +200,7 @@
                       <% sel_image = sel.pending? ? nil : image_for.call(sel) %>
                       <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:50px">
                         <% if sel.pending? %>
-                          <div style="width:42px;height:42px;border-radius:8px;border:1.5px dashed #D1D5DB;background:#FAFAFA;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
+                          <div style="width:42px;height:42px;border-radius:8px;border:1.5px dashed #D1D5DB;background:#FAFBFC;display:flex;align-items:center;justify-content:center;color:#c8ccd4;font:500 14px 'Sora',system-ui">—</div>
                         <% elsif sel_image %>
                           <%= image_tag sel_image, style: "width:42px;height:42px;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 6px rgba(0,0,0,.1);display:block", loading: "lazy", alt: "" %>
                         <% else %>
@@ -238,7 +238,7 @@
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
 
           <!-- Stage header -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #F0F0EE">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #ECEEF1">
             <div style="display:flex;align-items:center;gap:8px">
               <span style="font:700 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Stage <%= stage[:stage] %></span>
               <span style="font:600 12.5px 'Sora',system-ui;color:#1A1A1A"><%= stage[:label] %></span>
@@ -254,7 +254,7 @@
                 <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#C27D1B">In Progress</span>
               </div>
             <% else %>
-              <div style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;background:#F5F5F3;border:1.5px dashed #D1D5DB">
+              <div style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;background:#F4F5F7;border:1.5px dashed #D1D5DB">
                 <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#c8ccd4">Upcoming</span>
               </div>
             <% end %>
@@ -304,8 +304,8 @@
             <!-- Actions -->
             <div style="display:flex;gap:8px;flex:none">
               <a href="<%= asset_path("documents/#{doc[:file]}") %>" target="_blank" rel="noopener"
-                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F5F5F3;border:1px solid #E5E7EB;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:background .12s"
-                 onmouseover="this.style.background='#EAEAE7'" onmouseout="this.style.background='#F5F5F3'">
+                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F4F5F7;border:1px solid #E5E7EB;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:background .12s"
+                 onmouseover="this.style.background='#EAEAE7'" onmouseout="this.style.background='#F4F5F7'">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 View
               </a>
@@ -321,7 +321,7 @@
       </div>
     <% else %>
       <div style="text-align:center;padding:48px 24px">
-        <div style="width:52px;height:52px;border-radius:14px;background:#F5F5F3;border:1.5px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+        <div style="width:52px;height:52px;border-radius:14px;background:#F4F5F7;border:1.5px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8ccd4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A;margin-bottom:4px">No documents yet</div>
