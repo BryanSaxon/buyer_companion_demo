@@ -195,21 +195,10 @@ class DesignFlow
       component_type: "welcome_prompt", state: session.aasm_state, rooms_complete: 0, total_rooms: 8 }
   end
 
-  def handle_off_topic(user_input, llm_result)
-    adults = session.effective_family.select { |m| m[:age_note] == "adult" }
-    family_last = adults.first&.dig(:full)&.split&.last || lead.last_name.presence || "family"
-    subject = llm_result["draft_email_subject"] || "Question from the #{family_last} family"
-    body    = llm_result["draft_email_body"] || generate_draft_body(user_input)
-
-    draft = session.draft_emails.create!(
-      original_question: user_input,
-      subject: subject,
-      body: body
-    )
-
+  def handle_off_topic(_user_input, llm_result)
     { message: llm_result["message"],
-      component_html: render_component("chat_components/email_draft", draft: draft),
-      component_type: "email_draft",
+      component_html: nil,
+      component_type: nil,
       state: session.aasm_state,
       rooms_complete: session.rooms_complete_count,
       total_rooms: 8 }

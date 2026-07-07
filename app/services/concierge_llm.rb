@@ -422,9 +422,9 @@ class ConciergeLlm
     - Set is_off_topic: true ONLY when a question cannot be answered from this document at all
       (e.g., completely unrelated topics, specific current interest rates from their lender, legal
       disputes). When in doubt, attempt an answer.
-    - When is_off_topic is true: write a warm sentence saying you've drafted a note to Kassie so
-      she can follow up. Set draft_email_subject and draft_email_body addressed to Kassie Holley
-      at kholley@e-signaturehomes.com.
+    - When is_off_topic is true: write a warm 1–2 sentence message telling them you'll make sure
+      the team is aware of their question and someone will follow up with them directly. Do NOT
+      mention drafting an email. Do not set draft_email_subject or draft_email_body.
     - Set can_advance: false for conversational replies. Set can_advance: true when the user confirms
       a choice or is clearly ready to move forward.
     - Never invent details not in this document.
