@@ -22,25 +22,11 @@
       <span class="field-label">Submitted</span>
       <span class="field-value"><%= @submitted_at.strftime("%B %-d, %Y at %-I:%M %p %Z") %></span>
     </div>
-  </div>
-
-  <div class="section-title">Home</div>
-  <div class="card">
+    <% if @location.present? %>
     <div class="field-row">
-      <span class="field-label">Community</span>
-      <span class="field-value"><%= @community %></span>
+      <span class="field-label">Location</span>
+      <span class="field-value"><%= @location %></span>
     </div>
-    <div class="field-row">
-      <span class="field-label">Plan</span>
-      <span class="field-value"><%= @home[:floorplan] %></span>
-    </div>
-    <div class="field-row">
-      <span class="field-label">Specs</span>
-      <span class="field-value"><%= @home[:bedrooms] %>bd · <%= @home[:bathrooms] %>ba · <%= @home[:sqft] %> sq ft</span>
-    </div>
-    <div class="field-row">
-      <span class="field-label">Phase / Lot</span>
-      <span class="field-value">Phase <%= @home[:phase] %> · Lot <%= @home[:lot] %></span>
-    </div>
+    <% end %>
   </div>
 </div>
