@@ -79,7 +79,7 @@ module DemoData
   }.freeze
 
   DOCUMENTS = [
-    { name: "Reeds Vale Community Map", file: "reeds-vale-community-map.webp", category: "Community", size: "42 KB" }
+    { name: "Reeds Vale Community Map", file: "reeds-vale-community-map.png", category: "Community", size: "1.4 MB" }
   ].freeze
 
   FAMILY = [
