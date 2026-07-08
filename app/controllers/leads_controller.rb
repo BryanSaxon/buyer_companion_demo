@@ -12,7 +12,6 @@ class LeadsController < ApplicationController
     @lead.assign_attributes(lead_params.except(:email))
 
     if @lead.save
-      @lead.create_design_session!(aasm_state: "complete")
       DemoSeeder.seed_harrison_session(@lead)
       session[:lead_id] = @lead.id
       send_notification(@lead)
