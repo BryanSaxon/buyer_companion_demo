@@ -137,40 +137,6 @@
       </div>
     <% else %>
 
-      <%# ── Design Styles ─────────────────────────────────────── %>
-      <% if selected_styles.any? %>
-        <div style="margin-bottom:24px">
-          <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ac;margin-bottom:12px;display:flex;align-items:center;gap:8px">
-            <span>Design Style</span>
-            <div style="flex:1;height:1px;background:#E5E7EB"></div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <% selected_styles.each do |style| %>
-              <div class="design-style-card">
-                <%# Top/left: style image %>
-                <% if style[:image] %>
-                  <%= image_tag style[:image], class: "design-style-card__image", loading: "lazy", alt: style[:label] %>
-                <% else %>
-                  <div class="design-style-card__image-placeholder">
-                    <span style="font:500 11px 'Sora',system-ui;color:#c8ccd4">No image</span>
-                  </div>
-                <% end %>
-                <%# Right: label + description %>
-                <div style="padding:20px 22px;background:#fff;display:flex;flex-direction:column;justify-content:center">
-                  <div style="font:600 9px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#F5A623;margin-bottom:6px">Your Style</div>
-                  <div style="font:700 18px/1.2 'Sora',system-ui;color:#1A1A1A;margin-bottom:10px"><%= style[:label] %></div>
-                  <% if style[:about] %>
-                    <div style="font:400 12.5px/1.65 'Sora',system-ui;color:#6b7280"><%= style[:about] %></div>
-                  <% else %>
-                    <div style="font:400 12.5px/1.65 'Sora',system-ui;color:#9aa0ac"><%= style[:desc] %></div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-
       <%# ── Room palettes ──────────────────────────────────────── %>
       <% image_for = lambda { |sel|
         DemoData.selections_for(sel.room_key)
