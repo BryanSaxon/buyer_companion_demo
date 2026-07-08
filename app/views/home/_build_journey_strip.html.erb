@@ -19,6 +19,39 @@
   <!-- ── Design Journey panel ─────────────────────────────────── -->
   <div data-build-panel="design" style="padding:28px 28px 48px;display:block">
 
+    <!-- ── Your Home hero — elevation + floor plans ────────────── -->
+    <div style="margin-bottom:28px">
+      <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:4px">Your Home</div>
+      <div style="font:700 20px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em;margin-bottom:4px"><%= DemoData::HOME[:floorplan] %></div>
+      <div style="font:400 12px 'Sora',system-ui;color:#9aa0ac;margin-bottom:14px"><%= DemoData::HOME[:bedrooms] %> bed &middot; <%= DemoData::HOME[:bathrooms] %> bath &middot; <%= DemoData::HOME[:sqft] %> sq ft &middot; Home Site <%= DemoData::HOME[:lot].gsub("Home Site ","") %></div>
+
+      <%# Front elevation %>
+      <%= image_tag "home/elevation.webp",
+            style: "width:100%;border-radius:14px;object-fit:cover;aspect-ratio:16/9;display:block;box-shadow:0 4px 20px rgba(0,0,0,.12);margin-bottom:12px",
+            loading: "lazy",
+            alt: "#{DemoData::HOME[:floorplan]} front elevation" %>
+
+      <%# Floor plans — side by side %>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;padding:8px 12px 4px">Main Floor</div>
+          <%= image_tag "home/floorplan-main.webp",
+                style: "width:100%;display:block;background:#fafafa",
+                loading: "lazy",
+                alt: "#{DemoData::HOME[:floorplan]} main floor plan" %>
+        </div>
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;padding:8px 12px 4px">Upper Floor</div>
+          <%= image_tag "home/floorplan-upper.webp",
+                style: "width:100%;display:block;background:#fafafa",
+                loading: "lazy",
+                alt: "#{DemoData::HOME[:floorplan]} upper floor plan" %>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:1px;background:#E5E7EB;margin-bottom:28px"></div>
+
     <!-- ── Journey progress heading ───────────────────────────── -->
     <div style="margin-bottom:18px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
@@ -316,13 +349,13 @@
             </div>
             <!-- Actions -->
             <div style="display:flex;gap:8px;flex:none">
-              <a href="<%= asset_path("documents/#{doc[:file]}") %>" target="_blank" rel="noopener"
+              <a href="<%= "/documents/#{doc[:file]}" %>" target="_blank" rel="noopener"
                  style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F4F5F7;border:1px solid #E5E7EB;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:background .12s"
                  onmouseover="this.style.background='#EAEAE7'" onmouseout="this.style.background='#F4F5F7'">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 View
               </a>
-              <a href="<%= asset_path("documents/#{doc[:file]}") %>" download="<%= doc[:name] %>"
+              <a href="<%= "/documents/#{doc[:file]}" %>" download="<%= doc[:name] %>"
                  style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F5A623;border:none;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:filter .12s"
                  onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>

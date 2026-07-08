@@ -95,7 +95,10 @@
             <!-- Community card -->
             <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04)">
               <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:6px">The Community</div>
-              <div style="font:700 15px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em;margin-bottom:2px"><%= DemoData::COMMUNITY[:name] %></div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+                <%= image_tag "community/reeds-vale-logo.svg", style: "width:36px;height:36px;flex:none", alt: "Reeds Vale" %>
+                <div style="font:700 15px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em"><%= DemoData::COMMUNITY[:name] %></div>
+              </div>
               <div style="font:400 11.5px 'Sora',system-ui;color:#9aa0ac;margin-bottom:12px"><%= DemoData::COMMUNITY[:tagline] %></div>
               <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;margin-bottom:6px">Amenities</div>
               <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
@@ -204,7 +207,10 @@
         <!-- Community card -->
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.04);margin-top:14px">
           <div style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#F5A623;margin-bottom:6px">The Community</div>
-          <div style="font:700 15px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em;margin-bottom:2px"><%= DemoData::COMMUNITY[:name] %></div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <%= image_tag "community/reeds-vale-logo.svg", style: "width:36px;height:36px;flex:none", alt: "Reeds Vale" %>
+            <div style="font:700 15px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.01em"><%= DemoData::COMMUNITY[:name] %></div>
+          </div>
           <div style="font:400 11.5px 'Sora',system-ui;color:#9aa0ac;margin-bottom:12px"><%= DemoData::COMMUNITY[:tagline] %></div>
 
           <!-- Amenities -->

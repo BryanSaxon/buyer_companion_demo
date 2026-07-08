@@ -50,7 +50,7 @@ module DemoData
   BUILD_STAGES = [
     { key: "foundation", label: "Foundation",            stage: 1, status: :complete,     photos: %w[foundation-lot.jpg foundation-wide.jpg foundation-rebar.jpg foundation-detail.jpg] },
     { key: "framing",    label: "Framing",               stage: 2, status: :complete,     photos: %w[framing-front.jpg framing-side.jpg framing-trusses.jpg framing-interior.jpg] },
-    { key: "rough_in",   label: "Rough-In",              stage: 3, status: :in_progress,  photos: %w[drywall-greatroom.jpg drywall-kitchen.jpg drywall-hallway.jpg drywall-bedroom.jpg] },
+    { key: "rough_in",   label: "Rough-In",              stage: 3, status: :in_progress,  photos: %w[roughin-electrical.jpg roughin-framing.jpg roughin-electric-box.jpg roughin-wiring.jpg] },
     { key: "drywall",    label: "Drywall & Finishes",    stage: 4, status: :upcoming,     photos: %w[exterior-front.jpg exterior-porch.jpg exterior-garage.jpg exterior-side.jpg] },
     { key: "finishes",   label: "Final Finishes",        stage: 5, status: :upcoming,     photos: %w[finishes-kitchen.jpg finishes-living.jpg finishes-primary-bath.jpg finishes-bedroom.jpg] }
   ].freeze
@@ -79,8 +79,7 @@ module DemoData
   }.freeze
 
   DOCUMENTS = [
-    # Add documents here when sample PDFs are provided.
-    # Format: { name: "Display Name", file: "filename.pdf", category: "Category", size: "1.2 MB" }
+    { name: "Reeds Vale Community Map", file: "reeds-vale-community-map.webp", category: "Community", size: "42 KB" }
   ].freeze
 
   FAMILY = [

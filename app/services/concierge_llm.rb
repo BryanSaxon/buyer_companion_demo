@@ -202,6 +202,10 @@ class ConciergeLlm
     A: Lily loves art and wanted great natural light. Her room is Bedroom 3. It's painted "Agreeable
     Gray" and gets morning light.
 
+    Q: What is the name of my floor plan?
+    A: Your floor plan is The Amelia — specifically the 7D elevation. 5 bedrooms, 4 full baths,
+    1 half bath, 4,177 sq ft, with a 3-car garage at Home Site 405.
+
     Q: What home are the Harrisons building?
     A: Home Site 405 at Reeds Vale in College Grove, Tennessee. It's The Amelia floor plan — 5 bedrooms,
     4 full bathrooms, 1 half bath, 4,177 square feet, with a 3-car garage.
