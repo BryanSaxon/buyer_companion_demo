@@ -42,10 +42,15 @@
 
         <div style="margin-top:16px">
           <label style="display:block;font:500 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;margin-bottom:8px">Your company</label>
-          <input data-intake-target="company" data-action="input->intake#clearError" type="text" placeholder="Your home-building company"
-            style="width:100%;padding:13px 14px;border:1px solid #E5E7EB;border-radius:10px;background:#fff;font:400 16px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,box-shadow .15s"
+          <select data-intake-target="company" data-action="change->intake#clearError"
+            style="width:100%;padding:13px 40px 13px 14px;border:1px solid #E5E7EB;border-radius:10px;background-color:#fff;font:400 16px 'Sora',system-ui;color:#1A1A1A;outline:none;transition:border-color .15s,box-shadow .15s;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239aa0ac' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 14px center;background-size:16px 16px"
             onfocus="this.style.borderColor='#F5A623';this.style.boxShadow='0 0 0 3px rgba(245,166,35,.18)'"
-            onblur="this.style.borderColor='#E5E7EB';this.style.boxShadow='none'" />
+            onblur="this.style.borderColor='#E5E7EB';this.style.boxShadow='none'">
+            <option value="" disabled selected>Select your company</option>
+            <% @builders.each do |builder| %>
+              <option value="<%= builder.name %>"><%= builder.name %></option>
+            <% end %>
+          </select>
           <div style="display:flex;align-items:center;gap:6px;margin-top:7px">
             <span style="width:5px;height:5px;border-radius:50%;background:#F5A623;flex:none"></span>
             <span style="font:400 12px 'Sora',system-ui;color:#9aa0ac">We'll brand the buyer experience with this name.</span>
