@@ -15,6 +15,20 @@ class Lead < ApplicationRecord
     company.to_s.strip.presence || "Bucker Labs"
   end
 
+  # Matching predefined builder for this lead's company (nil for legacy
+  # free-text companies that predate the dropdown).
+  def builder
+    # Fully-qualified: inside an ActiveRecord model, a bare `Builder` resolves
+    # to ActiveRecord::Associations::Builder, not our top-level registry.
+    ::Builder.find_by_name(company)
+  end
+
+  # Logo asset path when the company matches a predefined builder, else nil.
+  # Views fall back to org_initials when this is absent.
+  def logo_path
+    builder&.logo
+  end
+
   def org_initials
     clean = org_name.gsub(/[^a-zA-Z0-9 ]/, " ").strip
     words = clean.split.reject(&:empty?)
