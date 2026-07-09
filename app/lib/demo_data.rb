@@ -84,7 +84,7 @@ module DemoData
     { name: "Late Change Order Process",            file: "late-change-order-process.pdf",              category: "Change Orders", size: "152 KB" },
     { name: "What Happens Next & Milestones",       file: "what-happens-next-and-milestones.pdf",       category: "Build Process", size: "445 KB" },
     { name: "Preparing for Closing Day",            file: "faq-preparing-for-closing-day.pdf",          category: "Closing", size: "199 KB" },
-    { name: "Homeowner FAQ",                        file: "homeowner-faq.docx",                         category: "General", size: "18 KB" },
+    { name: "Homeowner FAQ",                        file: "homeowner-faq.pdf",                          category: "General", size: "58 KB" },
     { name: "Reeds Vale Community Map",             file: "reeds-vale-community-map.png",               category: "Community", size: "1.4 MB" }
   ].freeze
 
