@@ -11,15 +11,17 @@
 
     <!-- ============ BRAND BAR ============ -->
     <div class="brand-bar">
-      <!-- Left: identity -->
+      <!-- Left: identity — logo alone reads as the brand lockup; the wordmark is the name -->
       <% if org_logo %>
-        <div style="width:38px;height:38px;border-radius:12px;background:#fff;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;padding:4px"><%= image_tag org_logo, alt: org_name, style: "max-width:100%;max-height:100%;object-fit:contain;display:block" %></div>
+        <div style="flex:1;min-width:0;display:flex;align-items:center">
+          <%= image_tag org_logo, alt: org_name, style: "height:32px;width:auto;max-width:260px;object-fit:contain;object-position:left center;display:block" %>
+        </div>
       <% else %>
         <div style="width:38px;height:38px;border-radius:12px;background:#F5A623;color:#1A1A2E;display:flex;align-items:center;justify-content:center;font:700 14px 'Sora',system-ui;flex:none"><%= org_initials %></div>
+        <div style="min-width:0;flex:1">
+          <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= org_name %></div>
+        </div>
       <% end %>
-      <div style="min-width:0;flex:1">
-        <div style="font:600 14px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= org_name %></div>
-      </div>
 
       <!-- Center: desktop segmented nav — Concierge first, My Home second -->
       <nav class="brand-nav">
@@ -75,9 +77,9 @@
 
             <div class="chat-header-bar">
               <% if org_logo %>
-                <div style="position:relative;width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;padding:3px">
+                <div style="position:relative;width:40px;height:34px;border-radius:9px;background:#fff;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;padding:3px 5px">
                   <%= image_tag org_logo, alt: org_name, style: "max-width:100%;max-height:100%;object-fit:contain;display:block" %>
-                  <span style="position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#22a06b;border:2px solid #fff"></span>
+                  <span style="position:absolute;right:-3px;bottom:-3px;width:10px;height:10px;border-radius:50%;background:#22a06b;border:2px solid #fff"></span>
                 </div>
               <% else %>
                 <div style="position:relative;width:34px;height:34px;border-radius:50%;background:#F5A623;color:#1A1A2E;display:flex;align-items:center;justify-content:center;font:700 12px 'Sora',system-ui;flex:none">
