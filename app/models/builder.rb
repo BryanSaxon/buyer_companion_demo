@@ -11,7 +11,7 @@ class Builder
     [ "Robert Thomas Homes",    "builders/robert-thomas-homes.png" ],
     [ "Rockhaven Homes",        "builders/rockhaven-homes.png" ],
     [ "Schuber Mitchell Homes", "builders/schuber-mitchell-homes.avif" ],
-    [ "SIG Homes",              "builders/sig-homes.svg" ]
+    [ "Signature Homes",        "builders/sig-homes.svg" ]
   ].freeze
 
   attr_reader :name, :logo
