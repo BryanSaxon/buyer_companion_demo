@@ -79,7 +79,13 @@ module DemoData
   }.freeze
 
   DOCUMENTS = [
-    { name: "Reeds Vale Community Map", file: "reeds-vale-community-map.png", category: "Community", size: "1.4 MB" }
+    { name: "Plan Review & Design Appointment FAQ", file: "faq-plan-review-and-design-appointment.pdf", category: "Design", size: "297 KB" },
+    { name: "Design Appointment FAQ",               file: "faq-design-appointment.pdf",                 category: "Design", size: "196 KB" },
+    { name: "Late Change Order Process",            file: "late-change-order-process.pdf",              category: "Change Orders", size: "152 KB" },
+    { name: "What Happens Next & Milestones",       file: "what-happens-next-and-milestones.pdf",       category: "Build Process", size: "445 KB" },
+    { name: "Preparing for Closing Day",            file: "faq-preparing-for-closing-day.pdf",          category: "Closing", size: "199 KB" },
+    { name: "Homeowner FAQ",                        file: "homeowner-faq.docx",                         category: "General", size: "18 KB" },
+    { name: "Reeds Vale Community Map",             file: "reeds-vale-community-map.png",               category: "Community", size: "1.4 MB" }
   ].freeze
 
   FAMILY = [
