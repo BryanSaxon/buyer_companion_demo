@@ -1,0 +1,27 @@
+<% show_image = local_assigns.fetch(:show_image, true) %>
+<% locked = local_assigns.fetch(:locked, false) %>
+<div class="chat-component" data-component="approval_card">
+  <% if show_image %>
+    <%# Kitchen rendering — tap to enlarge in the global lightbox %>
+    <%= image_tag "home/kitchen-rendering.png",
+          style: "width:100%;display:block;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);cursor:zoom-in;margin-bottom:10px",
+          loading: "lazy",
+          onclick: "window.openLightbox(this.src, this.alt)",
+          title: "Tap to enlarge",
+          alt: "Your kitchen rendering" %>
+  <% end %>
+  <% unless locked %>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <button class="chat-component-btn chat-component-btn--primary"
+              data-action="click->concierge#sendSelection"
+              data-selection-type="approval_approve">
+        Yes, I approve these selections ✓
+      </button>
+      <button class="chat-component-btn chat-component-btn--secondary"
+              data-action="click->concierge#sendSelection"
+              data-selection-type="approval_reject">
+        I'd like to request a change
+      </button>
+    </div>
+  <% end %>
+</div>

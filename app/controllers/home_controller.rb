@@ -14,12 +14,14 @@ class HomeController < ApplicationController
 
     if @messages.empty?
       if @session.complete?
-        msg = post_design_welcome(@lead)
+        # Begin the design-approval loop: greet the buyer with the kitchen rendering to
+        # approve before we roll into the "officially in construction" message.
+        session[:approval_stage] = "awaiting_approval"
         @lead.chat_messages.create!(
-          role: "concierge", content: msg, message_type: "text",
-          component_type: nil, component_html: nil
+          role: "concierge", content: ApprovalFlow.intro_message, message_type: "text",
+          component_type: "approval_card", component_html: ApprovalFlow.intro_component_html
         )
-        @initial_component_html = nil
+        @initial_component_html = ApprovalFlow.intro_component_html
       else
         msg  = flow.welcome_message
         html = flow.welcome_component_html
@@ -30,19 +32,18 @@ class HomeController < ApplicationController
         @initial_component_html = html
       end
     else
-      @initial_component_html = @session.complete? ? nil : flow.next_component_html
+      # Re-show the correct interactive component on refresh, including mid-approval.
+      @initial_component_html =
+        if !@session.complete?
+          flow.next_component_html
+        elsif session[:approval_stage] == "awaiting_approval"
+          ApprovalFlow.intro_component_html
+        elsif session[:approval_stage] == "collecting_feedback"
+          ApprovalFlow.feedback_prompt_component_html
+        end
     end
 
     @messages = @lead.chat_messages.chronological
     PageView.record(event: "home_open", request: request, lead: @lead)
-  end
-
-  private
-
-  def post_design_welcome(lead)
-    status = DemoData::BUILD_STATUS
-    "Hi Michael! Your design selections are all locked in — congratulations, you're officially in construction! " \
-    "Your home is currently in the #{status[:current_phase_short]} phase. " \
-    "I'm here any time you have questions about the build, your selections, or what comes next. What's on your mind?"
   end
 end

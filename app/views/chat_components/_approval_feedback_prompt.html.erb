@@ -1,0 +1,12 @@
+<% locked = local_assigns.fetch(:locked, false) %>
+<div class="chat-component" data-component="approval_feedback_prompt">
+  <% unless locked %>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <button class="chat-component-btn chat-component-btn--primary"
+              data-action="click->concierge#sendSelection"
+              data-selection-type="approval_feedback_done">
+        No, that's everything →
+      </button>
+    </div>
+  <% end %>
+</div>

@@ -1,12 +1,9 @@
 class DemoController < ApplicationController
   def reset
-    lead = current_lead
-    lead.chat_messages.delete_all
-    lead.design_session&.destroy
+    DemoSeeder.reset_for(current_lead)
 
-    DemoSeeder.seed_harrison_session(lead)
-
-    session[:show_welcome] = true
+    session[:show_welcome]  = true
+    session.delete(:approval_stage)
     redirect_to home_path
   end
 end

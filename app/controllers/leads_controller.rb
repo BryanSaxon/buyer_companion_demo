@@ -3,8 +3,10 @@ class LeadsController < ApplicationController
     @lead = Lead.find_or_initialize_from_params(lead_params)
 
     if @lead.persisted?
+      DemoSeeder.reset_for(@lead)
       session[:lead_id] = @lead.id
       session[:show_welcome] = true
+      session.delete(:approval_stage)
       send_notification(@lead)
       render json: { success: true, lead_id: @lead.id }
       return
@@ -13,9 +15,10 @@ class LeadsController < ApplicationController
     @lead.assign_attributes(lead_params.except(:email))
 
     if @lead.save
-      DemoSeeder.seed_harrison_session(@lead)
+      DemoSeeder.reset_for(@lead)
       session[:lead_id] = @lead.id
       session[:show_welcome] = true
+      session.delete(:approval_stage)
       send_notification(@lead)
       render json: { success: true, lead_id: @lead.id }
     else

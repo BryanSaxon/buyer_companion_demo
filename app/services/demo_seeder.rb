@@ -19,6 +19,14 @@ module DemoSeeder
     session
   end
 
+  # Wipes chat + session and reseeds — used to start every sign-in / reset from a
+  # clean, completed state so the approval loop replays each time.
+  def self.reset_for(lead)
+    lead.chat_messages.delete_all
+    lead.design_session&.destroy
+    seed_harrison_session(lead)
+  end
+
   private
 
   def self.seed_room_plans(session)
