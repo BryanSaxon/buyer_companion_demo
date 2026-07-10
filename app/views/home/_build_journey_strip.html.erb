@@ -27,7 +27,7 @@
 
       <%# Front elevation — tap to zoom %>
       <%= image_tag "home/elevation.webp",
-            style: "width:100%;border-radius:14px;object-fit:cover;aspect-ratio:16/9;display:block;box-shadow:0 4px 20px rgba(0,0,0,.12);margin-bottom:12px;cursor:zoom-in",
+            style: "width:100%;border-radius:14px;object-fit:cover;aspect-ratio:16/9;display:block;box-shadow:0 4px 20px rgba(0,0,0,.12);margin-bottom:12px;cursor:zoom-in;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none",
             loading: "lazy",
             onclick: "window.openLightbox(this.src, this.alt)",
             title: "Tap to enlarge",
@@ -38,7 +38,7 @@
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
           <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;padding:8px 12px 4px">Main Floor</div>
           <%= image_tag "home/floorplan-main.webp",
-                style: "width:100%;display:block;background:#fafafa;cursor:zoom-in",
+                style: "width:100%;display:block;background:#fafafa;cursor:zoom-in;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none",
                 loading: "lazy",
                 onclick: "window.openLightbox(this.src, this.alt)",
                 title: "Tap to enlarge",
@@ -47,7 +47,7 @@
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
           <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;padding:8px 12px 4px">Upper Floor</div>
           <%= image_tag "home/floorplan-upper.webp",
-                style: "width:100%;display:block;background:#fafafa;cursor:zoom-in",
+                style: "width:100%;display:block;background:#fafafa;cursor:zoom-in;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none",
                 loading: "lazy",
                 onclick: "window.openLightbox(this.src, this.alt)",
                 title: "Tap to enlarge",
