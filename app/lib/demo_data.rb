@@ -74,7 +74,7 @@ module DemoData
       { label: "Cabinets Installed",          planned: "August 11, 2026",   actual: nil,               status: :upcoming    },
       { label: "Countertops",                 planned: "August 25, 2026",   actual: nil,               status: :upcoming    },
       { label: "Trim / Millwork",             planned: "September 2, 2026", actual: nil,               status: :upcoming    },
-      { label: "Final Walkthrough",           planned: "September 22, 2026",actual: nil,               status: :upcoming    }
+      { label: "Final Walkthrough",           planned: "September 22, 2026", actual: nil,               status: :upcoming    }
     ].freeze
   }.freeze
 
