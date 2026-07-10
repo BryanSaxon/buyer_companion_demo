@@ -652,7 +652,7 @@ class DesignFlow
   end
 
   # Returns a human-friendly room name using occupants or chosen purpose where available.
-  # e.g. "Sarah's Room", "Chris & Cindy's Room", "Home Gym", or fallback "Bedroom 3".
+  # e.g. "Owen's Room", "Michael & Sarah's Room", "Home Gym", or fallback "Bedroom 3".
   def friendly_room_label(room_key)
     room_config = DemoData.room(room_key)
     room_plan   = session.room_plans.find_by(room_key: room_key)
