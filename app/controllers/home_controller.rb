@@ -8,8 +8,9 @@ class HomeController < ApplicationController
 
     flow = DesignFlow.new(session: @session, lead: @lead)
 
-    # First time this buyer lands in the app after signing in — show the welcome modal once.
-    @show_welcome_modal = @messages.empty?
+    # Show the welcome modal once, right after the buyer signs in or resets the demo.
+    # (Flag is set by LeadsController#create and DemoController#reset, then consumed here.)
+    @show_welcome_modal = session.delete(:show_welcome).present?
 
     if @messages.empty?
       if @session.complete?

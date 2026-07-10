@@ -6,6 +6,7 @@ class DemoController < ApplicationController
 
     DemoSeeder.seed_harrison_session(lead)
 
+    session[:show_welcome] = true
     redirect_to home_path
   end
 end

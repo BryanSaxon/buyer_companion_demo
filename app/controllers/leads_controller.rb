@@ -4,6 +4,7 @@ class LeadsController < ApplicationController
 
     if @lead.persisted?
       session[:lead_id] = @lead.id
+      session[:show_welcome] = true
       send_notification(@lead)
       render json: { success: true, lead_id: @lead.id }
       return
@@ -14,6 +15,7 @@ class LeadsController < ApplicationController
     if @lead.save
       DemoSeeder.seed_harrison_session(@lead)
       session[:lead_id] = @lead.id
+      session[:show_welcome] = true
       send_notification(@lead)
       render json: { success: true, lead_id: @lead.id }
     else
