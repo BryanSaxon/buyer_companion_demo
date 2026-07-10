@@ -3,7 +3,7 @@ module DemoData
     community: "Reeds Vale",
     phase:     "Stage 3 — Rough-In",
     lot:       "Home Site 405",
-    floorplan: "The Amelia",
+    floorplan: "Chapman 1B",
     bedrooms:  5,
     bathrooms: 4.5,
     sqft:      "4,177",
@@ -31,7 +31,7 @@ module DemoData
       management:       nil,
       management_phone: nil,
       management_email: nil,
-      monthly_dues:     "$185 / month",
+      monthly_dues:     "$125 / month",
       initiation_fee:   nil,
       capital_contrib:  nil,
       covers:           "Common-area landscaping, amenity center, trails, community lighting."
@@ -43,14 +43,14 @@ module DemoData
       high:       "Page High School"
     }.freeze,
     floor_plans: [
-      { name: "The Amelia", beds: 5, baths: 4.5, sqft: "4,177" }
+      { name: "Chapman 1B", beds: 5, baths: 4.5, sqft: "4,177" }
     ].freeze
   }.freeze
 
   BUILD_STAGES = [
     { key: "foundation", label: "Foundation",            stage: 1, status: :complete,     photos: %w[foundation-lot.jpg foundation-wide.jpg foundation-rebar.jpg foundation-detail.jpg] },
     { key: "framing",    label: "Framing",               stage: 2, status: :complete,     photos: %w[framing-front.jpg framing-side.jpg framing-trusses.jpg framing-interior.jpg] },
-    { key: "rough_in",   label: "Rough-In",              stage: 3, status: :in_progress,  photos: %w[roughin-electrical.jpg roughin-framing.jpg roughin-electric-box.jpg roughin-wiring.jpg] },
+    { key: "rough_in",   label: "Rough-In",              stage: 3, status: :in_progress,  photos: %w[roughin-electrical.jpg roughin-framing.jpg] },
     { key: "drywall",    label: "Drywall & Finishes",    stage: 4, status: :upcoming,     photos: %w[exterior-front.jpg exterior-porch.jpg exterior-garage.jpg exterior-side.jpg] },
     { key: "finishes",   label: "Final Finishes",        stage: 5, status: :upcoming,     photos: %w[finishes-kitchen.jpg finishes-living.jpg finishes-primary-bath.jpg finishes-bedroom.jpg] }
   ].freeze
@@ -78,14 +78,47 @@ module DemoData
     ].freeze
   }.freeze
 
-  DOCUMENTS = [
-    { name: "Plan Review & Design Appointment FAQ", file: "faq-plan-review-and-design-appointment.pdf", category: "Design", size: "297 KB" },
-    { name: "Design Appointment FAQ",               file: "faq-design-appointment.pdf",                 category: "Design", size: "196 KB" },
-    { name: "Late Change Order Process",            file: "late-change-order-process.pdf",              category: "Change Orders", size: "152 KB" },
-    { name: "What Happens Next & Milestones",       file: "what-happens-next-and-milestones.pdf",       category: "Build Process", size: "445 KB" },
-    { name: "Preparing for Closing Day",            file: "faq-preparing-for-closing-day.pdf",          category: "Closing", size: "199 KB" },
-    { name: "Homeowner FAQ",                        file: "homeowner-faq.pdf",                          category: "General", size: "58 KB" },
-    { name: "Reeds Vale Community Map",             file: "reeds-vale-community-map.png",               category: "Community", size: "1.4 MB" }
+  # Documents are grouped into collapsible folders. The Purchase Agreement
+  # Paperwork folder holds everything a lender needs and sits at the top.
+  # Folders with an empty :documents list render an explanatory empty-state.
+  DOCUMENT_FOLDERS = [
+    {
+      name:  "Purchase Agreement Paperwork",
+      blurb: "Everything your lender will need",
+      open:  true,
+      documents: [
+        { name: "Sales Contract", file: "sales-contract.pdf", size: "325 KB" }
+      ]
+    },
+    {
+      name:  "General Info & FAQs",
+      blurb: "Guides for every step of your build",
+      documents: [
+        { name: "Homeowner FAQ",                        file: "homeowner-faq.pdf",                          size: "58 KB" },
+        { name: "Plan Review & Design Appointment FAQ", file: "faq-plan-review-and-design-appointment.pdf",  size: "297 KB" },
+        { name: "Design Appointment FAQ",               file: "faq-design-appointment.pdf",                 size: "196 KB" },
+        { name: "What Happens Next & Milestones",       file: "what-happens-next-and-milestones.pdf",       size: "445 KB" },
+        { name: "Late Change Order Process",            file: "late-change-order-process.pdf",              size: "152 KB" },
+        { name: "Preparing for Closing Day",            file: "faq-preparing-for-closing-day.pdf",          size: "199 KB" }
+      ]
+    },
+    {
+      name:  "HOA & Community",
+      blurb: "Your neighborhood at Reeds Vale",
+      documents: [
+        { name: "Reeds Vale Community Map", file: "reeds-vale-community-map.png", size: "1.4 MB" }
+      ]
+    },
+    {
+      name:  "Warranty Documents",
+      blurb: "Provided to you at closing",
+      documents: []
+    },
+    {
+      name:  "Selections Paperwork",
+      blurb: "Exterior paint plan, interior paint plan & plot plan — available after closing",
+      documents: []
+    }
   ].freeze
 
   FAMILY = [

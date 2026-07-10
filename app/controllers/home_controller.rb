@@ -8,6 +8,9 @@ class HomeController < ApplicationController
 
     flow = DesignFlow.new(session: @session, lead: @lead)
 
+    # First time this buyer lands in the app after signing in — show the welcome modal once.
+    @show_welcome_modal = @messages.empty?
+
     if @messages.empty?
       if @session.complete?
         msg = post_design_welcome(@lead)

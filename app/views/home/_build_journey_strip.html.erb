@@ -25,26 +25,32 @@
       <div style="font:700 20px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em;margin-bottom:4px"><%= DemoData::HOME[:floorplan] %></div>
       <div style="font:400 12px 'Sora',system-ui;color:#9aa0ac;margin-bottom:14px"><%= DemoData::HOME[:bedrooms] %> bed &middot; <%= DemoData::HOME[:bathrooms] %> bath &middot; <%= DemoData::HOME[:sqft] %> sq ft &middot; Home Site <%= DemoData::HOME[:lot].gsub("Home Site ","") %></div>
 
-      <%# Front elevation %>
+      <%# Front elevation — tap to zoom %>
       <%= image_tag "home/elevation.webp",
-            style: "width:100%;border-radius:14px;object-fit:cover;aspect-ratio:16/9;display:block;box-shadow:0 4px 20px rgba(0,0,0,.12);margin-bottom:12px",
+            style: "width:100%;border-radius:14px;object-fit:cover;aspect-ratio:16/9;display:block;box-shadow:0 4px 20px rgba(0,0,0,.12);margin-bottom:12px;cursor:zoom-in",
             loading: "lazy",
+            onclick: "window.openLightbox(this.src, this.alt)",
+            title: "Tap to enlarge",
             alt: "#{DemoData::HOME[:floorplan]} front elevation" %>
 
-      <%# Floor plans — side by side %>
+      <%# Floor plans — side by side, tap to zoom %>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
           <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;padding:8px 12px 4px">Main Floor</div>
           <%= image_tag "home/floorplan-main.webp",
-                style: "width:100%;display:block;background:#fafafa",
+                style: "width:100%;display:block;background:#fafafa;cursor:zoom-in",
                 loading: "lazy",
+                onclick: "window.openLightbox(this.src, this.alt)",
+                title: "Tap to enlarge",
                 alt: "#{DemoData::HOME[:floorplan]} main floor plan" %>
         </div>
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
           <div style="font:600 8.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac;padding:8px 12px 4px">Upper Floor</div>
           <%= image_tag "home/floorplan-upper.webp",
-                style: "width:100%;display:block;background:#fafafa",
+                style: "width:100%;display:block;background:#fafafa;cursor:zoom-in",
                 loading: "lazy",
+                onclick: "window.openLightbox(this.src, this.alt)",
+                title: "Tap to enlarge",
                 alt: "#{DemoData::HOME[:floorplan]} upper floor plan" %>
         </div>
       </div>
@@ -232,55 +238,47 @@
       <div style="font:400 12.5px 'Sora',system-ui;color:#9aa0ac;margin-top:4px">Live updates from your lot at <%= DemoData::COMMUNITY[:name] %></div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:20px">
-      <% DemoData::BUILD_STAGES.each do |stage| %>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <%# Most recent stage first (Stage 3 → 2 → 1). Future stages with no photos yet are hidden. %>
+      <% visible_stages = DemoData::BUILD_STAGES.reject { |s| s[:status] == :upcoming }.sort_by { |s| -s[:stage] } %>
+      <% visible_stages.each do |stage| %>
+        <% expanded = stage[:status] == :in_progress %>
         <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
 
-          <!-- Stage header -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #ECEEF1">
+          <!-- Stage header — tap to expand / collapse -->
+          <div onclick="window.toggleStage(this)" aria-expanded="<%= expanded %>"
+               style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent">
             <div style="display:flex;align-items:center;gap:8px">
               <span style="font:700 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ac">Stage <%= stage[:stage] %></span>
               <span style="font:600 12.5px 'Sora',system-ui;color:#1A1A1A"><%= stage[:label] %></span>
             </div>
-            <% if stage[:status] == :complete %>
-              <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:#dcfce7;border:1px solid #bbf7d0">
-                <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
-                <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#166534">Complete</span>
-              </div>
-            <% elsif stage[:status] == :in_progress %>
-              <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:rgba(245,166,35,.1);border:1.5px solid #F5A623">
-                <div style="width:5px;height:5px;border-radius:50%;background:#F5A623;animation:tabDotPulse 1.4s ease-in-out infinite;flex:none"></div>
-                <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#C27D1B">In Progress</span>
-              </div>
-            <% else %>
-              <div style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;background:#F4F5F7;border:1.5px dashed #D1D5DB">
-                <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#c8ccd4">Upcoming</span>
-              </div>
-            <% end %>
+            <div style="display:flex;align-items:center;gap:10px;flex:none">
+              <% if stage[:status] == :complete %>
+                <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:#dcfce7;border:1px solid #bbf7d0">
+                  <svg viewBox="0 0 12 12" width="8" height="8" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+                  <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#166534">Complete</span>
+                </div>
+              <% else %>
+                <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:rgba(245,166,35,.1);border:1.5px solid #F5A623">
+                  <div style="width:5px;height:5px;border-radius:50%;background:#F5A623;animation:tabDotPulse 1.4s ease-in-out infinite;flex:none"></div>
+                  <span style="font:600 9.5px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#C27D1B">In Progress</span>
+                </div>
+              <% end %>
+              <svg data-stage-chevron width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa0ac" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;transition:transform .2s;transform:rotate(<%= expanded ? '180deg' : '0deg' %>)"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
           </div>
 
-          <!-- Photo grid or placeholder depending on stage status -->
-          <% if stage[:status] == :upcoming %>
-            <div style="padding:32px 24px;text-align:center;background:#FAFBFC">
-              <div style="width:44px;height:44px;border-radius:12px;background:#F0F1F3;border:1.5px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8ccd4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                  <circle cx="12" cy="13" r="4"/>
-                </svg>
-              </div>
-              <div style="font:600 12px 'Sora',system-ui;color:#9aa0ac;margin-bottom:4px">Photos Coming Soon</div>
-              <div style="font:400 11px 'Sora',system-ui;color:#b3b8c0;line-height:1.5">Progress photos will appear here once this phase begins.</div>
-            </div>
-          <% else %>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#E5E7EB">
-              <% stage[:photos].first(4).each do |photo| %>
-                <%= image_tag "progress/stage-#{stage[:stage]}/#{photo}",
-                      style: "width:100%;aspect-ratio:4/3;object-fit:cover;display:block",
-                      loading: "lazy",
-                      alt: "#{stage[:label]} progress photo" %>
-              <% end %>
-            </div>
-          <% end %>
+          <!-- Photo grid (collapsible) — tap a photo to enlarge -->
+          <div data-stage-body style="display:<%= expanded ? 'grid' : 'none' %>;grid-template-columns:1fr 1fr;gap:2px;background:#E5E7EB;border-top:1px solid #ECEEF1">
+            <% stage[:photos].first(4).each do |photo| %>
+              <%= image_tag "progress/stage-#{stage[:stage]}/#{photo}",
+                    style: "width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in",
+                    loading: "lazy",
+                    onclick: "window.openLightbox(this.src, this.alt)",
+                    title: "Tap to enlarge",
+                    alt: "#{stage[:label]} progress photo" %>
+            <% end %>
+          </div>
 
         </div>
       <% end %>
@@ -297,49 +295,69 @@
       <div style="font:400 12.5px 'Sora',system-ui;color:#9aa0ac;margin-top:4px">Contracts, warranties, and important paperwork</div>
     </div>
 
-    <% if DemoData::DOCUMENTS.any? %>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <% DemoData::DOCUMENTS.each do |doc| %>
-          <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;align-items:center;gap:14px">
-            <!-- PDF icon -->
-            <div style="width:40px;height:40px;border-radius:10px;background:#FEF2F2;border:1px solid #FECACA;display:flex;align-items:center;justify-content:center;flex:none">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-                <line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="11" y2="11"/>
-              </svg>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <% DemoData::DOCUMENT_FOLDERS.each do |folder| %>
+        <% open = folder[:open] == true %>
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+
+          <!-- Folder header — tap to expand / collapse -->
+          <div onclick="window.toggleDocFolder(this)" aria-expanded="<%= open %>"
+               style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent">
+            <div style="width:38px;height:38px;border-radius:10px;background:#FEF6E7;border:1px solid #F6E2B8;display:flex;align-items:center;justify-content:center;flex:none">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C27D1B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
             </div>
-            <!-- Doc info -->
             <div style="flex:1;min-width:0">
-              <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><%= doc[:name] %></div>
-              <div style="font:400 10.5px 'Sora',system-ui;color:#9aa0ac;margin-top:2px"><%= doc[:category] %><% if doc[:size].present? %> &middot; <%= doc[:size] %><% end %></div>
+              <div style="font:600 13.5px 'Sora',system-ui;color:#1A1A1A"><%= folder[:name] %></div>
+              <div style="font:400 11px 'Sora',system-ui;color:#9aa0ac;margin-top:1px"><%= folder[:blurb] %></div>
             </div>
-            <!-- Actions -->
-            <div style="display:flex;gap:8px;flex:none">
-              <a href="<%= "/documents/#{doc[:file]}" %>" target="_blank" rel="noopener"
-                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F4F5F7;border:1px solid #E5E7EB;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:background .12s"
-                 onmouseover="this.style.background='#EAEAE7'" onmouseout="this.style.background='#F4F5F7'">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                View
-              </a>
-              <a href="<%= "/documents/#{doc[:file]}" %>" download="<%= doc[:name] %>"
-                 style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F5A623;border:none;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:filter .12s"
-                 onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Download
-              </a>
-            </div>
+            <span style="font:600 10px 'IBM Plex Mono',ui-monospace,monospace;color:#9aa0ac;flex:none"><%= folder[:documents].length %></span>
+            <svg data-folder-chevron width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa0ac" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;transition:transform .2s;transform:rotate(<%= open ? '180deg' : '0deg' %>)"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
-        <% end %>
-      </div>
-    <% else %>
-      <div style="text-align:center;padding:48px 24px">
-        <div style="width:52px;height:52px;border-radius:14px;background:#F4F5F7;border:1.5px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8ccd4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+
+          <!-- Folder body (collapsible) -->
+          <div data-folder-body style="display:<%= open ? 'block' : 'none' %>;border-top:1px solid #ECEEF1;padding:10px 12px">
+            <% if folder[:documents].any? %>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <% folder[:documents].each do |doc| %>
+                  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;background:#FAFBFC;border:1px solid #EEF0F3;border-radius:10px;padding:11px 12px">
+                    <!-- PDF icon -->
+                    <div style="width:34px;height:34px;border-radius:8px;background:#FEF2F2;border:1px solid #FECACA;display:flex;align-items:center;justify-content:center;flex:none">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="11" y2="11"/></svg>
+                    </div>
+                    <!-- Doc name — wraps fully, never truncated -->
+                    <div style="flex:1 1 45%;min-width:0">
+                      <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A;white-space:normal;overflow-wrap:anywhere;line-height:1.3"><%= doc[:name] %></div>
+                      <% if doc[:size].present? %><div style="font:400 10.5px 'Sora',system-ui;color:#9aa0ac;margin-top:2px"><%= doc[:size] %></div><% end %>
+                    </div>
+                    <!-- Actions -->
+                    <div style="display:flex;gap:8px;flex:none;margin-left:auto">
+                      <a href="<%= "/documents/#{doc[:file]}" %>" target="_blank" rel="noopener"
+                         style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F4F5F7;border:1px solid #E5E7EB;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:background .12s"
+                         onmouseover="this.style.background='#EAEAE7'" onmouseout="this.style.background='#F4F5F7'">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        View
+                      </a>
+                      <a href="<%= "/documents/#{doc[:file]}" %>" download="<%= doc[:name] %>"
+                         style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#F5A623;border:none;font:600 10px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;color:#1A1A1A;text-decoration:none;transition:filter .12s"
+                         onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div style="text-align:center;padding:20px 16px">
+                <div style="font:500 12px 'Sora',system-ui;color:#9aa0ac">Nothing here yet</div>
+                <div style="font:400 11px 'Sora',system-ui;color:#b3b8c0;margin-top:3px;line-height:1.4">These documents will appear here once they're ready.</div>
+              </div>
+            <% end %>
+          </div>
+
         </div>
-        <div style="font:600 13px 'Sora',system-ui;color:#1A1A1A;margin-bottom:4px">No documents yet</div>
-        <div style="font:400 12px 'Sora',system-ui;color:#9aa0ac">Your contracts and important paperwork will appear here.</div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
 
   </div><!-- /data-build-panel="documents" -->
 
@@ -354,6 +372,26 @@
       root.querySelectorAll('[data-build-panel]').forEach(function(p) {
         p.style.display = p.dataset.buildPanel === tab ? 'block' : 'none';
       });
+    };
+
+    // Collapsible build-progress stage cards
+    window.toggleStage = function(header) {
+      var body   = header.nextElementSibling;
+      var chev   = header.querySelector('[data-stage-chevron]');
+      var isOpen = header.getAttribute('aria-expanded') === 'true';
+      header.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (body) body.style.display = isOpen ? 'none' : 'grid';
+      if (chev) chev.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+    };
+
+    // Collapsible document folders
+    window.toggleDocFolder = function(header) {
+      var body   = header.nextElementSibling;
+      var chev   = header.querySelector('[data-folder-chevron]');
+      var isOpen = header.getAttribute('aria-expanded') === 'true';
+      header.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (body) body.style.display = isOpen ? 'none' : 'block';
+      if (chev) chev.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
     };
   </script>
 

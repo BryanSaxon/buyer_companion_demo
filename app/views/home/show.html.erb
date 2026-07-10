@@ -139,3 +139,43 @@
 
   </div><!-- /concierge-card -->
 </div><!-- /concierge-outer -->
+
+<% if @show_welcome_modal %>
+  <!-- ============ WELCOME MODAL (first entry after sign-in) ============ -->
+  <div id="welcome-modal-overlay"
+       onclick="if(event.target===this)window.closeWelcomeModal()"
+       style="position:fixed;inset:0;z-index:1500;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,12,16,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:scFade .35s ease both">
+    <div id="welcome-modal-card"
+         style="width:100%;max-width:400px;background:#fff;border-radius:22px;padding:32px 28px 26px;box-shadow:0 24px 70px rgba(0,0,0,.35);text-align:center;animation:scRise .45s cubic-bezier(.2,.7,.2,1) both">
+      <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#F5A623,#C27D1B);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 8px 22px rgba(245,166,35,.35)">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 9.6V19h13V9.6"/><path d="M10 19v-5h4v5"/></svg>
+      </div>
+      <h2 style="margin:0;font:700 23px/1.2 'Sora',system-ui;color:#1A1A1A;letter-spacing:-.02em">Welcome to Household.</h2>
+      <p style="margin:16px 0 0;font:400 15px/1.55 'Sora',system-ui;color:#4b4b4b">
+        For this demo, you're Chris — the homeowner. Design day's done, every selection locked in.
+      </p>
+      <p style="margin:14px 0 0;font:500 15px/1.55 'Sora',system-ui;color:#1A1A1A">
+        Look around. Ask Penny anything.
+      </p>
+      <button onclick="window.closeWelcomeModal()"
+              style="width:100%;margin-top:24px;padding:15px;border:none;border-radius:999px;background:#F5A623;color:#0A0C10;font:600 15px 'Sora',system-ui;cursor:pointer;transition:filter .15s"
+              onmouseover="this.style.filter='brightness(1.05)'" onmouseout="this.style.filter=''">
+        Let's go
+      </button>
+    </div>
+  </div>
+  <script>
+    window.closeWelcomeModal = function() {
+      var o = document.getElementById('welcome-modal-overlay');
+      if (!o) return;
+      o.style.transition = 'opacity .25s ease';
+      o.style.opacity = '0';
+      document.body.style.overflow = '';
+      setTimeout(function() { o.remove(); }, 250);
+    };
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') window.closeWelcomeModal();
+    });
+  </script>
+<% end %>

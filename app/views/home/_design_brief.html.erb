@@ -1,5 +1,5 @@
 <% rooms_complete      = session.rooms_complete_count %>
-<% total_rooms        = 8 %>
+<% total_rooms        = DemoData::ROOMS.count %>
 <% pct               = total_rooms > 0 ? (rooms_complete.to_f / total_rooms * 100).round : 0 %>
 <% planning_done     = !session.welcome? && !session.room_planning? %>
 <% styles_done       = session.designing? || session.summary_review? || session.complete? %>
