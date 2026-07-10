@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "Buyer Companion <contact@bryansaxon.com>"
+  default from: "Bucker Labs <jarrod@buckerlabs.com>"
   layout "mailer"
 end

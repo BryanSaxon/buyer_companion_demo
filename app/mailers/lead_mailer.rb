@@ -5,7 +5,7 @@ class LeadMailer < ApplicationMailer
     @location = geolocate(ip_address)
 
     mail(
-      to: "emailbryansaxon@gmail.com",
+      to: "jarrod@buckerlabs.com",
       subject: "New Buyer Inquiry — #{lead.first_name} #{lead.last_name} (#{lead.company})"
     )
   end
