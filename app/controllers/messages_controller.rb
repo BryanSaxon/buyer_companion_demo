@@ -1,6 +1,23 @@
 class MessagesController < ApplicationController
   before_action :require_lead
 
+  # Buyer signalling they're done / changed their mind while giving design feedback.
+  APPROVAL_DONE_PHRASES = [
+    "never mind", "nevermind", "nvm", "changed my mind", "change my mind",
+    "on second thought", "no changes", "no change", "no more changes", "no more feedback",
+    "nothing else", "that's all", "thats all", "that's it", "thats it",
+    "that's everything", "thats everything", "that's fine", "thats fine",
+    "it's fine", "its fine", "it's good", "its good", "it's great", "its great",
+    "it's perfect", "its perfect", "it's ok", "its ok", "it's okay", "its okay",
+    "i'm good", "im good", "i'm fine", "im fine", "i'm done", "im done",
+    "i'm all set", "im all set", "all good", "we're good", "were good",
+    "leave it", "keep it", "good to go", "no thanks", "no thank you",
+    "it is fine", "it is good", "it is great", "it is perfect", "it is ok", "it is okay",
+    "that is all", "that is it", "that is everything", "that is fine", "no more"
+  ].freeze
+  APPROVAL_DONE_RE      = /\b(?:#{APPROVAL_DONE_PHRASES.map { |p| Regexp.escape(p) }.join('|')})\b/i
+  APPROVAL_DONE_BARE_RE = /\A(?:no|nope|nah|done|good|fine|ok|okay)[.!]*\z/i
+
   def create
     lead = current_lead
     return head :forbidden unless lead.id == params[:lead_id].to_i
@@ -34,7 +51,13 @@ class MessagesController < ApplicationController
         ApprovalFlow.reprompt_result
       end
     when "collecting_feedback"
-      ApprovalFlow.feedback_received_result
+      if text.match?(APPROVAL_DONE_RE) || text.strip.match?(APPROVAL_DONE_BARE_RE)
+        # Buyer changed their mind or has no more changes — move on.
+        session.delete(:approval_stage)
+        ApprovalFlow.done_result
+      else
+        ApprovalFlow.feedback_received_result
+      end
     end
   end
 

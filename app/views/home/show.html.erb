@@ -37,8 +37,11 @@
 
       <!-- Right: reset -->
       <div style="display:flex;align-items:center;flex:none">
+        <%# turbo:false forces a full page load so the fresh approval intro + kitchen
+            rendering paint reliably (matches the first-login navigation). %>
         <%= button_to "↺ Reset", demo_reset_path,
               method: :post,
+              form: { data: { turbo: false } },
               style: "font:600 11px 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#9aa0ac;text-decoration:none;display:flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid #E5E7EB;border-radius:8px;background:transparent;cursor:pointer;transition:all .15s",
               onmouseover: "this.style.color='#F5A623';this.style.borderColor='#F5A623'",
               onmouseout: "this.style.color='#9aa0ac';this.style.borderColor='#E5E7EB'" %>
