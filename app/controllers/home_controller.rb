@@ -39,10 +39,8 @@ class HomeController < ApplicationController
   private
 
   def post_design_welcome(lead)
-    family = DemoData::FAMILY.select { |m| m[:age_note] == "adult" }.map { |m| m[:name] }
-    names  = family.any? ? family.first(2).join(" and ") : "there"
     status = DemoData::BUILD_STATUS
-    "Hi #{names}! Your design selections are all locked in — congratulations, you're officially in construction! " \
+    "Hi Michael! Your design selections are all locked in — congratulations, you're officially in construction! " \
     "Your home is currently in the #{status[:current_phase_short]} phase. " \
     "I'm here any time you have questions about the build, your selections, or what comes next. What's on your mind?"
   end

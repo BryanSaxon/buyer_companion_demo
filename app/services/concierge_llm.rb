@@ -576,6 +576,8 @@ class ConciergeLlm
       #{constraints}
 
       Builder brand: #{lead.org_name}
+      You are speaking directly with Michael Harrison, the primary buyer. Address him as Michael
+      ("you"), and speak about Sarah and the kids in the third person unless he says otherwise.
       Current flow context: #{state_context}
 
       Respond ONLY with valid JSON. No markdown, no code fences, no prose outside the JSON object.
