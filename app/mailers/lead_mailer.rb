@@ -6,6 +6,7 @@ class LeadMailer < ApplicationMailer
 
     mail(
       to: "jarrod@buckerlabs.com",
+      reply_to: lead.email.presence,
       subject: "New Buyer Inquiry — #{lead.first_name} #{lead.last_name} (#{lead.company})"
     )
   end
