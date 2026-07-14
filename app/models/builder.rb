@@ -6,6 +6,7 @@ class Builder
   # were created under an old name matching after a rename, so their logo
   # survives (e.g. a "SIG Homes" lead still resolves after the Signature rename).
   ENTRIES = [
+    [ "Chesapeake Homes",       "builders/chesapeake-homes.svg" ],
     [ "Classic Homes",          "builders/classic-homes.svg" ],
     [ "Eastbrook Homes",        "builders/eastbrook-homes.webp" ],
     [ "Grand Homes",            "builders/grand-homes.png" ],
